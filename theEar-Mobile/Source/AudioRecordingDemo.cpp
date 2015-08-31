@@ -349,9 +349,7 @@ private:
     {
         char buffer[1024];
         osc::OutboundPacketStream p( buffer, 1024 );
-//
-//
-//        
+        
         p << osc::BeginBundleImmediate
         << osc::BeginMessage( "/test1" )
         << true << 23 << (float)3.1415 << "hello" << osc::EndMessage
@@ -365,12 +363,8 @@ private:
         message = portBox.getText();
         log->writeToLog(message);
         
-        buffer[0] = 'C';
-        buffer[1] = 'O';
-        buffer[2] = 'N';
-        
-//        datagramSocket.write(ipBox.getText(), portBox.getText().getIntValue(), p.Data(), p.Size());
-        datagramSocket.write(ipBox.getText(), portBox.getText().getIntValue(), buffer, 1024);
+        datagramSocket.write(ipBox.getText(), portBox.getText().getIntValue(), p.Data(), p.Size());
+
 //
 //        repaint();
     }
