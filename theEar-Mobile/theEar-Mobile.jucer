@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="GCPJ6F" name="theEar-Mobile" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="com.yourcompany.theEarMobile" includeBinaryInAppConfig="1"
+              jucerVersion="3.2.0">
+  <MAINGROUP id="HbPPUx" name="theEar-Mobile">
+    <GROUP id="{4035F341-CD9A-AB8A-C692-7ADEC6081F84}" name="Source">
+      <GROUP id="{623007C3-0A4F-6DA9-9950-48733DDA0377}" name="Essentia-RingBuffer">
+        <FILE id="YKZo3P" name="ringbufferinput.h" compile="0" resource="0"
+              file="Source/ringbufferinput.h"/>
+        <FILE id="xiD5uZ" name="ringbufferoutput.h" compile="0" resource="0"
+              file="Source/ringbufferoutput.h"/>
+      </GROUP>
+    </GROUP>
+    <FILE id="M5QQ5P" name="AudioLiveScrollingDisplay.h" compile="0" resource="0"
+          file="Source/AudioLiveScrollingDisplay.h"/>
+    <FILE id="wNJScS" name="AudioRecordingDemo.cpp" compile="1" resource="0"
+          file="Source/AudioRecordingDemo.cpp"/>
+    <FILE id="Zl2SfP" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    <FILE id="w3PG6J" name="MainComponent.cpp" compile="1" resource="0"
+          file="Source/MainComponent.cpp"/>
+    <FILE id="WwqHw4" name="StandardRecorder.h" compile="0" resource="0"
+          file="Source/StandardRecorder.h"/>
+    <FILE id="Etoie2" name="StreamingRecorder.h" compile="0" resource="0"
+          file="Source/StreamingRecorder.h"/>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" externalLibraries="essentia&#10;tag&#10;yaml">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="1" optimisation="1" targetName="theEar-Mobile" headerPath="/usr/local/include"
+                       libraryPath="/usr/local/lib"/>
+        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="0" optimisation="3" targetName="theEar-Mobile" libraryPath="/usr/local/lib"
+                       headerPath="/usr/local/include"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../JUCE/modules"/>
+        <MODULEPATH id="danlin_oscpack" path="../../../JUCE_MODULES/danlin_modules/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <ANDROID targetFolder="Builds/Android" androidVersionCode="1" androidActivityClass="com.yourcompany.theearmobile.theEarMobile"
+             androidSDKPath="/usr/local/opt/android-sdk" androidNDKPath="/usr/local/opt/android-ndk"
+             androidMinimumSDK="10" androidInternetNeeded="1" androidKeyStore="${user.home}/.android/debug.keystore"
+             androidKeyStorePass="android" androidKeyAlias="androiddebugkey"
+             androidKeyAliasPass="android" androidCpp11="1" toolset="4.9"
+             androidStaticLibraries="essentia" androidOtherPermissions="android.permission.RECORD_AUDIO">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" androidArchitectures="armeabi-v7a" isDebug="1" optimisation="1"
+                       targetName="theEar-Mobile" headerPath="/Users/carthach/Dev/android/modules/essentia/include"/>
+        <CONFIGURATION name="Release" androidArchitectures="armeabi-v7a" isDebug="0"
+                       optimisation="3" targetName="theEar-Mobile" headerPath="/Users/carthach/Dev/android/modules/essentia/include"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../JUCE/modules"/>
+        <MODULEPATH id="danlin_oscpack" path="../../../JUCE_MODULES/danlin_modules/modules"/>
+      </MODULEPATHS>
+    </ANDROID>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULES id="danlin_oscpack" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_audio_devices" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_audio_formats" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_audio_processors" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_audio_utils" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_core" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_cryptography" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_events" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_gui_extra" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_opengl" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_video" showAllCode="1" useLocalCopy="1"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>
