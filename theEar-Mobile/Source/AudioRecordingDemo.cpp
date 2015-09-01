@@ -28,6 +28,53 @@
 #include "StandardRecorder.h"
 #include <sstream>
 
+class SimpleDeviceManagerInputLevelMeter  : public Component,
+public Timer
+{
+public:
+    SimpleDeviceManagerInputLevelMeter (AudioDeviceManager& m)
+    : manager (m), level (0)
+    {
+        startTimer (50);
+        manager.enableInputLevelMeasurement (true);
+    }
+    
+    ~SimpleDeviceManagerInputLevelMeter()
+    {
+        manager.enableInputLevelMeasurement (false);
+    }
+    
+    void timerCallback() override
+    {
+        if (isShowing())
+        {
+            const float newLevel = (float) manager.getCurrentInputLevel();
+            
+            if (std::abs (level - newLevel) > 0.005f)
+            {
+                level = newLevel;
+                repaint();
+            }
+        }
+        else
+        {
+            level = 0;
+        }
+    }
+    
+    void paint (Graphics& g) override
+    {
+        getLookAndFeel().drawLevelMeter (g, getWidth(), getHeight(),
+                                         (float) exp (log (level) / 3.0)); // (add a bit of a skew to make the level more obvious)
+    }
+    
+private:
+    AudioDeviceManager& manager;
+    float level;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleDeviceManagerInputLevelMeter)
+};
+
 
 //==============================================================================
 /** A simple class that acts as an AudioIODeviceCallback and writes the
@@ -220,38 +267,69 @@ class AudioRecordingDemo  : public Component,
 {
 public:
     AudioRecordingDemo(AudioDeviceManager* deviceManager)
-        : recorder (recordingThumbnail.getAudioThumbnail())
+        : recorder (recordingThumbnail.getAudioThumbnail()), inputMeter(*deviceManager)
     {
         setOpaque (true);
         addAndMakeVisible (liveAudioScroller);
 
-        addAndMakeVisible (explanationLabel);
-        explanationLabel.setText ("This page demonstrates how to record a wave file from the live audio input..\n\nPressing record will start recording a file in your \"Documents\" folder.", dontSendNotification);
-        explanationLabel.setFont (Font (15.00f, Font::plain));
-        explanationLabel.setJustificationType (Justification::topLeft);
-        explanationLabel.setEditable (false, false, false);
-        explanationLabel.setColour (TextEditor::textColourId, Colours::black);
-        explanationLabel.setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+//        addAndMakeVisible (explanationLabel);
+//        explanationLabel.setText ("This page demonstrates how to record a wave file from the live audio input..\n\nPressing record will start recording a file in your \"Documents\" folder.", dontSendNotification);
+//        explanationLabel.setFont (Font (15.00f, Font::plain));
+//        explanationLabel.setJustificationType (Justification::topLeft);
+//        explanationLabel.setEditable (false, false, false);
+//        explanationLabel.setColour (TextEditor::textColourId, Colours::black);
+//        explanationLabel.setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+        
+        addAndMakeVisible(inputMeter);
+        
 
         addAndMakeVisible (recordButton);
-        recordButton.setButtonText ("Record");
+        recordButton.setButtonText ("Listen!");
         recordButton.addListener (this);
         recordButton.setColour (TextButton::buttonColourId, Colour (0xffff5c5c));
         recordButton.setColour (TextButton::textColourOnId, Colours::black);
         
-        addAndMakeVisible (ipBox);
-//        ipBox.setButtonText ("Record");
-//        ipBox.addListener (this);
-        ipBox.setColour (TextButton::buttonColourId, Colour (0xffff5c5c));
-        ipBox.setColour (TextButton::textColourOnId, Colours::black);
-        ipBox.setText("10.80.28.71");
+        addAndMakeVisible (keyScaleLabel);
+        keyScaleLabel.setText ("Key/Scale:", dontSendNotification);
         
-        addAndMakeVisible (portBox);
-        //        ipBox.setButtonText ("Record");
-        //        ipBox.addListener (this);
-        portBox.setColour (TextButton::buttonColourId, Colour (0xffff5c5c));
-        portBox.setColour (TextButton::textColourOnId, Colours::black);
-        portBox.setText("8000");
+        addAndMakeVisible (keyScaleTextBox);
+        keyScaleTextBox.setReadOnly(true);
+        keyScaleTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
+        
+        addAndMakeVisible (rmsLabel);
+        rmsLabel.setText ("RMS:", dontSendNotification);
+        
+        addAndMakeVisible (rmsTextBox);
+        rmsTextBox.setReadOnly(true);
+        rmsTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
+        
+        addAndMakeVisible (spectralFlatnessLabel);
+        spectralFlatnessLabel.setText ("Spectral Flatness:", dontSendNotification);
+        
+        addAndMakeVisible (spectralFlatnessTextBox);
+        spectralFlatnessTextBox.setReadOnly(true);
+        spectralFlatnessTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
+        
+        addAndMakeVisible (spectralCentroidLabel);
+        spectralCentroidLabel.setText ("Spectral Centroid:", dontSendNotification);
+        
+        addAndMakeVisible (spectralCentroidTextBox);
+        spectralCentroidTextBox.setReadOnly(true);
+        spectralCentroidTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
+
+        addAndMakeVisible (ipAddressLabel);
+        ipAddressLabel.setText ("IP Address:", dontSendNotification);
+        
+        addAndMakeVisible (ipAddressTextBox);
+        ipAddressTextBox.setText("127.0.0.1");
+        
+        addAndMakeVisible (oscInfoLabel);
+        oscInfoLabel.setText ("Set OSC Info:", dontSendNotification);
+        addAndMakeVisible (portNumberLabel);
+        portNumberLabel.setText ("Port Number:", dontSendNotification);
+        
+        addAndMakeVisible (portNumberTextBox);
+        portNumberTextBox.setText("8000");
 
         addAndMakeVisible (recordingThumbnail);
         
@@ -261,12 +339,6 @@ public:
         deviceManager->addAudioCallback (&recorder);
         
         recorder.addChangeListener(this);
-
-        
-
-        
-
-
     }
 
     ~AudioRecordingDemo()
@@ -280,8 +352,11 @@ public:
         g.fillAll (Colours::green);
         
         g.setColour(Colours::black);
-        g.drawFittedText (recorder.keyString, 50, 300, 150,50, Justification::left, 2);
-        
+//        g.drawFittedText (recorder.keyString, 50, 300, 150,50, Justification::left, 2);
+        keyScaleTextBox.setText(recorder.keyScaleString);
+        rmsTextBox.setText(String(recorder.rmsValue));
+        spectralFlatnessTextBox.setText(String(recorder.spectralFlatnessValue));
+        spectralCentroidTextBox.setText(String(recorder.spectralCentroidValue));
     }
 
     void resized() override
@@ -291,8 +366,36 @@ public:
         recordingThumbnail.setBounds (area.removeFromTop (80).reduced (8));
         recordButton.setBounds (area.removeFromTop (36).removeFromLeft (140).reduced (8));
         explanationLabel.setBounds (area.reduced (8));
-        ipBox.setBounds(recordButton.getBounds().withY(explanationLabel.getY()+60));
-        portBox.setBounds(recordButton.getBounds().withY(explanationLabel.getY()+90));
+
+        int xOffset = recordButton.getX()+130;
+        
+        Rectangle<int> labelBounds = recordButton.getBounds();
+        Rectangle<int> valueBounds = recordButton.getBounds().withX(xOffset);
+        
+        
+        int labelY = explanationLabel.getY()+5;
+        
+        keyScaleLabel.setBounds(labelBounds.withY(labelY));
+        keyScaleTextBox.setBounds(valueBounds.withY(labelY));
+        rmsLabel.setBounds(labelBounds.withY(labelY+=30));
+        rmsTextBox.setBounds(valueBounds.withY(labelY));
+        
+        spectralFlatnessLabel.setBounds(labelBounds.withY(labelY+=30));
+        spectralFlatnessTextBox.setBounds(valueBounds.withY(labelY));
+        spectralCentroidLabel.setBounds(labelBounds.withY(labelY+=30));
+        spectralCentroidTextBox.setBounds(valueBounds.withY(labelY));
+
+        oscInfoLabel.setBounds(labelBounds.withY(labelY+=40));
+        
+        ipAddressLabel.setBounds(labelBounds.withY(labelY+=30));
+        ipAddressTextBox.setBounds(valueBounds.withY(labelY));
+        portNumberLabel.setBounds(labelBounds.withY(labelY+=30));
+        portNumberTextBox.setBounds(valueBounds.withY(labelY));
+        
+        inputMeter.setBounds(recordButton.getBounds().withX(xOffset));
+        inputMeter.setSize(recordButton.getWidth()/2,recordButton.getHeight() );
+
+
     }
 
 private:
@@ -305,8 +408,14 @@ private:
     Label explanationLabel;
     TextButton recordButton;
     DatagramSocket datagramSocket;
+    SimpleDeviceManagerInputLevelMeter inputMeter;
     
-    TextEditor ipBox, portBox;
+    
+    Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel, oscInfoLabel;
+    Label ipAddressLabel, portNumberLabel;
+    
+    TextEditor keyScaleTextBox, rmsTextBox, spectralFlatnessTextBox, spectralCentroidTextBox;
+    TextEditor ipAddressTextBox, portNumberTextBox;
     
     bool recording = false;
 
@@ -328,7 +437,7 @@ private:
     void stopRecording()
     {
         recorder.stop();
-        recordButton.setButtonText ("Record");
+        recordButton.setButtonText ("Listen!");
         recordingThumbnail.setDisplayFullThumbnail (true);
         
         recording = false;
@@ -351,19 +460,23 @@ private:
         osc::OutboundPacketStream p( buffer, 1024 );
         
         p << osc::BeginBundleImmediate
-        << osc::BeginMessage( "/test1" )
-        << true << 23 << (float)3.1415 << "hello" << osc::EndMessage
-        << osc::BeginMessage( "/test2" )
-        << true << 24 << (float)10.8 << "world" << osc::EndMessage
+        << osc::BeginMessage( "/earData" )
+        << recorder.keyScaleString.toRawUTF8()
+        << recorder.rmsValue
+        << recorder.spectralFlatnessValue
+        << recorder.spectralCentroidValue
+        << osc::EndMessage
+//        << osc::BeginMessage( "/test2" )
+//        << true << 24 << (float)10.8 << "world" << osc::EndMessage
         << osc::EndBundle;
 //
-        juce::Logger *log = juce::Logger::getCurrentLogger();
-        String message(ipBox.getText());
-        log->writeToLog(message);
-        message = portBox.getText();
-        log->writeToLog(message);
+//        juce::Logger *log = juce::Logger::getCurrentLogger();
+//        String message(ipAddressTextBox.getText());
+//        log->writeToLog(message);
+//        message = portNumberTextBox.getText();
+//        log->writeToLog(message);
         
-        datagramSocket.write(ipBox.getText(), portBox.getText().getIntValue(), p.Data(), p.Size());
+        datagramSocket.write(ipAddressTextBox.getText(), portNumberTextBox.getText().getIntValue(), p.Data(), p.Size());
 
 //
         repaint();

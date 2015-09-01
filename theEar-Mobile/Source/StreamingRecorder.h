@@ -15,7 +15,7 @@ public:
     essentia::streaming::Algorithm* ringBufferInput;
     essentia::streaming::RingBufferInput* ringBufferInputPtr;
     
-    essentia::streaming::Algorithm *fc, *w, *spectrum, *spectralPeaks, *hpcpKey, *key, *mfcc;
+    essentia::streaming::Algorithm *fc, *w, *spectrum, *spectralPeaks, *hpcpKey, *key, *mfcc, *rms, *spectralCentroid, *spectralFlatness;
     
     essentia::scheduler::Network* n;
     
@@ -23,7 +23,8 @@ public:
     
     essentia::standard::Algorithm* aggr;
     
-    String keyString;
+    String keyScaleString;
+    essentia::Real rmsValue, spectralFlatnessValue, spectralCentroidValue;
     
     int frameSize = 4096;
     int hopSize = 2048;
@@ -32,8 +33,6 @@ public:
     : thumbnail (thumbnailToUpdate), Thread("ESSENTIA_THREAD"),
     sampleRate (0), nextSampleNum (0), recording(false)
     {
-//        backgroundThread.startThread();
-        
         setupEssentia();
     }
     
@@ -41,7 +40,7 @@ public:
     {
         essentia::init();
         
-        essentia::setDebugLevel(essentia::ENetwork);
+//        essentia::setDebugLevel(essentia::ENetwork);
         
         essentia::streaming::AlgorithmFactory& factory = essentia::streaming::AlgorithmFactory::instance();
         
@@ -73,6 +72,9 @@ public:
         key           = factory.create("Key");
         key->configure();
         mfcc           = factory.create("MFCC");
+        rms = factory.create("RMS");
+        spectralFlatness = factory.create("FlatnessDB");
+        spectralCentroid = factory.create("Centroid", "range", 44100/2.0);
         
         
         // Audio -> FrameCutter
@@ -98,6 +100,16 @@ public:
         key->output("scale")     >>  PC(pool, "scale");
         key->output("strength")  >>  PC(pool, "strength");
         
+        w->output("frame") >> rms->input("array");
+        rms->output("rms") >> PC(pool, "rms");
+        
+        spectrum->output("spectrum") >> spectralFlatness->input("array");
+        spectralFlatness->output("flatnessDB") >> PC(pool, "spectralFlatness");
+        
+
+        spectrum->output("spectrum") >> spectralCentroid->input("array");
+        spectralCentroid->output("centroid") >> PC(pool, "spectralCentroid");
+        
         const char* stats[] = { "mean"};
         
         aggr = essentia::standard::AlgorithmFactory::create("PoolAggregator",
@@ -112,9 +124,8 @@ public:
     
     ~StreamingRecorder()
     {
-//        stop();
-        
         delete n;
+        stop();
     }
     
     //==============================================================================
@@ -244,19 +255,20 @@ public:
                     key->process();
                     
                     if(pool.contains<std::string>("key"))
-                        keyString = pool.value<std::string>("key") + " " + pool.value<std::string>("scale");
-                    
-
-                    pool.clear();
-                    
+                        keyScaleString = pool.value<std::string>("key") + " " + pool.value<std::string>("scale");
+                
+                    //Then every 32 frames clear the key Algorithm history
                     if(frameCount % 32 == 0)
                         key->reset();                    
                 }
                 
-
+                std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
                 
-                
-                
+    
+                rmsValue = reals["rms"].back();
+                spectralFlatnessValue = reals["spectralFlatness"].back();
+                spectralCentroidValue = reals["spectralCentroid"].back();
+            
                 sendChangeMessage();
                 
                 //Notify of change
@@ -271,13 +283,11 @@ public:
     
 private:
     AudioThumbnail& thumbnail;
-    ScopedPointer<AudioFormatWriter::ThreadedWriter> threadedWriter; // the FIFO used to buffer the incoming data
+
     double sampleRate;
     int64 nextSampleNum;
                
     int lastNumSamples = 0;
-    
-    CriticalSection writerLock;
 
     bool recording = false;
 
