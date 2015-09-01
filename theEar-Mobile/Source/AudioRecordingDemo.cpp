@@ -280,7 +280,7 @@ public:
         g.fillAll (Colours::green);
         
         g.setColour(Colours::black);
-//        g.drawFittedText (recorder.updateString, 50, 300, 150,50, Justification::left, 2);
+        g.drawFittedText (recorder.keyString, 50, 300, 150,50, Justification::left, 2);
         
     }
 
@@ -366,7 +366,7 @@ private:
         datagramSocket.write(ipBox.getText(), portBox.getText().getIntValue(), p.Data(), p.Size());
 
 //
-//        repaint();
+        repaint();
     }
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioRecordingDemo)

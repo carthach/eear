@@ -23,8 +23,10 @@ public:
     
     essentia::standard::Algorithm* aggr;
     
-    int frameSize = 2048;
-    int hopSize = 1024;
+    String keyString;
+    
+    int frameSize = 4096;
+    int hopSize = 2048;
     
     StreamingRecorder (AudioThumbnail& thumbnailToUpdate)
     : thumbnail (thumbnailToUpdate), Thread("ESSENTIA_THREAD"),
@@ -39,16 +41,29 @@ public:
     {
         essentia::init();
         
+        essentia::setDebugLevel(essentia::ENetwork);
+        
         essentia::streaming::AlgorithmFactory& factory = essentia::streaming::AlgorithmFactory::instance();
         
         ringBufferInput = factory.create("RingBufferInput");
-        ringBufferInput->configure();
+        ringBufferInput->configure("bufferSize", 44100);
         
         //A pointer to the Ring Buffer so we can access its goodies
         ringBufferInputPtr = static_cast<essentia::streaming::RingBufferInput*>(ringBufferInput);
-        
+
         // instantiate all required algorithms
-        fc   = factory.create("FrameCutter");
+        fc = factory.create("FrameCutter");
+        
+//        // instantiate all required algorithms
+//        fc = factory.create("FrameCutter",
+//                       "frameSize", frameSize,
+//                       "hopSize", hopSize,
+//                       "silentFrames", "noise",
+//                       "startFromZero", false);
+//
+        // instantiate all required algorithms
+        fc = factory.create("FrameCutter");
+        
         w     = factory.create("Windowing", "type", "blackmanharris62");
         spectrum      = factory.create("Spectrum");
         spectralPeaks = factory.create("SpectralPeaks",
@@ -76,12 +91,12 @@ public:
         spectrum->output("spectrum")  >>  mfcc->input("spectrum");
         
         mfcc->output("bands")     >>  essentia::streaming::NOWHERE;                   // we don't want the mel bands
-        mfcc->output("mfcc")      >>  PC(pool, "lowlevel.mfcc");
+        mfcc->output("mfcc")      >>  PC(pool, "mfcc");
         
         // attach output proxy(ies)
-        key->output("key")       >>  PC(pool, "keyKey");
-        key->output("scale")     >>  PC(pool, "keyScale");
-        key->output("strength")  >>  PC(pool, "lowlevel.keyStrength");
+        key->output("key")       >>  PC(pool, "key");
+        key->output("scale")     >>  PC(pool, "scale");
+        key->output("strength")  >>  PC(pool, "strength");
         
         const char* stats[] = { "mean"};
         
@@ -93,7 +108,6 @@ public:
 
         n = new essentia::scheduler::Network(ringBufferInput);
         n->runPrepare();
-
     }
     
     ~StreamingRecorder()
@@ -173,6 +187,8 @@ public:
         sampleRate = 0;
     }
     
+    int bufferCount=0;
+    
     void audioDeviceIOCallback (const float** inputChannelData, int /*numInputChannels*/,
                                 float** outputChannelData, int numOutputChannels,
                                 int numSamples) override
@@ -180,10 +196,11 @@ public:
 
         
         if(recording) {
-            //Create the lock and copy the audio into the Essentia RingBuffer
 //            const ScopedLock sl (writerLock);
             
             //Put the samples into the RingBuffer
+            //According to ringbufferimpl.h Essentia should handle thread safety
+            
             ringBufferInputPtr->add(const_cast<essentia::Real *> (inputChannelData[0]), numSamples);
         }
         
@@ -210,33 +227,41 @@ public:
     {
         int frameCount = 0;
         
+
         //This is the Essentia thread, you need to consume the RingBuffer and do your work
         while(!threadShouldExit())
         {
             {
+                
 //                const ScopedLock sl (writerLock);
+                
                 n->runStep();
                 
-
-                
-                //Framewise info can be sent out
-                
-                //Long term info needs to be aggregated before sending out
-                if(frameCount++ % 20 == 0) {
-                    aggrPool.clear();
+                //Dirty filthy hack
+                //If we've got X frames send a forced message to the key thing to stop and output the key
+                if(frameCount % 8 == 0 && frameCount > 0) {
+                    key->shouldStop(true);
+                    key->process();
                     
-                    aggr->compute();
+                    if(pool.contains<std::string>("key"))
+                        keyString = pool.value<std::string>("key") + " " + pool.value<std::string>("scale");
+                    
 
                     pool.clear();
                     
+                    if(frameCount % 32 == 0)
+                        key->reset();                    
                 }
+                
+
+                
                 
                 
                 sendChangeMessage();
                 
                 //Notify of change
                 
-
+                frameCount++;
             }
             Thread::sleep (1);
         }
