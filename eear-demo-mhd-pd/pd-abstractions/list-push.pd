@@ -1,0 +1,18 @@
+#N canvas 593 211 450 477 10;
+#X obj 65 21 inlet;
+#X obj 127 100 list;
+#X obj 65 42 list append;
+#X obj 65 135 outlet;
+#X obj 234 25 inlet;
+#X text 213 8 bang para resetar la lista;
+#X obj 65 64 list split \$1;
+#X text 65 166 make a list of a certain length. a new value replaces
+the oldest value;
+#X connect 0 0 2 0;
+#X connect 1 0 2 1;
+#X connect 2 0 6 0;
+#X connect 4 0 2 1;
+#X connect 6 0 1 0;
+#X connect 6 0 3 0;
+#X connect 6 2 1 0;
+#X connect 6 2 3 0;
