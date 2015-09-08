@@ -23,7 +23,7 @@ public:
     
     essentia::standard::Algorithm* aggr;
     
-    String keyScaleString;
+    String keyString, scaleString;
     essentia::Real rmsValue, spectralFlatnessValue, spectralCentroidValue;
     
     int frameSize = 4096;
@@ -254,8 +254,10 @@ public:
                     key->shouldStop(true);
                     key->process();
                     
-                    if(pool.contains<std::string>("key"))
-                        keyScaleString = pool.value<std::string>("key") + " " + pool.value<std::string>("scale");
+                    if(pool.contains<std::string>("key")) {
+                        keyString = pool.value<std::string>("key");
+                        scaleString = pool.value<std::string>("scale");
+                    }
                 
                     //Then every 32 frames clear the key Algorithm history
                     if(frameCount % 32 == 0)

@@ -353,7 +353,9 @@ public:
         
         g.setColour(Colours::black);
 //        g.drawFittedText (recorder.keyString, 50, 300, 150,50, Justification::left, 2);
-        keyScaleTextBox.setText(recorder.keyScaleString);
+        
+        String keyScaleString = recorder.keyString + " " + recorder.scaleString;
+        keyScaleTextBox.setText(keyScaleString);
         rmsTextBox.setText(String(recorder.rmsValue));
         spectralFlatnessTextBox.setText(String(recorder.spectralFlatnessValue));
         spectralCentroidTextBox.setText(String(recorder.spectralCentroidValue));
@@ -459,16 +461,16 @@ private:
         char buffer[1024];
         osc::OutboundPacketStream p( buffer, 1024 );
         
-        p << osc::BeginBundleImmediate
+        p
         << osc::BeginMessage( "/earData" )
-        << recorder.keyScaleString.toRawUTF8()
+        << recorder.keyString.toRawUTF8()
+        << recorder.scaleString.toRawUTF8()
         << recorder.rmsValue
         << recorder.spectralFlatnessValue
         << recorder.spectralCentroidValue
-        << osc::EndMessage
+        << osc::EndMessage;
 //        << osc::BeginMessage( "/test2" )
 //        << true << 24 << (float)10.8 << "world" << osc::EndMessage
-        << osc::EndBundle;
 //
 //        juce::Logger *log = juce::Logger::getCurrentLogger();
 //        String message(ipAddressTextBox.getText());
