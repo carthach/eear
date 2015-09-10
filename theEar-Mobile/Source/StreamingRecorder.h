@@ -20,18 +20,18 @@ public:
     essentia::scheduler::Network* n;
     
     essentia::Pool pool, aggrPool;
-    
     essentia::standard::Algorithm* aggr;
     
     String keyString, scaleString;
     essentia::Real rmsValue, spectralFlatnessValue, spectralCentroidValue;
     
+    //As suggested by KeyExtractor
     int frameSize = 4096;
     int hopSize = 2048;
     
-    StreamingRecorder (AudioThumbnail& thumbnailToUpdate)
-    : thumbnail (thumbnailToUpdate), Thread("ESSENTIA_THREAD"),
-    sampleRate (0), nextSampleNum (0), recording(false)
+    int computeFrameCount = 8;
+    
+    StreamingRecorder () : Thread("ESSENTIA_THREAD"), sampleRate (0), recording(false)
     {
         setupEssentia();
     }
@@ -51,14 +51,14 @@ public:
         ringBufferInputPtr = static_cast<essentia::streaming::RingBufferInput*>(ringBufferInput);
 
         // instantiate all required algorithms
-        fc = factory.create("FrameCutter");
+//        fc = factory.create("FrameCutter");
         
-//        // instantiate all required algorithms
-//        fc = factory.create("FrameCutter",
-//                       "frameSize", frameSize,
-//                       "hopSize", hopSize,
-//                       "silentFrames", "noise",
-//                       "startFromZero", false);
+        // instantiate all required algorithms
+        fc = factory.create("FrameCutter",
+                       "frameSize", frameSize,
+                       "hopSize", hopSize,
+                       "silentFrames", "noise",
+                       "startFromZero", false);
 //
         // instantiate all required algorithms
         fc = factory.create("FrameCutter");
@@ -74,7 +74,7 @@ public:
         mfcc           = factory.create("MFCC");
         rms = factory.create("RMS");
         spectralFlatness = factory.create("FlatnessDB");
-        spectralCentroid = factory.create("Centroid", "range", 44100/2.0);
+        spectralCentroid = factory.create("Centroid", "range", 44100.0/2.0);
         
         
         // Audio -> FrameCutter
@@ -124,12 +124,19 @@ public:
     
     ~StreamingRecorder()
     {
+        n->clear(); //This takes care of deleting the algorithms in the network...
+        
+        //But the network and aggr were allocated manually...
         delete n;
+        delete aggr;
+        
+        essentia::shutdown();
+        
         stop();
     }
     
     //==============================================================================
-    void startRecording (const File& file)
+    void startRecording ()
     {
         stop();
         
@@ -138,46 +145,13 @@ public:
             n->reset();
             pool.clear();
             startThread();
-//            if (fileStream != nullptr)
-//            {
-//                // Now create a WAV writer object that writes to our output stream...
-//                WavAudioFormat wavFormat;
-//                AudioFormatWriter* writer = wavFormat.createWriterFor (fileStream, sampleRate, 1, 16, StringPairArray(), 0);
-//                
-//                if (writer != nullptr)
-//                {
-//                    fileStream.release(); // (passes responsibility for deleting the stream to the writer object that is now using it)
-//                    
-//                    // Now we'll create one of these helper objects which will act as a FIFO buffer, and will
-//                    // write the data to disk on our background thread.
-//                    threadedWriter = new AudioFormatWriter::ThreadedWriter (writer, backgroundThread, 32768);
-//                    
-//                    // Reset our recording thumbnail
-//                    thumbnail.reset (writer->getNumChannels(), writer->getSampleRate());
-//                    nextSampleNum = 0;
-//                    
-//                    // And now, swap over our active writer pointer so that the audio callback will start using it..
-//                    const ScopedLock sl (writerLock);
-//                    activeWriter = threadedWriter;
-//                }
-//            }
+
             recording = true;
         }
     }
     
     void stop()
     {
-        // First, clear this pointer to stop the audio callback from using our writer object..
-        {
-//            const ScopedLock sl (writerLock);
-//            activeWriter = nullptr;
-        }
-        
-        // Now we can delete the writer object. It's done in this order because the deletion could
-        // take a little time while remaining data gets flushed to disk, so it's best to avoid blocking
-        // the audio callback while this happens.
-//        threadedWriter = nullptr;
-        
         stopThread(1000);
         recording = false;
     }
@@ -198,35 +172,18 @@ public:
         sampleRate = 0;
     }
     
-    int bufferCount=0;
-    
     void audioDeviceIOCallback (const float** inputChannelData, int /*numInputChannels*/,
                                 float** outputChannelData, int numOutputChannels,
                                 int numSamples) override
     {
-
-        
         if(recording) {
 //            const ScopedLock sl (writerLock);
             
             //Put the samples into the RingBuffer
-            //According to ringbufferimpl.h Essentia should handle thread safety
+            //According to ringbufferimpl.h Essentia should handle thread safety...
             
             ringBufferInputPtr->add(const_cast<essentia::Real *> (inputChannelData[0]), numSamples);
         }
-        
-        lastNumSamples = numSamples;        
-        
-        //Old file writer stuff
-//        if (activeWriter != nullptr)
-//        {
-//            activeWriter->write (inputChannelData, numSamples);
-//            
-//            // Create an AudioSampleBuffer to wrap our incomming data, note that this does no allocations or copies, it simply references our input data
-//            const AudioSampleBuffer buffer (const_cast<float**> (inputChannelData), thumbnail.getNumChannels(), numSamples);
-//            thumbnail.addBlock (nextSampleNum, buffer, 0, numSamples);
-//            nextSampleNum += numSamples;
-//        }
         
         // We need to clear the output buffers, in case they're full of junk..
         for (int i = 0; i < numOutputChannels; ++i)
@@ -236,61 +193,54 @@ public:
     
     void run()
     {
-        int frameCount = 0;
+        int frameOutCount = 0;
+        bool shouldClear = false;
         
-
         //This is the Essentia thread, you need to consume the RingBuffer and do your work
         while(!threadShouldExit())
         {
-            {
-                
 //                const ScopedLock sl (writerLock);
+            
+            n->runStep();
+            
+            //Dirty filthy hack
+            //If we've got X frames send a forced message to the key thing to stop and output the key
+            if(frameOutCount % computeFrameCount == 0 && computeFrameCount > 0) {
+                key->shouldStop(true);
+                key->process();
                 
-                n->runStep();
-                
-                //Dirty filthy hack
-                //If we've got X frames send a forced message to the key thing to stop and output the key
-                if(frameCount % 8 == 0 && frameCount > 0) {
-                    key->shouldStop(true);
-                    key->process();
-                    
-                    if(pool.contains<std::string>("key")) {
-                        keyString = pool.value<std::string>("key");
-                        scaleString = pool.value<std::string>("scale");
-                    }
-                
-                    //Then every 32 frames clear the key Algorithm history
-                    if(frameCount % 32 == 0)
-                        key->reset();                    
+                if(pool.contains<std::string>("key")) {
+                    keyString = pool.value<std::string>("key");
+                    scaleString = pool.value<std::string>("scale");
                 }
                 
-                std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
-                
-    
-                rmsValue = reals["rms"].back();
-                spectralFlatnessValue = reals["spectralFlatness"].back();
-                spectralCentroidValue = reals["spectralCentroid"].back();
-            
-                sendChangeMessage();
-                
-                //Notify of change
-                
-                frameCount++;
+//                if(frameOutCount % 32 == 0)
+//                    key->reset();
             }
-            Thread::sleep (1);
+            
+            //Clear out the key algorithm
+            if(frameOutCount % (computeFrameCount+1) == 0 && computeFrameCount > 0)
+                key->reset();
+            
+            std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
+            
+            rmsValue = reals["rms"].back();
+            spectralFlatnessValue = reals["spectralFlatness"].back();
+            spectralCentroidValue = reals["spectralCentroid"].back();
+        
+            sendChangeMessage();
+            
+            //Notify of change
+            
+            frameOutCount++;
+
+            sleep (1);
         }
     }
     
-    
-    
 private:
-    AudioThumbnail& thumbnail;
-
+//    AudioThumbnail& thumbnail;
     double sampleRate;
-    int64 nextSampleNum;
-               
-    int lastNumSamples = 0;
-
     bool recording = false;
 
 };

@@ -78,7 +78,7 @@ public:
     void paint (Graphics& g) override
     {
         // (Our component is opaque, so we must completely fill the background with a solid colour)
-//        g.fillAll (Colours::green);
+        g.fillAll(Colours::black);
         
 
         
@@ -88,9 +88,8 @@ public:
 
     void resized() override
     {
-        Rectangle<int> r = getLocalBounds();
-        
-        recorder.setBounds(r);
+        //Just one sub component
+        recorder.setBounds(getLocalBounds());
     }
 
 

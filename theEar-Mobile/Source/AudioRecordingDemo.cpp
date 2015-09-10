@@ -227,7 +227,7 @@ public:
 
     void paint (Graphics& g) override
     {
-        g.fillAll (Colours::darkgrey);
+        g.fillAll();
         g.setColour (Colours::lightgrey);
 
         if (thumbnail.getTotalLength() > 0.0)
@@ -263,11 +263,13 @@ private:
 //==============================================================================
 class AudioRecordingDemo  : public Component,
                             private Button::Listener,
-                            private ChangeListener
+                            private ChangeListener,
+                            private SliderListener
+
 {
 public:
     AudioRecordingDemo(AudioDeviceManager* deviceManager)
-        : recorder (recordingThumbnail.getAudioThumbnail()), inputMeter(*deviceManager)
+        : recorder (), inputMeter(*deviceManager)
     {
         setOpaque (true);
         addAndMakeVisible (liveAudioScroller);
@@ -330,8 +332,22 @@ public:
         
         addAndMakeVisible (portNumberTextBox);
         portNumberTextBox.setText("8000");
+        
 
-        addAndMakeVisible (recordingThumbnail);
+        
+        addAndMakeVisible (frameSlider);
+        frameSlider.setRange (1.0, 44100.0/512.0, 1.0);
+        frameSlider.setValue (50, dontSendNotification);
+        frameSlider.setSliderStyle (Slider::LinearHorizontal);
+        frameSlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
+        frameSlider.addListener (this);
+
+        
+        addAndMakeVisible (frameSliderLabel);
+        frameSliderLabel.setText ("Size of analysis buffer", dontSendNotification);
+        frameSliderLabel.attachToComponent (&frameSlider, true);
+        
+//        addAndMakeVisible (recordingThumbnail);
         
         this->deviceManager = deviceManager;
 
@@ -349,10 +365,8 @@ public:
 
     void paint (Graphics& g) override
     {
-        g.fillAll (Colours::green);
-        
+        g.fillAll (Colours::grey);
         g.setColour(Colours::black);
-//        g.drawFittedText (recorder.keyString, 50, 300, 150,50, Justification::left, 2);
         
         String keyScaleString = recorder.keyString + " " + recorder.scaleString;
         keyScaleTextBox.setText(keyScaleString);
@@ -365,7 +379,7 @@ public:
     {
         Rectangle<int> area (getLocalBounds());
         liveAudioScroller.setBounds (area.removeFromTop (80).reduced (8));
-        recordingThumbnail.setBounds (area.removeFromTop (80).reduced (8));
+//        recordingThumbnail.setBounds (area.removeFromTop (80).reduced (8));
         recordButton.setBounds (area.removeFromTop (36).removeFromLeft (140).reduced (8));
         explanationLabel.setBounds (area.reduced (8));
 
@@ -374,10 +388,12 @@ public:
         Rectangle<int> labelBounds = recordButton.getBounds();
         Rectangle<int> valueBounds = recordButton.getBounds().withX(xOffset);
         
-        
         int labelY = explanationLabel.getY()+5;
         
-        keyScaleLabel.setBounds(labelBounds.withY(labelY));
+        frameSliderLabel.setBounds(labelBounds.withY(labelY));
+        frameSlider.setBounds (valueBounds.withY(labelY));
+        
+        keyScaleLabel.setBounds(labelBounds.withY(labelY+=30));
         keyScaleTextBox.setBounds(valueBounds.withY(labelY));
         rmsLabel.setBounds(labelBounds.withY(labelY+=30));
         rmsTextBox.setBounds(valueBounds.withY(labelY));
@@ -412,7 +428,9 @@ private:
     DatagramSocket datagramSocket;
     SimpleDeviceManagerInputLevelMeter inputMeter;
     
+    Slider frameSlider;
     
+    Label frameSliderLabel;
     Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel, oscInfoLabel;
     Label ipAddressLabel, portNumberLabel;
     
@@ -426,9 +444,7 @@ private:
 //        const File file (File::getSpecialLocation (File::userDocumentsDirectory)
 //                            .getNonexistentChildFile ("Juce Demo Audio Recording", ".wav"));
         
-        const File file ("/sdcard/out.wav");
-        
-        recorder.startRecording (file);
+        recorder.startRecording ();
 
         recordButton.setButtonText ("Stop");
         recordingThumbnail.setDisplayFullThumbnail (false);
@@ -453,6 +469,19 @@ private:
                 stopRecording();
             else
                 startRecording();
+        }
+    }
+    
+    void 	sliderValueChanged (Slider *slider) override
+    {
+        if (slider == &frameSlider) {
+            int frameValue = int(slider->getValue());
+            if(frameValue != recorder.computeFrameCount) {
+                if (recorder.isRecording())
+                    stopRecording();
+                recorder.computeFrameCount = frameValue;
+                
+            }
         }
     }
     
