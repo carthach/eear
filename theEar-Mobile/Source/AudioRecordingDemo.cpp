@@ -334,6 +334,16 @@ public:
         portNumberTextBox.setText("8000");
         
 
+        addAndMakeVisible (sensitivitySlider);
+        sensitivitySlider.setRange (1.0, 44100.0/512.0, 1.0);
+        sensitivitySlider.setValue (50, dontSendNotification);
+        sensitivitySlider.setSliderStyle (Slider::LinearHorizontal);
+        sensitivitySlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
+        sensitivitySlider.addListener (this);
+        
+        addAndMakeVisible (sensitivitySliderLabel);
+        sensitivitySliderLabel.setText ("Sensitivity", dontSendNotification);
+        sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
         
         addAndMakeVisible (frameSlider);
         frameSlider.setRange (1.0, 44100.0/512.0, 1.0);
@@ -341,10 +351,9 @@ public:
         frameSlider.setSliderStyle (Slider::LinearHorizontal);
         frameSlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
         frameSlider.addListener (this);
-
         
         addAndMakeVisible (frameSliderLabel);
-        frameSliderLabel.setText ("Size of analysis buffer", dontSendNotification);
+        frameSliderLabel.setText ("Size of Buffer", dontSendNotification);
         frameSliderLabel.attachToComponent (&frameSlider, true);
         
 //        addAndMakeVisible (recordingThumbnail);
@@ -370,7 +379,7 @@ public:
         
         String keyScaleString = recorder.keyString + " " + recorder.scaleString;
         keyScaleTextBox.setText(keyScaleString);
-        rmsTextBox.setText(String(recorder.rmsValue));
+        rmsTextBox.setText(String(float(recorder.rmsValue), 10));
         spectralFlatnessTextBox.setText(String(recorder.spectralFlatnessValue));
         spectralCentroidTextBox.setText(String(recorder.spectralCentroidValue));
     }
@@ -389,8 +398,11 @@ public:
         Rectangle<int> valueBounds = recordButton.getBounds().withX(xOffset);
         
         int labelY = explanationLabel.getY()+5;
+
+        sensitivitySliderLabel.setBounds(labelBounds.withY(labelY));
+        sensitivitySlider.setBounds (valueBounds.withY(labelY));
         
-        frameSliderLabel.setBounds(labelBounds.withY(labelY));
+        frameSliderLabel.setBounds(labelBounds.withY(labelY+=30));
         frameSlider.setBounds (valueBounds.withY(labelY));
         
         keyScaleLabel.setBounds(labelBounds.withY(labelY+=30));
@@ -428,9 +440,9 @@ private:
     DatagramSocket datagramSocket;
     SimpleDeviceManagerInputLevelMeter inputMeter;
     
-    Slider frameSlider;
+    Slider frameSlider, sensitivitySlider;
+    Label frameSliderLabel, sensitivitySliderLabel;
     
-    Label frameSliderLabel;
     Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel, oscInfoLabel;
     Label ipAddressLabel, portNumberLabel;
     

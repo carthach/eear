@@ -1,8 +1,7 @@
 #include <essentia/algorithmfactory.h>
 #include <essentia/streaming/algorithms/poolstorage.h>
 #include <essentia/scheduler/network.h>
-#include "ringbufferinput.h"
-
+#include <essentia/streaming/algorithms/ringbufferinput.h>
 
 //==============================================================================
 /** A simple class that acts as an AudioIODeviceCallback and writes the
@@ -12,9 +11,7 @@ class StreamingRecorder  : public AudioIODeviceCallback, public Thread, public C
 {
     
 public:
-    essentia::streaming::Algorithm* ringBufferInput;
-    essentia::streaming::RingBufferInput* ringBufferInputPtr;
-    
+    essentia::streaming::RingBufferInput* ringBufferInput;
     essentia::streaming::Algorithm *fc, *w, *spectrum, *spectralPeaks, *hpcpKey, *key, *mfcc, *rms, *spectralCentroid, *spectralFlatness;
     
     essentia::scheduler::Network* n;
@@ -44,11 +41,12 @@ public:
         
         essentia::streaming::AlgorithmFactory& factory = essentia::streaming::AlgorithmFactory::instance();
         
-        ringBufferInput = factory.create("RingBufferInput");
-        ringBufferInput->configure("bufferSize", 44100);
-        
+        ringBufferInput = new essentia::streaming::RingBufferInput();
+        ringBufferInput->declareParameters();
+        ringBufferInput->essentia::Configurable::configure("bufferSize", 44100);
+
         //A pointer to the Ring Buffer so we can access its goodies
-        ringBufferInputPtr = static_cast<essentia::streaming::RingBufferInput*>(ringBufferInput);
+//        ringBufferInputPtr = static_cast<essentia::streaming::RingBufferInput*>(ringBufferInput);
 
         // instantiate all required algorithms
 //        fc = factory.create("FrameCutter");
@@ -114,7 +112,6 @@ public:
         
         aggr = essentia::standard::AlgorithmFactory::create("PoolAggregator",
                                                             "defaultStats", essentia::arrayToVector<std::string>(stats));
-        
         aggr->input("input").set(pool);
         aggr->output("output").set(aggrPool);
 
@@ -124,6 +121,7 @@ public:
     
     ~StreamingRecorder()
     {
+        
         n->clear(); //This takes care of deleting the algorithms in the network...
         
         //But the network and aggr were allocated manually...
@@ -144,6 +142,7 @@ public:
         {
             n->reset();
             pool.clear();
+            aggrPool.clear();
             startThread();
 
             recording = true;
@@ -182,7 +181,11 @@ public:
             //Put the samples into the RingBuffer
             //According to ringbufferimpl.h Essentia should handle thread safety...
             
-            ringBufferInputPtr->add(const_cast<essentia::Real *> (inputChannelData[0]), numSamples);
+            const AudioSampleBuffer buffer (const_cast<float**> (inputChannelData), 1, numSamples);
+            
+            std::cout << buffer.getRMSLevel(0, 0, buffer.getNumSamples()) << "\n";
+            
+            ringBufferInput->add(const_cast<essentia::Real *> (inputChannelData[0]), numSamples);
         }
         
         // We need to clear the output buffers, in case they're full of junk..
@@ -214,27 +217,38 @@ public:
                     scaleString = pool.value<std::string>("scale");
                 }
                 
+                aggr->compute();
+                std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
+                
+                rmsValue = reals["rms"].back();
+                spectralFlatnessValue = reals["spectralFlatness"].back();
+                spectralCentroidValue = reals["spectralCentroid"].back();
+                
+                sendChangeMessage();
 //                if(frameOutCount % 32 == 0)
 //                    key->reset();
             }
             
             //Clear out the key algorithm
-            if(frameOutCount % (computeFrameCount+1) == 0 && computeFrameCount > 0)
-                key->reset();
+            if(frameOutCount % (computeFrameCount+1) == 0 && computeFrameCount > 0) {
+//                key->reset();
+                n->reset();
+                aggrPool.clear();
+            }
             
-            std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
-            
-            rmsValue = reals["rms"].back();
-            spectralFlatnessValue = reals["spectralFlatness"].back();
-            spectralCentroidValue = reals["spectralCentroid"].back();
+//            std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
+//            
+//            rmsValue = reals["rms"].back();
+//            spectralFlatnessValue = reals["spectralFlatness"].back();
+//            spectralCentroidValue = reals["spectralCentroid"].back();
         
-            sendChangeMessage();
+
             
             //Notify of change
             
             frameOutCount++;
 
-            sleep (1);
+//            sleep (1);
         }
     }
     
