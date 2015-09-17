@@ -66,7 +66,7 @@ public:
                                                     DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar (true);
-            setContentOwned (createMainContentComponent(), false);
+            
             
             setResizable (true, true);
 //
@@ -84,7 +84,7 @@ public:
                        jmax (600, (int) (0.7f * getParentHeight())));
             
 #endif
-            
+            setContentOwned (createMainContentComponent(), false);
             setVisible (true);
         }
 

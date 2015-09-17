@@ -183,7 +183,7 @@ public:
             
             const AudioSampleBuffer buffer (const_cast<float**> (inputChannelData), 1, numSamples);
             
-            std::cout << buffer.getRMSLevel(0, 0, buffer.getNumSamples()) << "\n";
+//            std::cout << buffer.getRMSLevel(0, 0, buffer.getNumSamples()) << "\n";
             
             ringBufferInput->add(const_cast<essentia::Real *> (inputChannelData[0]), numSamples);
         }
@@ -234,6 +234,7 @@ public:
 //                key->reset();
                 n->reset();
                 aggrPool.clear();
+                frameOutCount = 0;
             }
             
 //            std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
