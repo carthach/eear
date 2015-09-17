@@ -142,7 +142,7 @@ bool ChildProcessMaster::sendMessageToSlave (const MemoryBlock& mb)
     return false;
 }
 
-bool ChildProcessMaster::launchSlaveProcess (const File& executable, const String& commandLineUniqueID, int timeoutMs, int streamFlags)
+bool ChildProcessMaster::launchSlaveProcess (const File& executable, const String& commandLineUniqueID, int timeoutMs)
 {
     connection = nullptr;
     jassert (childProcess.kill());
@@ -153,7 +153,7 @@ bool ChildProcessMaster::launchSlaveProcess (const File& executable, const Strin
     args.add (executable.getFullPathName());
     args.add (getCommandLinePrefix (commandLineUniqueID) + pipeName);
 
-    if (childProcess.start (args, streamFlags))
+    if (childProcess.start (args))
     {
         connection = new Connection (*this, pipeName, timeoutMs <= 0 ? defaultTimeoutMs : timeoutMs);
 

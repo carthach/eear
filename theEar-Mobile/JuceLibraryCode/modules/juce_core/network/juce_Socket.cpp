@@ -569,11 +569,8 @@ DatagramSocket::DatagramSocket (const bool canBroadcast)
     SocketHelpers::initSockets();
 
     handle = (int) socket (AF_INET, SOCK_DGRAM, 0);
-    if (handle >= 0)
-    {
-        SocketHelpers::resetSocketOptions (handle, true, canBroadcast);
-        SocketHelpers::makeReusable (handle);
-    }
+    SocketHelpers::resetSocketOptions (handle, true, canBroadcast);
+    SocketHelpers::makeReusable (handle);
 }
 
 DatagramSocket::~DatagramSocket()
@@ -581,18 +578,8 @@ DatagramSocket::~DatagramSocket()
     if (lastServerAddress != nullptr)
         freeaddrinfo (static_cast <struct addrinfo*> (lastServerAddress));
 
-    shutdown();
-}
-
-void DatagramSocket::shutdown()
-{
-    if (handle < 0)
-        return;
-
-    int copyOfHandle = handle;
-    handle = -1;
     bool connected = false;
-    SocketHelpers::closeSocket (copyOfHandle, readLock, false, 0, connected);
+    SocketHelpers::closeSocket (handle, readLock, false, 0, connected);
 }
 
 bool DatagramSocket::bindToPort (const int port)
@@ -602,9 +589,6 @@ bool DatagramSocket::bindToPort (const int port)
 
 bool DatagramSocket::bindToPort (const int port, const String& addr)
 {
-    if (handle < 0)
-        return false;
-
     if (SocketHelpers::bindSocket (handle, port, addr))
     {
         isBound = true;
@@ -618,9 +602,6 @@ bool DatagramSocket::bindToPort (const int port, const String& addr)
 
 int DatagramSocket::getBoundPort() const noexcept
 {
-    if (handle < 0)
-        return -1;
-
     return isBound ? SocketHelpers::getBoundPort (handle) : -1;
 }
 
@@ -628,17 +609,11 @@ int DatagramSocket::getBoundPort() const noexcept
 int DatagramSocket::waitUntilReady (const bool readyForReading,
                                     const int timeoutMsecs) const
 {
-    if (handle < 0)
-        return -1;
-
     return SocketHelpers::waitForReadiness (handle, readLock, readyForReading, timeoutMsecs);
 }
 
 int DatagramSocket::read (void* destBuffer, int maxBytesToRead, bool shouldBlock)
 {
-    if (handle < 0)
-        return -1;
-
     bool connected = true;
     return isBound ? SocketHelpers::readSocket (handle, destBuffer, maxBytesToRead,
                                                 connected, shouldBlock, readLock) : -1;
@@ -646,9 +621,6 @@ int DatagramSocket::read (void* destBuffer, int maxBytesToRead, bool shouldBlock
 
 int DatagramSocket::read (void* destBuffer, int maxBytesToRead, bool shouldBlock, String& senderIPAddress, int& senderPort)
 {
-    if (handle < 0)
-        return -1;
-
     bool connected = true;
     return isBound ? SocketHelpers::readSocket (handle, destBuffer, maxBytesToRead, connected,
                                                 shouldBlock, readLock, &senderIPAddress, &senderPort) : -1;
@@ -657,9 +629,6 @@ int DatagramSocket::read (void* destBuffer, int maxBytesToRead, bool shouldBlock
 int DatagramSocket::write (const String& remoteHostname, int remotePortNumber,
                            const void* sourceBuffer, int numBytesToWrite)
 {
-    if (handle < 0)
-        return -1;
-
     struct addrinfo*& info = reinterpret_cast <struct addrinfo*&> (lastServerAddress);
 
     // getaddrinfo can be quite slow so cache the result of the address lookup
@@ -682,7 +651,7 @@ int DatagramSocket::write (const String& remoteHostname, int remotePortNumber,
 
 bool DatagramSocket::joinMulticast (const String& multicastIPAddress)
 {
-    if (! isBound || handle < 0)
+    if (! isBound)
         return false;
 
     return SocketHelpers::multicast (handle, multicastIPAddress, lastBindAddress, true);
@@ -690,7 +659,7 @@ bool DatagramSocket::joinMulticast (const String& multicastIPAddress)
 
 bool DatagramSocket::leaveMulticast (const String& multicastIPAddress)
 {
-    if (! isBound || handle < 0)
+    if (! isBound)
         return false;
 
     return SocketHelpers::multicast (handle, multicastIPAddress, lastBindAddress, false);

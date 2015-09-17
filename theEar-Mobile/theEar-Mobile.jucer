@@ -4,7 +4,14 @@
               bundleIdentifier="com.yourcompany.theEarMobile" includeBinaryInAppConfig="1"
               jucerVersion="3.2.0">
   <MAINGROUP id="HbPPUx" name="theEar-Mobile">
-    <GROUP id="{4035F341-CD9A-AB8A-C692-7ADEC6081F84}" name="Source"/>
+    <GROUP id="{4035F341-CD9A-AB8A-C692-7ADEC6081F84}" name="Source">
+      <GROUP id="{623007C3-0A4F-6DA9-9950-48733DDA0377}" name="Essentia-RingBuffer">
+        <FILE id="YKZo3P" name="ringbufferinput.h" compile="0" resource="0"
+              file="Source/ringbufferinput.h"/>
+        <FILE id="xiD5uZ" name="ringbufferoutput.h" compile="0" resource="0"
+              file="Source/ringbufferoutput.h"/>
+      </GROUP>
+    </GROUP>
     <FILE id="M5QQ5P" name="AudioLiveScrollingDisplay.h" compile="0" resource="0"
           file="Source/AudioLiveScrollingDisplay.h"/>
     <FILE id="wNJScS" name="AudioRecordingDemo.cpp" compile="1" resource="0"

@@ -679,8 +679,6 @@ void CodeEditorComponent::scrollToLineInternal (int newFirstLineOnScreen)
         updateCachedIterators (firstLineOnScreen);
         rebuildLineTokensAsync();
         pimpl->handleUpdateNowIfNeeded();
-
-        editorViewportPositionChanged();
     }
 }
 
@@ -1229,10 +1227,6 @@ void CodeEditorComponent::handleTabKey()
 void CodeEditorComponent::handleEscapeKey()
 {
     newTransaction();
-}
-
-void CodeEditorComponent::editorViewportPositionChanged()
-{
 }
 
 //==============================================================================

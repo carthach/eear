@@ -401,17 +401,14 @@ void MidiKeyboardComponent::paint (Graphics& g)
         }
     }
 
-    if (! lineColour.isTransparent())
-    {
-        g.setColour (lineColour);
+    g.setColour (lineColour);
 
-        switch (orientation)
-        {
-            case horizontalKeyboard:            g.fillRect (0, height - 1, x, 1); break;
-            case verticalKeyboardFacingLeft:    g.fillRect (0, 0, 1, x); break;
-            case verticalKeyboardFacingRight:   g.fillRect (width - 1, 0, 1, x); break;
-            default: break;
-        }
+    switch (orientation)
+    {
+        case horizontalKeyboard:            g.fillRect (0, height - 1, x, 1); break;
+        case verticalKeyboardFacingLeft:    g.fillRect (0, 0, 1, x); break;
+        case verticalKeyboardFacingRight:   g.fillRect (width - 1, 0, 1, x); break;
+        default: break;
     }
 
     const Colour blackNoteColour (findColour (blackNoteColourId));
@@ -475,27 +472,24 @@ void MidiKeyboardComponent::drawWhiteNote (int midiNoteNumber,
         }
     }
 
-    if (! lineColour.isTransparent())
-    {
-        g.setColour (lineColour);
+    g.setColour (lineColour);
 
+    switch (orientation)
+    {
+        case horizontalKeyboard:            g.fillRect (x, y, 1, h); break;
+        case verticalKeyboardFacingLeft:    g.fillRect (x, y, w, 1); break;
+        case verticalKeyboardFacingRight:   g.fillRect (x, y + h - 1, w, 1); break;
+        default: break;
+    }
+
+    if (midiNoteNumber == rangeEnd)
+    {
         switch (orientation)
         {
-            case horizontalKeyboard:            g.fillRect (x, y, 1, h); break;
-            case verticalKeyboardFacingLeft:    g.fillRect (x, y, w, 1); break;
-            case verticalKeyboardFacingRight:   g.fillRect (x, y + h - 1, w, 1); break;
+            case horizontalKeyboard:            g.fillRect (x + w, y, 1, h); break;
+            case verticalKeyboardFacingLeft:    g.fillRect (x, y + h, w, 1); break;
+            case verticalKeyboardFacingRight:   g.fillRect (x, y - 1, w, 1); break;
             default: break;
-        }
-
-        if (midiNoteNumber == rangeEnd)
-        {
-            switch (orientation)
-            {
-                case horizontalKeyboard:            g.fillRect (x + w, y, 1, h); break;
-                case verticalKeyboardFacingLeft:    g.fillRect (x, y + h, w, 1); break;
-                case verticalKeyboardFacingRight:   g.fillRect (x, y - 1, w, 1); break;
-                default: break;
-            }
         }
     }
 }

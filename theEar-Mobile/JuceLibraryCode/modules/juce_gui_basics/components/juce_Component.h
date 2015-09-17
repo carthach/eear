@@ -1353,26 +1353,19 @@ public:
     */
     virtual void enablementChanged();
 
-    //==============================================================================
-    /** Returns the component's current transparancy level.
-        See setAlpha() for more details.
-    */
-    float getAlpha() const noexcept;
-
     /** Changes the transparency of this component.
         When painted, the entire component and all its children will be rendered
         with this as the overall opacity level, where 0 is completely invisible, and
         1.0 is fully opaque (i.e. normal).
 
-        @see getAlpha, alphaChanged
+        @see getAlpha
     */
     void setAlpha (float newAlpha);
 
-    /** Called when setAlpha() is used to change the alpha value of this component.
-        If you override this, you should also invoke the base class's implementation
-        during your overridden function, as it performs some repainting behaviour.
+    /** Returns the component's current transparancy level.
+        See setAlpha() for more details.
     */
-    virtual void alphaChanged();
+    float getAlpha() const;
 
     //==============================================================================
     /** Changes the mouse cursor shape to use when the mouse is over this component.

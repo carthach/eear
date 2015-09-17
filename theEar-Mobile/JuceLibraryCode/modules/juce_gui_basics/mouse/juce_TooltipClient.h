@@ -65,14 +65,14 @@ class JUCE_API  SettableTooltipClient   : public TooltipClient
 public:
     //==============================================================================
     /** Destructor. */
-    ~SettableTooltipClient() {}
+    virtual ~SettableTooltipClient()                                {}
 
     //==============================================================================
     /** Assigns a new tooltip to this object. */
     virtual void setTooltip (const String& newTooltip)              { tooltipString = newTooltip; }
 
     /** Returns the tooltip assigned to this object. */
-    String getTooltip() override                                    { return tooltipString; }
+    virtual String getTooltip()                                     { return tooltipString; }
 
 protected:
     SettableTooltipClient() {}

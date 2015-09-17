@@ -84,15 +84,14 @@ RelativeRectangle::RelativeRectangle (const Rectangle<float>& rect)
 
 RelativeRectangle::RelativeRectangle (const String& s)
 {
-    String error;
     String::CharPointerType text (s.getCharPointer());
-    left = RelativeCoordinate (Expression::parse (text, error));
+    left = RelativeCoordinate (Expression::parse (text));
     RelativeRectangleHelpers::skipComma (text);
-    top = RelativeCoordinate (Expression::parse (text, error));
+    top = RelativeCoordinate (Expression::parse (text));
     RelativeRectangleHelpers::skipComma (text);
-    right = RelativeCoordinate (Expression::parse (text, error));
+    right = RelativeCoordinate (Expression::parse (text));
     RelativeRectangleHelpers::skipComma (text);
-    bottom = RelativeCoordinate (Expression::parse (text, error));
+    bottom = RelativeCoordinate (Expression::parse (text));
 }
 
 bool RelativeRectangle::operator== (const RelativeRectangle& other) const noexcept

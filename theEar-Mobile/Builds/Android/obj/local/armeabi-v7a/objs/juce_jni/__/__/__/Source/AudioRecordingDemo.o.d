@@ -573,7 +573,7 @@ obj/local/armeabi-v7a/objs/juce_jni/__/__/__/Source/AudioRecordingDemo.o: \
  /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/stack \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/scheduler/../streaming/streamingalgorithm.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/scheduler/../essentiautil.h \
- jni/../../../Source/ringbufferinput.h \
+ /Users/carthach/Dev/android/modules/essentia/include/essentia/streaming/algorithms/ringbufferinput.h \
  jni/../../../Source/StandardRecorder.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/essentiamath.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/utils/tnt/tnt2essentiautils.h \
@@ -1727,7 +1727,7 @@ jni/../../../Source/StreamingRecorder.h:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/scheduler/../essentiautil.h:
 
-jni/../../../Source/ringbufferinput.h:
+/Users/carthach/Dev/android/modules/essentia/include/essentia/streaming/algorithms/ringbufferinput.h:
 
 jni/../../../Source/StandardRecorder.h:
 

@@ -157,8 +157,7 @@ public:
     */
     bool launchSlaveProcess (const File& executableToLaunch,
                              const String& commandLineUniqueID,
-                             int timeoutMs = 0,
-                             int streamFlags = ChildProcess::wantStdOut | ChildProcess::wantStdErr);
+                             int timeoutMs = 0);
 
     /** This will be called to deliver a message from the slave process.
         The call will probably be made on a background thread, so be careful with your thread-safety!

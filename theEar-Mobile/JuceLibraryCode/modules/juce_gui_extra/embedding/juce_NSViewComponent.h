@@ -73,8 +73,6 @@ public:
     /** @internal */
     void paint (Graphics&) override;
     /** @internal */
-    void alphaChanged() override;
-    /** @internal */
     static ReferenceCountedObject* attachViewToComponent (Component&, void*);
 
 private:

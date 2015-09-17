@@ -29,7 +29,7 @@
 #ifndef JUCE_HEAPBLOCK_H_INCLUDED
 #define JUCE_HEAPBLOCK_H_INCLUDED
 
-#if ! (defined (DOXYGEN) || JUCE_EXCEPTIONS_DISABLED)
+#ifndef DOXYGEN
 namespace HeapBlockHelper
 {
     template <bool shouldThrow>
@@ -295,11 +295,7 @@ private:
 
     void throwOnAllocationFailure() const
     {
-       #if JUCE_EXCEPTIONS_DISABLED
-        jassert (data != nullptr); // without exceptions, you'll need to find a better way to handle this failure case.
-       #else
         HeapBlockHelper::ThrowOnFail<throwOnFailure>::check (data);
-       #endif
     }
 
    #if ! (defined (JUCE_DLL) || defined (JUCE_DLL_BUILD))
