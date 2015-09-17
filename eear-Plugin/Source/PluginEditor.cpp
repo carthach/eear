@@ -206,13 +206,12 @@ void TheEarPluginAudioProcessorEditor::buttonClicked(Button* button)
     if(button == &resetSynthButton) {
         String path = "/Users/carthach/Dev/git/GiantSteps/eear/eear-demo-mhd-pd/MHD-short-loops";
         
-        if(String(earOSCServer.key) != "") {
-            Array<File> matchingFiles = getAudioFiles(File(path), earOSCServer.key, earOSCServer.scale);
-            if(matchingFiles.size() > 0)
-                getProcessor().setSynthSamples(matchingFiles);
-
-        }
-//        getProcessor().setSynthSamples(getAudioFiles(File(path), "E", "minor"));
+//        if(String(earOSCServer.key) != "") {
+//            Array<File> matchingFiles = getAudioFiles(File(path), earOSCServer.key, earOSCServer.scale);
+//            if(matchingFiles.size() > 0)
+//                getProcessor().setSynthSamples(matchingFiles);
+//        }
+        getProcessor().setSynthSamples(getAudioFiles(File(path), "E", "minor"));
     }
 }
 

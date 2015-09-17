@@ -76,8 +76,10 @@ public:
         
         midiKeyboardState.addListener(this);
         
+        int midiOffset = 12;
+        
         for(int i=0; i<16; i++) {
-            pads.add(new PadComponent(midiKeyboardState, 60+i));
+            pads.add(new PadComponent(midiKeyboardState, (midiOffset+i)));
             addAndMakeVisible(pads[i]);
         }
         
@@ -148,8 +150,8 @@ public:
             float colWidth = getWidth() / 4.0; // get grid cell size
             float colHeight = getHeight() / cols; // get grid cell size
             
-            float col = i % cols;
-            float row = floor(i / cols);
+            float col = (i % cols);
+            float row = 3 - (floor(i / cols));
             
             float posX = col * colWidth + colWidth/4.0;
             float posY = row * colHeight + colHeight/4.0;

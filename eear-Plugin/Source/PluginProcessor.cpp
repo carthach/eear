@@ -224,7 +224,7 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles)
     
     synth.clearSounds();
     
-    int midiOffset = 60;
+    int midiOffset = 12;
     
     for(int i=0; i< 16; i++) {
         int randomFileIndex = rand.nextInt(listOfFiles.size());
@@ -322,25 +322,25 @@ void TheEarPluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
         buffer.applyGain (channel, 0, buffer.getNumSamples(), gain->getValue());
     
     
-//    MidiBuffer normalBuffer;
-//    
-//    //Get an iterator
-//    MidiBuffer::Iterator midiBufferIterator(midiMessages);
-//    
-//    for(int i=0; i<midiMessages.getNumEvents(); i++) {
-//        MidiMessage midiMessage;
-//        int samplePosition;
-//        midiBufferIterator.getNextEvent(midiMessage, samplePosition);
-//        
-//        if (midiMessage.isNoteOn()) {
-//            noteOnBuffer.addEvent(midiMessage, 0);
-//        }
-//        if(midiMessage.isNoteOff()) {
-//            noteOnBuffer.addEvent(midiMessage, samplePosition);
-//            normalBuffer.addEvent(midiMessage, samplePosition);
-//        }
-//
-//    }
+    MidiBuffer normalBuffer;
+    
+    //Get an iterator
+    MidiBuffer::Iterator midiBufferIterator(midiMessages);
+    
+    for(int i=0; i<midiMessages.getNumEvents(); i++) {
+        MidiMessage midiMessage;
+        int samplePosition;
+        midiBufferIterator.getNextEvent(midiMessage, samplePosition);
+        
+        if (midiMessage.isNoteOn()) {
+            noteOnBuffer.addEvent(midiMessage, 0);
+        }
+        if(midiMessage.isNoteOff()) {
+            noteOnBuffer.addEvent(midiMessage, samplePosition);
+            normalBuffer.addEvent(midiMessage, samplePosition);
+        }
+
+    }
     
     double param, fractpart, intpart;
     
@@ -362,14 +362,14 @@ void TheEarPluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
 
     // and now get the synth to process these midi events and generate its output.
     
-//    if(newBeat) {
-//        synth.renderNextBlock (buffer, noteOnBuffer, 0, numSamples);
-//        noteOnBuffer.clear();
-//    }
-//    else
-//        synth.renderNextBlock (buffer, normalBuffer, 0, numSamples);
+    if(newBeat) {
+        synth.renderNextBlock (buffer, noteOnBuffer, 0, numSamples);
+        noteOnBuffer.clear();
+    }
+    else
+        synth.renderNextBlock (buffer, normalBuffer, 0, numSamples);
     
-    synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
+//    synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
 
     // Apply our delay effect to the new output..
     for (channel = 0; channel < getNumInputChannels(); ++channel)
