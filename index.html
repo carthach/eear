@@ -19,25 +19,19 @@
     </section>
 
     <section class="main-content">
-      <h1>
-<a id="eear" class="anchor" href="#eear" aria-hidden="true"><span class="octicon octicon-link"></span></a>eear</h1>
-
-<p>Key-based instrument presented at Sonár MHD 2015.</p>
-
-<p><em>eear</em> is a smartphone app that analyses incoming audio and provides on-screen real-time musical information about the signal, that can be sent via OSC to a laptop or desktop computer for endless musical manipulation and sound-processing.</p>
+      <p><em>eear</em> is a smartphone app that analyses incoming audio and provides on-screen real-time musical information about the signal, that can be sent via OSC to a laptop or desktop computer for endless musical manipulation and sound-processing.</p>
 
 <h4>
 <a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h4>
 
-<p>At the moment, <em>eear</em> provides tonal information about the music around the user. It can act in <strong>continuous mode</strong>, providing chord estimations as the music evolves, or it can work in <strong>static mode</strong>, listening to music during a time period selected by the user, giving an estimate of what could be considered the key of the music.</p>
+<p>For now, <em>eear</em> provides tonal information about the music surrounding the user. It can act in <strong>continuous mode</strong>, providing chord estimations as the music evolves, or it can work in <strong>static mode</strong>, listening for a time period selected by the user, delivering a global estimate of what could be considered the musical key of the music.</p>
 
-<p>b) Loudness measure...</p>
+<p>Furthermore, <em>eear</em> displays basic timbral information, including the degree of noisiness, loudness and spectral centroid (a measure of where pitched content is located) of the sound. This information is sent via OSC so it could easily influence musical developments, lighting applications or image processing.</p>
 
-<p>c,d) Spectral flatness and centroid, which provide a measure of how pitched or noisy the input signal is.</p>
+<h3>
+<a id="expansion" class="anchor" href="#expansion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Expansion</h3>
 
 <p>All these estimators can be expanded to a great number of them. In the future we will enquiry into their practical utility, to select a few very meaninful ones.</p>
-
-<p>All the information above, shown on the smartphone screen, is sent via OSC, so any computer with a DAW or digital music software could use this data to influence the generation of music in real-time fitting the enviromental music. (We will demonstrate this in the presentation).</p>
 
 <p>Future Improvements that we will consider to work on during the Tech fest: implement onsets detection and beat tracking.  Even further, implement PTP style clocking server for accurate tempo synchronization scenari.</p>
 
@@ -48,6 +42,8 @@
 
 <h3>
 <a id="technology" class="anchor" href="#technology" aria-hidden="true"><span class="octicon octicon-link"></span></a>Technology</h3>
+
+<p><em>eear</em> uses Music Technology Group's audio procesing library <em>Essentia</em> and <em>JUCE</em> </p>
 
 <h3>
 <a id="team" class="anchor" href="#team" aria-hidden="true"><span class="octicon octicon-link"></span></a>Team</h3>
@@ -65,7 +61,7 @@
 <h3>
 <a id="acknowledgements" class="anchor" href="#acknowledgements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Acknowledgements</h3>
 
-<p><em>eear</em> was originally </p>
+<p><em>eear</em> was conceived during a Music Hack Day at <em>Sonar 2015</em> in Barcelona, where it won an Incubation Prize by <a href="http://musictechfest.net/musicbricks/">#musicbricks</a></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/GiantSteps/eear">eear</a> is maintained by <a href="https://github.com/GiantSteps">GiantSteps</a>.</span>
