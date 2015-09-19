@@ -282,30 +282,30 @@ public:
         File Resources = File::getSpecialLocation(juce::File::SpecialLocationType::currentApplicationFile).getChildFile("Contents").getChildFile("Resources");
 #endif
         
-            File file(Resources.getChildFile("AbyssinicaSIL.Juce"));
-            
+//            File file(Resources.getChildFile("AbyssinicaSIL.Juce"));
+//            
 //            int memSize = file.getSize();
-            cout << file.exists() << endl;
+//            cout << file.exists() << endl;
 //            void * fontBlock = malloc(memSize);
 //            FileInputStream fstream(file);
-//
+
 //            fstream.read(fontBlock, memSize);
 //            Typeface::createSystemTypefaceFor (fontBlock,memSize);
 //            cout << memSize << endl;
 //            free( fontBlock);
-            
+        
 //            Font f ("Abyssinica SIL",70,Font::FontStyleFlags::plain);
-//            CustomTypeface t;
-//            
+//            FileInputStream inputS = ;
+//            typeFace = new CustomTypeface(*file.createInputStream());
+
+//            mainFont = Font(typeFace);
 //            t.addGlyphsFromOtherTypeface(*f.getTypeface(), 'A', 42);
 //            FileOutputStream * outf = file.createOutputStream();
 //           t.writeToStream(*outf);
-            
-            
-            FileInputStream * inf = file.createInputStream();
         
-
-        
+            
+                
+        mainFont = Font("Abyssinica SIL",70,Font::FontStyleFlags::plain);
         
 
 
@@ -366,11 +366,11 @@ public:
         
 
         
-        keyScaleTextBox.setFont(Font("Arial",67,Font::FontStyleFlags::plain), true);
-        keyScaleTextBox.setFontHeight(67);
+        keyScaleTextBox.setFont(mainFont);
+//        keyScaleTextBox.setFontHeight(67);
 
         
-        keyScaleTextBox.setColour(Colour::fromRGB(119,195,214));
+        keyScaleTextBox.setColour(Label::ColourIds::textColourId,Colour::fromRGB(119,195,214));
         addAndMakeVisible (keyScaleTextBox);
 //        addAndMakeVisible (rmsLabel);
 //        rmsLabel.setText ("RMS:", dontSendNotification);
@@ -461,7 +461,7 @@ public:
         //        recordingThumbnail.setBounds (area.removeFromTop (80).reduced (8));
         
         keyScaleTextBox.setBounds(area.removeFromTop (136));
-        keyScaleTextBox.setFontHeight(1000);
+        //keyScaleTextBox.setFontHeight(1000);
         
         spectrum.setBounds(area.removeFromTop (136));
         spectralHandler.bounds  = spectrum.getBounds();
@@ -533,8 +533,9 @@ private:
     Label ipAddressLabel, portNumberLabel;
     
     
-    Font font;
-    DrawableText keyScaleTextBox;
+//    CustomTypeface * typeFace;
+    Label keyScaleTextBox;
+    Font mainFont;
     TextEditor rmsTextBox, spectralFlatnessTextBox, spectralCentroidTextBox;
     TextEditor ipAddressTextBox, portNumberTextBox;
     
@@ -620,8 +621,8 @@ private:
         
         if(spectralHandler.needsUpdate()){
             
-            String keyScaleString = recorder.keyString + " " + recorder.scaleString;
-            keyScaleTextBox.setText(keyScaleString);
+            String keyScaleString = recorder.keyString + " " + (recorder.scaleString=="major"?"":"m");
+            keyScaleTextBox.setText(keyScaleString,dontSendNotification);
             rmsTextBox.setText(String(float(recorder.rmsValue), 10));
             spectralFlatnessTextBox.setText(String(recorder.spectralFlatnessValue));
             spectralCentroidTextBox.setText(String(recorder.spectralCentroidValue));
