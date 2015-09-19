@@ -12,6 +12,7 @@
 #define __PLUGINPROCESSOR_H_526ED7A9__
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "MyIncludes.h"
 
 
 //==============================================================================

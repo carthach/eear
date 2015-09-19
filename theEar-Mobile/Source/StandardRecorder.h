@@ -1,3 +1,6 @@
+#ifndef STANDARDRECORDER_H
+#define STANDARDRECORDER_H
+
 #include <essentia/algorithmfactory.h>
 #include <essentia/essentiamath.h>
 #include <essentia/pool.h>
@@ -373,3 +376,5 @@ private:
     
     CircularAudioBuffer circularBuffer;
 };
+
+#endif

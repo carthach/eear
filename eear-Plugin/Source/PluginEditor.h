@@ -15,58 +15,37 @@
 #include "PluginProcessor.h"
 #include "EarOSCServer.h"
 #include "PadGrid.h"
+#include "InterfaceComponent.h"
+#include "DataComponent.h"
+
+//==============================================================================
+class MainTab  : public TabbedComponent
+{
+public:
+    MainTab (MidiKeyboardState& s, AudioProcessor& p)
+    : TabbedComponent (TabbedButtonBar::TabsAtTop)
+    {
+        addTab ("Interface",  Colours::grey, new InterfaceComponent(s, p), true);
+        addTab ("Data",  Colours::grey, new DataComponent(), true);
+    }
+};
 
 
 //==============================================================================
 /** This is the editor component that our filter will display.
 */
-class TheEarPluginAudioProcessorEditor  : public AudioProcessorEditor,
-                                            public SliderListener,
-                                            public Timer,
-                                            public Button::Listener,
-                                            public ChangeListener
+class TheEarPluginAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
     TheEarPluginAudioProcessorEditor (TheEarPluginAudioProcessor&);
     ~TheEarPluginAudioProcessorEditor();
 
     //==============================================================================
-    void timerCallback() override;
     void paint (Graphics&) override;
     void resized() override;
-    void sliderValueChanged (Slider*) override;
-    void sliderDragStarted  (Slider*) override;
-    void sliderDragEnded    (Slider*) override;
-    void buttonClicked(Button* button) override;
-    void changeListenerCallback (ChangeBroadcaster *source);
 
 private:
-    MidiKeyboardComponent midiKeyboard;
-    Label infoLabel, gainLabel, delayLabel;
-    Slider gainSlider, delaySlider;
-    ScopedPointer<ResizableCornerComponent> resizer;
-    ComponentBoundsConstrainer resizeLimits;
-    EarOSCServer earOSCServer;
-    
-    TextButton resetSynthButton;
-    Label currentKeyScaleLabel, liveKeyScaleLabel;
-    TextEditor currentKeyScaleTextBox, liveKeyScaleTextBox;
-
-    AudioPlayHead::CurrentPositionInfo lastDisplayedPosition;
-
-    //==============================================================================
-    TheEarPluginAudioProcessor& getProcessor() const
-    {
-        return static_cast<TheEarPluginAudioProcessor&> (processor);
-    }
-
-    AudioProcessorParameter* getParameterFromSlider (const Slider*) const;
-
-    void displayPositionInfo (const AudioPlayHead::CurrentPositionInfo& pos);
-    
-    Array<File> getAudioFiles(const File& audioFolder, String key, String scale);
-    
-    PadGrid padGrid;
+    MainTab mainTab;
 };
 
 
