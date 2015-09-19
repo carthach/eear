@@ -309,7 +309,7 @@ public:
 //           t.writeToStream(*outf);
             
             
-            FileInputStream * inf = file.createInputStream();
+//            FileInputStream * inf = file.createInputStream();
         
 
         
@@ -424,6 +424,8 @@ public:
         deviceManager->addAudioCallback (&recorder);
         
         recorder.addChangeListener(this);
+        resized();
+        
     }
     
     ~AudioRecordingDemo()

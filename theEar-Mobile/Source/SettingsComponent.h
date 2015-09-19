@@ -96,9 +96,9 @@ public:
     
     void buttonClicked (Button *) override
     {
-        recorder->ipAddress = ipAddressTextBox.getText();
-        recorder->portNumber = portNumberTextBox.getText().getIntValue();
-        
+//        recorder->ipAddress = ipAddressTextBox.getText();
+//        recorder->portNumber = portNumberTextBox.getText().getIntValue();
+//        
     }
     
     void sliderValueChanged (Slider *slider) override
