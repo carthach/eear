@@ -428,6 +428,7 @@ obj/local/armeabi-v7a/objs/juce_jni/__/__/__/Source/AudioRecordingDemo.o: \
  jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnailBase.h \
  jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnail.h \
  jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnailCache.h \
+ jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioVisualiserComponent.h \
  jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/gui/juce_MidiKeyboardComponent.h \
  jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioAppComponent.h \
  jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/players/juce_AudioProcessorPlayer.h \
@@ -496,8 +497,9 @@ obj/local/armeabi-v7a/objs/juce_jni/__/__/__/Source/AudioRecordingDemo.o: \
  jni/../../../Source/../JuceLibraryCode/modules/juce_video/playback/juce_DirectShowComponent.h \
  jni/../../../Source/../JuceLibraryCode/modules/juce_video/playback/juce_QuickTimeMovieComponent.h \
  jni/../../../Source/../JuceLibraryCode/modules/juce_video/capture/juce_CameraDevice.h \
+ jni/../../../Source/../JuceLibraryCode/BinaryData.h \
  jni/../../../Source/AudioLiveScrollingDisplay.h \
- jni/../../../Source/StreamingRecorder.h \
+ jni/../../../Source/Common.h jni/../../../Source/StreamingRecorder.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/algorithmfactory.h \
  /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/map \
  /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/sstream \
@@ -1438,6 +1440,8 @@ jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioTh
 
 jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnailCache.h:
 
+jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioVisualiserComponent.h:
+
 jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/gui/juce_MidiKeyboardComponent.h:
 
 jni/../../../Source/../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioAppComponent.h:
@@ -1574,7 +1578,11 @@ jni/../../../Source/../JuceLibraryCode/modules/juce_video/playback/juce_QuickTim
 
 jni/../../../Source/../JuceLibraryCode/modules/juce_video/capture/juce_CameraDevice.h:
 
+jni/../../../Source/../JuceLibraryCode/BinaryData.h:
+
 jni/../../../Source/AudioLiveScrollingDisplay.h:
+
+jni/../../../Source/Common.h:
 
 jni/../../../Source/StreamingRecorder.h:
 

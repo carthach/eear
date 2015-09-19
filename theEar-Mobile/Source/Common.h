@@ -8,7 +8,7 @@
 
 #ifndef _Common_h
 #define _Common_h
-#include "juce_core.h"
+//#include "juce_core.h"
 using namespace juce;
 
 
