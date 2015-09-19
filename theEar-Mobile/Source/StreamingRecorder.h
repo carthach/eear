@@ -5,7 +5,13 @@
 #include <essentia/streaming/algorithms/poolstorage.h>
 #include <essentia/scheduler/network.h>
 #include <essentia/streaming/algorithms/ringbufferinput.h>
+#include <map>
+#include <string>
+#include <tuple>
+#include <iostream>
+#include <utility>
 
+using namespace std;
 
 
 //==============================================================================
@@ -26,6 +32,8 @@ public:
     
     String keyString, scaleString;
     essentia::Real rmsValue, spectralFlatnessValue, spectralCentroidValue;
+    map< String,int > keyPoolMajor;
+    map< String,int > keyPoolMinor;
     
     //As suggested by KeyExtractor
     int frameSize = 4096;
@@ -37,6 +45,43 @@ public:
     {
         setupEssentia();
     }
+    
+    
+    void clearKeyPool(map<String,int > & keyPool){
+        keyPool["A"] = 0;
+        keyPool["A#"] = 0;
+        keyPool["B"] = 0;
+        keyPool["B#"] = 0;
+        keyPool["C"] = 0;
+        keyPool["C#"] = 0;
+        keyPool["D"] = 0;
+        keyPool["D#"] = 0;
+        keyPool["E"] = 0;
+        keyPool["E#"] = 0;
+        keyPool["F"] = 0;
+        keyPool["F#"] = 0;
+        keyPool["G"] = 0;
+        keyPool["G#"] = 0;
+        
+    }
+    
+    String getBestInPool(map<String,int > & keyPool){
+        String res;
+        int max = 0;
+        for(auto k:keyPool){
+            if(k.second>max){
+                max = k.second;
+                res = k.first;
+            }
+        }
+        
+        
+        return res;
+        
+    }
+    
+    
+    
     
     void setupEssentia()
     {
@@ -147,6 +192,9 @@ public:
         {
             n->reset();
             pool.clear();
+            clearKeyPool(keyPoolMajor);
+            clearKeyPool(keyPoolMinor);
+            
             aggrPool.clear();
             
             recording = true;
@@ -227,6 +275,24 @@ public:
                 rmsValue = reals["rms"].back();
                 spectralFlatnessValue = reals["spectralFlatness"].back();
                 spectralCentroidValue = reals["spectralCentroid"].back();
+                if(scaleString=="m"){
+                    keyPoolMinor[keyString ]++;
+
+                }
+                else{
+                    keyPoolMajor[keyString ]++;
+
+                }
+                String minorBest = getBestInPool(keyPoolMinor);
+                String majorBest = getBestInPool(keyPoolMajor);
+                if(keyPoolMinor[minorBest]>keyPoolMajor[majorBest]){
+                    scaleString = "m";
+                    keyString = minorBest;
+                }
+                else{
+                    keyString = majorBest;
+                    scaleString = "M";
+                }
                 
                 sendChangeMessage();
                 //                if(frameOutCount % 32 == 0)

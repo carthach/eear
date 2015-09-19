@@ -486,9 +486,6 @@ private:
                 case Button::buttonDown :
                     startRecording();
                     break;
-                case Button::buttonNormal:
-
-                    break;
                 default:
                     break;
             };
