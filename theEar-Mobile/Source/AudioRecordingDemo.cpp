@@ -22,6 +22,8 @@
  ==============================================================================
  */
 
+
+
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioLiveScrollingDisplay.h"
 #include "StreamingRecorder.h"
@@ -271,41 +273,46 @@ private SliderListener
 
 {
 public:
+    String oscIP = "127.0.0.1";
+    int oscPort = 8000;
+    StreamingRecorder recorder;
+    
     AudioRecordingDemo(AudioDeviceManager* deviceManager)
     : recorder (), inputMeter(*deviceManager)
     {
         setOpaque (true);
 #if defined JUCE_ANDROID || defined JUCE_IOS
 #error( Need to define media Path for android / ios)
-        assert(false);
+//        assert(false);
 #else
         File Resources = File::getSpecialLocation(juce::File::SpecialLocationType::currentApplicationFile).getChildFile("Contents").getChildFile("Resources");
 #endif
         
-//            File file(Resources.getChildFile("AbyssinicaSIL.Juce"));
-//            
+        
+            File file(Resources.getChildFile("AbyssinicaSIL.Juce"));
+            
 //            int memSize = file.getSize();
-//            cout << file.exists() << endl;
+            cout << file.exists() << endl;
 //            void * fontBlock = malloc(memSize);
 //            FileInputStream fstream(file);
-
+//
 //            fstream.read(fontBlock, memSize);
 //            Typeface::createSystemTypefaceFor (fontBlock,memSize);
 //            cout << memSize << endl;
 //            free( fontBlock);
-        
+            
 //            Font f ("Abyssinica SIL",70,Font::FontStyleFlags::plain);
-//            FileInputStream inputS = ;
-//            typeFace = new CustomTypeface(*file.createInputStream());
-
-//            mainFont = Font(typeFace);
+//            CustomTypeface t;
+//            
 //            t.addGlyphsFromOtherTypeface(*f.getTypeface(), 'A', 42);
 //            FileOutputStream * outf = file.createOutputStream();
 //           t.writeToStream(*outf);
-        
             
-                
-        mainFont = Font("Abyssinica SIL",70,Font::FontStyleFlags::plain);
+            
+            FileInputStream * inf = file.createInputStream();
+        
+
+        
         
 
 
@@ -366,11 +373,11 @@ public:
         
 
         
-        keyScaleTextBox.setFont(mainFont);
-//        keyScaleTextBox.setFontHeight(67);
+        keyScaleTextBox.setFont(Font("Arial",67,Font::FontStyleFlags::plain), true);
+        keyScaleTextBox.setFontHeight(67);
 
         
-        keyScaleTextBox.setColour(Label::ColourIds::textColourId,Colour::fromRGB(119,195,214));
+        keyScaleTextBox.setColour(Colour::fromRGB(119,195,214));
         addAndMakeVisible (keyScaleTextBox);
 //        addAndMakeVisible (rmsLabel);
 //        rmsLabel.setText ("RMS:", dontSendNotification);
@@ -393,19 +400,7 @@ public:
 //        spectralCentroidTextBox.setReadOnly(true);
 //        spectralCentroidTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
 //        
-        addAndMakeVisible (ipAddressLabel);
-        ipAddressLabel.setText ("IP Address:", dontSendNotification);
-        
-        addAndMakeVisible (ipAddressTextBox);
-        ipAddressTextBox.setText("127.0.0.1");
-        
-        addAndMakeVisible (oscInfoLabel);
-        oscInfoLabel.setText ("Set OSC Info:", dontSendNotification);
-        addAndMakeVisible (portNumberLabel);
-        portNumberLabel.setText ("Port Number:", dontSendNotification);
-        
-        addAndMakeVisible (portNumberTextBox);
-        portNumberTextBox.setText("8000");
+
         
         
         addAndMakeVisible (sensitivitySlider);
@@ -419,16 +414,7 @@ public:
         sensitivitySliderLabel.setText ("Sensitivity", dontSendNotification);
         sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
         
-        addAndMakeVisible (frameSlider);
-        frameSlider.setRange (1.0, 44100.0/512.0, 1.0);
-        frameSlider.setValue (50, dontSendNotification);
-        frameSlider.setSliderStyle (Slider::LinearHorizontal);
-        frameSlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
-        frameSlider.addListener (this);
-        
-        addAndMakeVisible (frameSliderLabel);
-        frameSliderLabel.setText ("Size of Buffer", dontSendNotification);
-        frameSliderLabel.attachToComponent (&frameSlider, true);
+
         
         //        addAndMakeVisible (recordingThumbnail);
         
@@ -461,7 +447,7 @@ public:
         //        recordingThumbnail.setBounds (area.removeFromTop (80).reduced (8));
         
         keyScaleTextBox.setBounds(area.removeFromTop (136));
-        //keyScaleTextBox.setFontHeight(1000);
+        keyScaleTextBox.setFontHeight(1000);
         
         spectrum.setBounds(area.removeFromTop (136));
         spectralHandler.bounds  = spectrum.getBounds();
@@ -491,15 +477,24 @@ public:
 //        spectralCentroidLabel.setBounds(labelBounds.withY(labelY+=30));
 //        spectralCentroidTextBox.setBounds(valueBounds.withY(labelY));
         
+
+        
         inputMeter.setBounds(recordButton.getBounds().withX(xOffset));
         inputMeter.setSize(recordButton.getWidth()/2,recordButton.getHeight() );
         
         
     }
     
-    String ipAddress;
-    int portNumber;
-    
+    void stopRecording()
+    {
+        recorder.stop();
+        
+        
+        //        recordButton.setButtonText ("Listen!");
+        recordingThumbnail.setDisplayFullThumbnail (true);
+        
+        recording = false;
+    }
     
 private:
     AudioDeviceManager* deviceManager;
@@ -507,9 +502,9 @@ private:
     RecordingThumbnail recordingThumbnail;
     //    AudioRecorder recorder;
     //    StandardRecorder recorder;
-    StreamingRecorder recorder;
+
     Label explanationLabel;
-    
+    TextEditor rmsTextBox, spectralFlatnessTextBox, spectralCentroidTextBox;
     
     ImageButton recordButton;
     
@@ -523,20 +518,17 @@ private:
     DatagramSocket datagramSocket;
     SimpleDeviceManagerInputLevelMeter inputMeter;
     
-    Slider frameSlider, sensitivitySlider;
-    Label frameSliderLabel, sensitivitySliderLabel;
+    Slider sensitivitySlider;
+    Label sensitivitySliderLabel;
     
-    Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel, oscInfoLabel;
-    Label ipAddressLabel, portNumberLabel;
+    Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel;
+
     
     
+    Font font;
+    DrawableText keyScaleTextBox;
     
 
-//    CustomTypeface * typeFace;
-    Label keyScaleTextBox;
-    Font mainFont;
-    TextEditor rmsTextBox, spectralFlatnessTextBox, spectralCentroidTextBox;
-    TextEditor ipAddressTextBox, portNumberTextBox;
     
     bool recording = false;
     
@@ -553,16 +545,7 @@ private:
         recording = true;
     }
     
-    void stopRecording()
-    {
-        recorder.stop();
-        
-        
-        //        recordButton.setButtonText ("Listen!");
-        recordingThumbnail.setDisplayFullThumbnail (true);
-        
-        recording = false;
-    }
+
     
     void buttonClicked (Button* button) override
     {
@@ -577,15 +560,7 @@ private:
     
     void 	sliderValueChanged (Slider *slider) override
     {
-        if (slider == &frameSlider) {
-            int frameValue = int(slider->getValue());
-            if(frameValue != recorder.computeFrameCount) {
-                if (recorder.isRecording())
-                    stopRecording();
-                recorder.computeFrameCount = frameValue;
-                
-            }
-        }
+
     }
     
     void changeListenerCallback (ChangeBroadcaster *source)
@@ -610,18 +585,17 @@ private:
         //        message = portNumberTextBox.getText();
         //        log->writeToLog(message);
         
-        datagramSocket.write(ipAddress, portNumber, p.Data(), p.Size());
+//        datagramSocket.write(ipAddressTextBox.getText(), portNumberTextBox.getText().getIntValue(), p.Data(), p.Size());
+        datagramSocket.write(oscIP, oscPort, p.Data(), p.Size());
         
-        
-
-
-
+        std::cout << oscIP;
+        std::cout << oscPort << "\n\n\n";
         
         
         if(spectralHandler.needsUpdate()){
             
-            String keyScaleString = recorder.keyString + " " + (recorder.scaleString=="major"?"":"m");
-            keyScaleTextBox.setText(keyScaleString,dontSendNotification);
+            String keyScaleString = recorder.keyString + " " + recorder.scaleString;
+            keyScaleTextBox.setText(keyScaleString);
             rmsTextBox.setText(String(float(recorder.rmsValue), 10));
             spectralFlatnessTextBox.setText(String(recorder.spectralFlatnessValue));
             spectralCentroidTextBox.setText(String(recorder.spectralCentroidValue));

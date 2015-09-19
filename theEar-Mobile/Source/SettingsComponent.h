@@ -12,15 +12,28 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 //#include "AudioRecordingDemo.cpp"
 
-class SettingsComponent : public Component, public Button::Listener {
+class SettingsComponent : public Component, public Button::Listener, Slider::Listener {
 public:
     Label ipAddressLabel, portNumberLabel, oscInfoLabel;
     TextEditor ipAddressTextBox, portNumberTextBox;
     TextButton saveButton;
     AudioRecordingDemo* recorder;
+    Slider frameSlider;
+    Label frameSliderLabel;
     
     SettingsComponent(AudioRecordingDemo* recorder)
     {
+        addAndMakeVisible (frameSlider);
+        frameSlider.setRange (1.0, 44100.0/512.0, 1.0);
+        frameSlider.setValue (50, dontSendNotification);
+        frameSlider.setSliderStyle (Slider::LinearHorizontal);
+        frameSlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
+        frameSlider.addListener (this);
+        
+        addAndMakeVisible (frameSliderLabel);
+        frameSliderLabel.setText ("Size of Buffer", dontSendNotification);
+        frameSliderLabel.attachToComponent (&frameSlider, true);
+        
         addAndMakeVisible (ipAddressLabel);
         ipAddressLabel.setText ("IP Address:", dontSendNotification);
         
@@ -64,6 +77,10 @@ public:
         Rectangle<int> valueBounds(150, 0, 100, 20);
         
         int labelY = 0;
+        
+        frameSliderLabel.setBounds(labelBounds.withY(labelY+=30));
+        frameSlider.setBounds (valueBounds.withY(labelY));
+
     
         oscInfoLabel.setBounds(labelBounds.withY(labelY+=40));
         
@@ -82,6 +99,19 @@ public:
         recorder->ipAddress = ipAddressTextBox.getText();
         recorder->portNumber = portNumberTextBox.getText().getIntValue();
         
+    }
+    
+    void sliderValueChanged (Slider *slider) override
+    {
+        if (slider == &frameSlider) {
+            int frameValue = int(slider->getValue());
+            if(frameValue != recorder->recorder.computeFrameCount) {
+                if (recorder->recorder.isRecording())
+                    recorder->stopRecording();
+                recorder->recorder.computeFrameCount = frameValue;
+                
+            }
+        }
     }
 };
 
