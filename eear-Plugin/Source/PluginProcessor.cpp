@@ -248,6 +248,7 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles)
 
 TheEarPluginAudioProcessor::~TheEarPluginAudioProcessor()
 {
+
 }
 
 //==============================================================================

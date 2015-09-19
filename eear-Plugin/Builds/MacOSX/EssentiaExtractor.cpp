@@ -28,7 +28,7 @@ std::vector<float> EssentiaExtractor::hannWindow(int size){
 EssentiaExtractor::EssentiaExtractor(AudioFormatManager* formatManager)
 {
     //Call this globally
-//    essentia::init();
+    essentia::init();
     
 
         
@@ -40,6 +40,7 @@ EssentiaExtractor::EssentiaExtractor(AudioFormatManager* formatManager)
 EssentiaExtractor::~EssentiaExtractor()
 {
 //    delete rhythmExtractor;
+    essentia::shutdown();
 }
 
 Array<File> EssentiaExtractor::getAudioFiles(const File& audioFolder)

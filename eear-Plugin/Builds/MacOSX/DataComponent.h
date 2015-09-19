@@ -82,6 +82,8 @@ public:
     {
         formatManager.registerBasicFormats();
         
+        std::cout << "HERE\n";
+        
         String formats = formatManager.getWildcardForAllFormats();
         
 //        formatManager.registerFormat(&coreAudioFormat, false);
@@ -154,6 +156,9 @@ public:
         datasetFolderTextBox.setText(datasetFolder.getFullPathName());
         
         addAndMakeVisible(tableComponent);
+        
+        std::cout << "THERE\n";
+
     }
     
     void resized () override
@@ -219,8 +224,6 @@ private:
     EssentiaExtractor extractor;
     HashMap<String, int> featureMap;
 
-
-    
     void updateListBox(ListBox& fromListBox, ListBox& toListBox, ListBoxContents& fromModel,ListBoxContents& toModel)
     {
         const SparseSet<int>& selectedRows = fromListBox.getSelectedRows();
