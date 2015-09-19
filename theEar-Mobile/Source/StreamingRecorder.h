@@ -122,6 +122,7 @@ public:
         
         n = new essentia::scheduler::Network(ringBufferInput);
         n->runPrepare();
+        startThread();
     }
     
     ~StreamingRecorder()
@@ -135,20 +136,18 @@ public:
         
         essentia::shutdown();
         
-        stop();
+        stopThread(1000);
     }
     
     //==============================================================================
     void startRecording ()
     {
-        stop();
         
         if (sampleRate > 0)
         {
             n->reset();
             pool.clear();
             aggrPool.clear();
-            startThread();
             
             recording = true;
         }
@@ -156,8 +155,8 @@ public:
     
     void stop()
     {
-        stopThread(1000);
         recording = false;
+
     }
     
     bool isRecording() const

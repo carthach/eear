@@ -317,7 +317,7 @@ public:
         
         
         addAndMakeVisible(inputMeter);
-
+        
         
         
         
@@ -402,24 +402,24 @@ public:
         area.removeFromTop(10);
         Rectangle<int> strip = area.removeFromTop(80);
         Rectangle<int> inputMeterBox = strip.removeFromLeft(80).removeFromTop(60).withY(20);
-
+        
         inputMeter.setBounds(inputMeterBox);//.getX(),inputMeterBox.getY(),inputMeterBox.getHeight(),inputMeterBox.getWidth());
-
+        
         inputMeter.setTransform(AffineTransform::rotation(-float_Pi /2.0f,
                                                           inputMeterBox.getCentre().x,
                                                           inputMeterBox.getCentre().y));
-//        inputMeter.setBounds(inputMeterBox.getX(),inputMeterBox.getY(),inputMeterBox.getHeight(),inputMeterBox.getWidth());
-
+        //        inputMeter.setBounds(inputMeterBox.getX(),inputMeterBox.getY(),inputMeterBox.getHeight(),inputMeterBox.getWidth());
+        
         liveAudioScroller.setBounds (strip);
-
+        
         keyScaleTextBox.setBounds(area.removeFromTop (140));
         spectrum.setBounds(area.removeFromTop (180));
         spectralHandler.bounds  = spectrum.getBounds();
         spectrum.setPath(spectralHandler.getPath());
         recordButton.setBounds (area.reduced(20));
-//        explanationLabel.setBounds (area.reduced (8));
+        //        explanationLabel.setBounds (area.reduced (8));
         
-
+        
         
         
         
@@ -429,20 +429,15 @@ public:
     void stopRecording()
     {
         recorder.stop();
-        
-        
-        //        recordButton.setButtonText ("Listen!");
-        recordingThumbnail.setDisplayFullThumbnail (true);
-        
+
         recording = false;
     }
     
 private:
     AudioDeviceManager* deviceManager;
     LiveScrollingAudioDisplay liveAudioScroller;
-    RecordingThumbnail recordingThumbnail;
-    
-    Label explanationLabel;
+
+
     TextEditor rmsTextBox, spectralFlatnessTextBox, spectralCentroidTextBox;
     
     ImageButton recordButton;
@@ -470,24 +465,37 @@ private:
         
         recorder.startRecording ();
         
-        recordButton.setButtonText ("Stop");
-        recordingThumbnail.setDisplayFullThumbnail (false);
         
         recording = true;
     }
     
     
     
-    void buttonClicked (Button* button) override
+    void buttonClicked (Button* button) override {
+    
+                        stopRecording();
+    };
+    void buttonStateChanged(Button* button) override
     {
+    
         if (button == &recordButton)
         {
-            if (recording)
-                stopRecording();
-            else
-                startRecording();
+            cout << button->getState() << endl;;
+            switch(button->getState()){
+                    
+                case Button::buttonDown :
+                    startRecording();
+                    break;
+                case Button::buttonNormal:
+
+                    break;
+                default:
+                    break;
+            };
         }
     }
+    
+
     
     void 	sliderValueChanged (Slider *slider) override
     {
@@ -511,7 +519,7 @@ private:
         
         datagramSocket.write(oscIP, oscPort, p.Data(), p.Size());
         
-        //        std::cout << oscIP;
+        //        std::     << oscIP;
         //        std::cout << oscPort << "\n\n\n";
         
         
