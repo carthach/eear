@@ -491,18 +491,15 @@ public:
 //        spectralCentroidLabel.setBounds(labelBounds.withY(labelY+=30));
 //        spectralCentroidTextBox.setBounds(valueBounds.withY(labelY));
         
-        oscInfoLabel.setBounds(labelBounds.withY(labelY+=40));
-        
-        ipAddressLabel.setBounds(labelBounds.withY(labelY+=30));
-        ipAddressTextBox.setBounds(valueBounds.withY(labelY));
-        portNumberLabel.setBounds(labelBounds.withY(labelY+=30));
-        portNumberTextBox.setBounds(valueBounds.withY(labelY));
-        
         inputMeter.setBounds(recordButton.getBounds().withX(xOffset));
         inputMeter.setSize(recordButton.getWidth()/2,recordButton.getHeight() );
         
         
     }
+    
+    String ipAddress;
+    int portNumber;
+    
     
 private:
     AudioDeviceManager* deviceManager;
@@ -533,6 +530,8 @@ private:
     Label ipAddressLabel, portNumberLabel;
     
     
+    
+
 //    CustomTypeface * typeFace;
     Label keyScaleTextBox;
     Font mainFont;
@@ -611,7 +610,7 @@ private:
         //        message = portNumberTextBox.getText();
         //        log->writeToLog(message);
         
-        datagramSocket.write(ipAddressTextBox.getText(), portNumberTextBox.getText().getIntValue(), p.Data(), p.Size());
+        datagramSocket.write(ipAddress, portNumber, p.Data(), p.Size());
         
         
 

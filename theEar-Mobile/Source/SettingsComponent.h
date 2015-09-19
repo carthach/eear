@@ -79,8 +79,8 @@ public:
     
     void buttonClicked (Button *) override
     {
-        recorder->oscIP = ipAddressTextBox.getText();
-        recorder->oscPort = portNumberTextBox.getText().getIntValue();
+        recorder->ipAddress = ipAddressTextBox.getText();
+        recorder->portNumber = portNumberTextBox.getText().getIntValue();
         
     }
 };
