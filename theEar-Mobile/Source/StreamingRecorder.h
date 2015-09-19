@@ -42,35 +42,35 @@ public:
     {
         essentia::init();
         
-//        essentia::setDebugLevel(essentia::ENetwork);
+        //        essentia::setDebugLevel(essentia::ENetwork);
         
         essentia::streaming::AlgorithmFactory& factory = essentia::streaming::AlgorithmFactory::instance();
         
         ringBufferInput = new essentia::streaming::RingBufferInput();
         ringBufferInput->declareParameters();
         ringBufferInput->essentia::Configurable::configure("bufferSize", 44100);
-
+        
         //A pointer to the Ring Buffer so we can access its goodies
-//        ringBufferInputPtr = static_cast<essentia::streaming::RingBufferInput*>(ringBufferInput);
-
+        //        ringBufferInputPtr = static_cast<essentia::streaming::RingBufferInput*>(ringBufferInput);
+        
         // instantiate all required algorithms
-//        fc = factory.create("FrameCutter");
+        //        fc = factory.create("FrameCutter");
         
         // instantiate all required algorithms
         fc = factory.create("FrameCutter",
-                       "frameSize", frameSize,
-                       "hopSize", hopSize,
-                       "silentFrames", "noise",
-                       "startFromZero", false);
-//
+                            "frameSize", frameSize,
+                            "hopSize", hopSize,
+                            "silentFrames", "noise",
+                            "startFromZero", false);
+        //
         // instantiate all required algorithms
         fc = factory.create("FrameCutter");
         
         w     = factory.create("Windowing", "type", "blackmanharris62");
         spectrum      = factory.create("Spectrum");
         spectralPeaks = factory.create("SpectralPeaks",
-                                        "orderBy", "magnitude", "magnitudeThreshold", 1e-05,
-                                        "minFrequency", 40, "maxFrequency", 5000, "maxPeaks", 10000);
+                                       "orderBy", "magnitude", "magnitudeThreshold", 1e-05,
+                                       "minFrequency", 40, "maxFrequency", 5000, "maxPeaks", 10000);
         hpcpKey       = factory.create("HPCP");
         key           = factory.create("Key");
         key->configure();
@@ -109,7 +109,7 @@ public:
         spectrum->output("spectrum") >> spectralFlatness->input("array");
         spectralFlatness->output("flatnessDB") >> PC(pool, "spectralFlatness");
         
-
+        
         spectrum->output("spectrum") >> spectralCentroid->input("array");
         spectralCentroid->output("centroid") >> PC(pool, "spectralCentroid");
         
@@ -119,7 +119,7 @@ public:
                                                             "defaultStats", essentia::arrayToVector<std::string>(stats));
         aggr->input("input").set(pool);
         aggr->output("output").set(aggrPool);
-
+        
         n = new essentia::scheduler::Network(ringBufferInput);
         n->runPrepare();
     }
@@ -149,7 +149,7 @@ public:
             pool.clear();
             aggrPool.clear();
             startThread();
-
+            
             recording = true;
         }
     }
@@ -181,14 +181,14 @@ public:
                                 int numSamples) override
     {
         if(recording) {
-//            const ScopedLock sl (writerLock);
+            //            const ScopedLock sl (writerLock);
             
             //Put the samples into the RingBuffer
             //According to ringbufferimpl.h Essentia should handle thread safety...
             
             const AudioSampleBuffer buffer (const_cast<float**> (inputChannelData), 1, numSamples);
             
-//            std::cout << buffer.getRMSLevel(0, 0, buffer.getNumSamples()) << "\n";
+            //            std::cout << buffer.getRMSLevel(0, 0, buffer.getNumSamples()) << "\n";
             
             ringBufferInput->add(const_cast<essentia::Real *> (inputChannelData[0]), numSamples);
         }
@@ -207,7 +207,7 @@ public:
         //This is the Essentia thread, you need to consume the RingBuffer and do your work
         while(!threadShouldExit())
         {
-//                const ScopedLock sl (writerLock);
+            //                const ScopedLock sl (writerLock);
             
             n->runStep();
             
@@ -230,39 +230,39 @@ public:
                 spectralCentroidValue = reals["spectralCentroid"].back();
                 
                 sendChangeMessage();
-//                if(frameOutCount % 32 == 0)
-//                    key->reset();
+                //                if(frameOutCount % 32 == 0)
+                //                    key->reset();
             }
             
             //Clear out the key algorithm
             if(frameOutCount % (computeFrameCount+1) == 0 && computeFrameCount > 0) {
-//                key->reset();
+                //                key->reset();
                 n->reset();
                 aggrPool.clear();
                 frameOutCount = 0;
             }
             
-//            std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
-//            
-//            rmsValue = reals["rms"].back();
-//            spectralFlatnessValue = reals["spectralFlatness"].back();
-//            spectralCentroidValue = reals["spectralCentroid"].back();
-        
-
+            //            std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
+            //
+            //            rmsValue = reals["rms"].back();
+            //            spectralFlatnessValue = reals["spectralFlatness"].back();
+            //            spectralCentroidValue = reals["spectralCentroid"].back();
+            
+            
             
             //Notify of change
             
             frameOutCount++;
-
-//            sleep (1);
+            
+            //            sleep (1);
         }
     }
     
 private:
-//    AudioThumbnail& thumbnail;
+    //    AudioThumbnail& thumbnail;
     double sampleRate;
     bool recording = false;
-
+    
 };
 
 #endif

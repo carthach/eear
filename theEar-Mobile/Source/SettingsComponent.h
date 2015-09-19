@@ -23,8 +23,8 @@ public:
     
     Slider sensitivitySlider;
     Label sensitivitySliderLabel;
-//    Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel;
-
+    //    Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel;
+    
     
     SettingsComponent(AudioRecordingDemo* recorder)
     {
@@ -69,7 +69,7 @@ public:
         sensitivitySliderLabel.setText ("Sensitivity", dontSendNotification);
         sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
         
-
+        
         
         this->recorder = recorder;
     }
@@ -83,7 +83,7 @@ public:
     void paint (Graphics& g) override
     {
         // (Our component is opaque, so we must completely fill the background with a solid colour)
-//        g.fillAll(Colours::black);
+        //        g.fillAll(Colours::black);
         
         
         // You can add your drawing code here!
@@ -100,8 +100,8 @@ public:
         
         frameSliderLabel.setBounds(labelBounds.withY(labelY+=30));
         frameSlider.setBounds (valueBounds.withY(labelY));
-
-    
+        
+        
         oscInfoLabel.setBounds(labelBounds.withY(labelY+=40));
         
         ipAddressLabel.setBounds(labelBounds.withY(labelY+=30));
@@ -111,14 +111,14 @@ public:
         
         saveButton.setBounds(labelBounds.withY(labelY+=30));
         saveButton.addListener(this);
-
+        
     }
     
     void buttonClicked (Button *) override
     {
-//        recorder->ipAddress = ipAddressTextBox.getText();
-//        recorder->portNumber = portNumberTextBox.getText().getIntValue();
-//        
+        //        recorder->ipAddress = ipAddressTextBox.getText();
+        //        recorder->portNumber = portNumberTextBox.getText().getIntValue();
+        //
     }
     
     void sliderValueChanged (Slider *slider) override
