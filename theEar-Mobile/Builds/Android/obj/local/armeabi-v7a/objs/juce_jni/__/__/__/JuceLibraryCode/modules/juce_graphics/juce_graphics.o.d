@@ -348,6 +348,8 @@ obj/local/armeabi-v7a/objs/juce_jni/__/__/__/JuceLibraryCode/modules/juce_graphi
  jni/../../../JuceLibraryCode/modules/juce_graphics/image_formats/juce_PNGLoader.cpp \
  jni/../../../JuceLibraryCode/modules/juce_graphics/image_formats/../../juce_core/zip/zlib/zlib.h \
  jni/../../../JuceLibraryCode/modules/juce_graphics/image_formats/../../juce_core/zip/zlib/zconf.h \
+ /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/setjmp.h \
+ /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/machine/setjmp.h \
  jni/../../../JuceLibraryCode/modules/juce_graphics/image_formats/pnglib/png.h \
  jni/../../../JuceLibraryCode/modules/juce_graphics/image_formats/pnglib/pngconf.h \
  jni/../../../JuceLibraryCode/modules/juce_graphics/image_formats/pnglib/pngconf.h \
@@ -1078,6 +1080,10 @@ jni/../../../JuceLibraryCode/modules/juce_graphics/image_formats/juce_PNGLoader.
 jni/../../../JuceLibraryCode/modules/juce_graphics/image_formats/../../juce_core/zip/zlib/zlib.h:
 
 jni/../../../JuceLibraryCode/modules/juce_graphics/image_formats/../../juce_core/zip/zlib/zconf.h:
+
+/usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/setjmp.h:
+
+/usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/machine/setjmp.h:
 
 jni/../../../JuceLibraryCode/modules/juce_graphics/image_formats/pnglib/png.h:
 

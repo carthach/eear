@@ -282,12 +282,12 @@ public:
     : recorder ()//, inputMeter(*deviceManager)
     {
         setOpaque (true);
-#if defined JUCE_ANDROID || defined JUCE_IOS
-#error( Need to define media Path for android / ios)
-        //        assert(false);
-#else
+//#if defined JUCE_ANDROID || defined JUCE_IOS
+////#error( Need to define media Path for android / ios)
+//        //        assert(false);
+//#else
         File Resources = File::getSpecialLocation(juce::File::SpecialLocationType::currentApplicationFile).getChildFile("Contents").getChildFile("Resources");
-#endif
+//#endif
         
         
         File file(Resources.getChildFile("AbyssinicaSIL.Juce"));
@@ -327,14 +327,20 @@ public:
         
         
         {
-            File file(Resources.getChildFile("recordButtonPushed.png"));
-            FileInputStream fstream(file);
-            recordButtonImagePushed =ImageFileFormat::loadFrom (fstream);
+//            File file(Resources.getChildFile("recordButtonPushed.png"));
+//            FileInputStream fstream(file);
+//            recordButtonImagePushed =ImageFileFormat::loadFrom (fstream);
+            
+            recordButtonImagePushed = ImageCache::getFromMemory (BinaryData::button_pushed_png,
+                                                                 BinaryData::button_pushed_pngSize);
         }
         {
-            File file(Resources.getChildFile("recordButtonNotPushed.png"));
-            FileInputStream fstream(file);
-            recordButtonImageNotPushed =ImageFileFormat::loadFrom (fstream);
+//            File file(Resources.getChildFile("recordButtonNotPushed.png"));
+//            FileInputStream fstream(file);
+//            recordButtonImageNotPushed =ImageFileFormat::loadFrom (fstream);
+            
+            recordButtonImageNotPushed = ImageCache::getFromMemory (BinaryData::button_no_pushed_png,
+                                                                 BinaryData::button_no_pushed_pngSize);
         }
         
         {
