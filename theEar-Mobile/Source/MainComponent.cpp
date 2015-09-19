@@ -11,6 +11,20 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioRecordingDemo.cpp"
+#include "SettingsComponent.h"
+
+//==============================================================================
+class MainTab  : public TabbedComponent
+{
+public:
+    MainTab (AudioDeviceManager& deviceManager)
+    : TabbedComponent (TabbedButtonBar::TabsAtTop)
+    {
+        addTab ("Interface",  Colours::grey, new AudioRecordingDemo(&deviceManager), true);
+        addTab ("Settings",  Colours::grey, new SettingsComponent((AudioRecordingDemo *)getTabContentComponent(0)), true);
+        
+    }
+};
 
 //==============================================================================
 /*
@@ -21,7 +35,7 @@ class MainContentComponent   : public AudioAppComponent
 {
 public:
     //==============================================================================
-    MainContentComponent() : recorder(&deviceManager)
+    MainContentComponent() : mainTab(deviceManager)
     {
         // specify the number of input and output channels that we want to open
 
@@ -35,7 +49,7 @@ public:
         deviceManager.setAudioDeviceSetup(setup, true);
 //        deviceManager.in
         
-        addAndMakeVisible(recorder);
+        addAndMakeVisible(mainTab);
     }
 
     ~MainContentComponent()
@@ -89,7 +103,7 @@ public:
     void resized() override
     {
         //Just one sub component
-        recorder.setBounds(getLocalBounds());
+        mainTab.setBounds(getLocalBounds());
     }
 
 
@@ -97,8 +111,9 @@ private:
     //==============================================================================
 
     // Your private member variables go here...
-    AudioRecordingDemo recorder;
-
+//    AudioRecordingDemo recorder;
+    
+    MainTab mainTab;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };

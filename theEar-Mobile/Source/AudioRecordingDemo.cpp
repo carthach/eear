@@ -22,6 +22,8 @@
  ==============================================================================
  */
 
+
+
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioLiveScrollingDisplay.h"
 #include "StreamingRecorder.h"
@@ -271,6 +273,9 @@ private SliderListener
 
 {
 public:
+    String oscIP = "127.0.0.1";
+    int oscPort = 8000;
+    
     AudioRecordingDemo(AudioDeviceManager* deviceManager)
     : recorder (), inputMeter(*deviceManager)
     {
@@ -393,19 +398,7 @@ public:
 //        spectralCentroidTextBox.setReadOnly(true);
 //        spectralCentroidTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
 //        
-        addAndMakeVisible (ipAddressLabel);
-        ipAddressLabel.setText ("IP Address:", dontSendNotification);
-        
-        addAndMakeVisible (ipAddressTextBox);
-        ipAddressTextBox.setText("127.0.0.1");
-        
-        addAndMakeVisible (oscInfoLabel);
-        oscInfoLabel.setText ("Set OSC Info:", dontSendNotification);
-        addAndMakeVisible (portNumberLabel);
-        portNumberLabel.setText ("Port Number:", dontSendNotification);
-        
-        addAndMakeVisible (portNumberTextBox);
-        portNumberTextBox.setText("8000");
+
         
         
         addAndMakeVisible (sensitivitySlider);
@@ -491,12 +484,7 @@ public:
 //        spectralCentroidLabel.setBounds(labelBounds.withY(labelY+=30));
 //        spectralCentroidTextBox.setBounds(valueBounds.withY(labelY));
         
-        oscInfoLabel.setBounds(labelBounds.withY(labelY+=40));
-        
-        ipAddressLabel.setBounds(labelBounds.withY(labelY+=30));
-        ipAddressTextBox.setBounds(valueBounds.withY(labelY));
-        portNumberLabel.setBounds(labelBounds.withY(labelY+=30));
-        portNumberTextBox.setBounds(valueBounds.withY(labelY));
+
         
         inputMeter.setBounds(recordButton.getBounds().withX(xOffset));
         inputMeter.setSize(recordButton.getWidth()/2,recordButton.getHeight() );
@@ -512,7 +500,7 @@ private:
     //    StandardRecorder recorder;
     StreamingRecorder recorder;
     Label explanationLabel;
-    
+    TextEditor rmsTextBox, spectralFlatnessTextBox, spectralCentroidTextBox;
     
     ImageButton recordButton;
     
@@ -529,14 +517,14 @@ private:
     Slider frameSlider, sensitivitySlider;
     Label frameSliderLabel, sensitivitySliderLabel;
     
-    Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel, oscInfoLabel;
-    Label ipAddressLabel, portNumberLabel;
+    Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel;
+
     
     
     Font font;
     DrawableText keyScaleTextBox;
-    TextEditor rmsTextBox, spectralFlatnessTextBox, spectralCentroidTextBox;
-    TextEditor ipAddressTextBox, portNumberTextBox;
+    
+
     
     bool recording = false;
     
@@ -610,12 +598,11 @@ private:
         //        message = portNumberTextBox.getText();
         //        log->writeToLog(message);
         
-        datagramSocket.write(ipAddressTextBox.getText(), portNumberTextBox.getText().getIntValue(), p.Data(), p.Size());
+//        datagramSocket.write(ipAddressTextBox.getText(), portNumberTextBox.getText().getIntValue(), p.Data(), p.Size());
+        datagramSocket.write(oscIP, oscPort, p.Data(), p.Size());
         
-        
-
-
-
+        std::cout << oscIP;
+        std::cout << oscPort << "\n\n\n";
         
         
         if(spectralHandler.needsUpdate()){

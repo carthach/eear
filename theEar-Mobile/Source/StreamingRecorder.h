@@ -1,7 +1,12 @@
+#ifndef STREAMINGRECORDER_H
+#define STREAMINGRECORDER_H
+
 #include <essentia/algorithmfactory.h>
 #include <essentia/streaming/algorithms/poolstorage.h>
 #include <essentia/scheduler/network.h>
 #include <essentia/streaming/algorithms/ringbufferinput.h>
+
+
 
 //==============================================================================
 /** A simple class that acts as an AudioIODeviceCallback and writes the
@@ -259,3 +264,5 @@ private:
     bool recording = false;
 
 };
+
+#endif
