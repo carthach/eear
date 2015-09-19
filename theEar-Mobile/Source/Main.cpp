@@ -78,10 +78,11 @@ public:
 #if JUCE_IOS || JUCE_ANDROID
             setFullScreen (true);
 #else
-            setBounds ((int) (0.1f * getParentWidth()),
-                       (int) (0.1f * getParentHeight()),
-                       jmax (850, (int) (0.5f * getParentWidth())),
-                       jmax (600, (int) (0.7f * getParentHeight())));
+//            setBounds ((int) (0.1f * getParentWidth()),
+//                       (int) (0.1f * getParentHeight()),
+//                       jmax (850, (int) (0.5f * getParentWidth())),
+//                       jmax (600, (int) (0.7f * getParentHeight())));
+            setBounds(0,0,640,1136);
             
 #endif
             setContentOwned (createMainContentComponent(), false);

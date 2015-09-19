@@ -21,6 +21,11 @@ public:
     Slider frameSlider;
     Label frameSliderLabel;
     
+    Slider sensitivitySlider;
+    Label sensitivitySliderLabel;
+//    Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel;
+
+    
     SettingsComponent(AudioRecordingDemo* recorder)
     {
         addAndMakeVisible (frameSlider);
@@ -50,6 +55,21 @@ public:
         
         saveButton.setButtonText("Save");
         addAndMakeVisible(saveButton);
+        
+        
+        
+        addAndMakeVisible (sensitivitySlider);
+        sensitivitySlider.setRange (1.0, 44100.0/512.0, 1.0);
+        sensitivitySlider.setValue (50, dontSendNotification);
+        sensitivitySlider.setSliderStyle (Slider::LinearHorizontal);
+        sensitivitySlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
+        sensitivitySlider.addListener (this);
+        
+        addAndMakeVisible (sensitivitySliderLabel);
+        sensitivitySliderLabel.setText ("Sensitivity", dontSendNotification);
+        sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
+        
+
         
         this->recorder = recorder;
     }
@@ -113,6 +133,8 @@ public:
             }
         }
     }
+    
+    
 };
 
 #endif

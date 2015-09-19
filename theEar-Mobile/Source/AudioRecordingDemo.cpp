@@ -312,21 +312,11 @@ public:
 //            FileInputStream * inf = file.createInputStream();
         
 
-        
-        
-
-
         addAndMakeVisible (liveAudioScroller);
         
-        //        addAndMakeVisible (explanationLabel);
-        //        explanationLabel.setText ("This page demonstrates how to record a wave file from the live audio input..\n\nPressing record will start recording a file in your \"Documents\" folder.", dontSendNotification);
-        //        explanationLabel.setFont (Font (15.00f, Font::plain));
-        //        explanationLabel.setJustificationType (Justification::topLeft);
-        //        explanationLabel.setEditable (false, false, false);
-        //        explanationLabel.setColour (TextEditor::textColourId, Colours::black);
-        //        explanationLabel.setColour (TextEditor::backgroundColourId, Colour (0x00000000));
         
         addAndMakeVisible(inputMeter);
+
         
         
         addAndMakeVisible (recordButton);
@@ -367,53 +357,15 @@ public:
         spectrum.setStrokeThickness(6);
         spectrum.setFill(Colours::transparentWhite);
         spectrum.setPath(spectralHandler.getPath());
-        
-//        addAndMakeVisible (keyScaleLabel);
-//        keyScaleLabel.setText ("Key/Scale:", dontSendNotification);
-        
 
         
-        keyScaleTextBox.setFont(Font("Arial",67,Font::FontStyleFlags::plain), true);
-        keyScaleTextBox.setFontHeight(67);
+        keyScaleTextBox.setFont(Font("Arial",67,Font::FontStyleFlags::plain));
+
 
         
-        keyScaleTextBox.setColour(Colour::fromRGB(119,195,214));
+        keyScaleTextBox.setColour(juce::Label::ColourIds::textColourId,Colour::fromRGB(119,195,214));
         addAndMakeVisible (keyScaleTextBox);
-//        addAndMakeVisible (rmsLabel);
-//        rmsLabel.setText ("RMS:", dontSendNotification);
-//        
-//        addAndMakeVisible (rmsTextBox);
-//        rmsTextBox.setReadOnly(true);
-//        rmsTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
-//        
-//        addAndMakeVisible (spectralFlatnessLabel);
-//        spectralFlatnessLabel.setText ("Spectral Flatness:", dontSendNotification);
-//        
-//        addAndMakeVisible (spectralFlatnessTextBox);
-//        spectralFlatnessTextBox.setReadOnly(true);
-//        spectralFlatnessTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
-//        
-//        addAndMakeVisible (spectralCentroidLabel);
-//        spectralCentroidLabel.setText ("Spectral Centroid:", dontSendNotification);
-        
-//        addAndMakeVisible (spectralCentroidTextBox);
-//        spectralCentroidTextBox.setReadOnly(true);
-//        spectralCentroidTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
-//        
 
-        
-        
-        addAndMakeVisible (sensitivitySlider);
-        sensitivitySlider.setRange (1.0, 44100.0/512.0, 1.0);
-        sensitivitySlider.setValue (50, dontSendNotification);
-        sensitivitySlider.setSliderStyle (Slider::LinearHorizontal);
-        sensitivitySlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
-        sensitivitySlider.addListener (this);
-        
-        addAndMakeVisible (sensitivitySliderLabel);
-        sensitivitySliderLabel.setText ("Sensitivity", dontSendNotification);
-        sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
-        
 
         
         //        addAndMakeVisible (recordingThumbnail);
@@ -446,10 +398,8 @@ public:
     {
         Rectangle<int> area (getLocalBounds());
         liveAudioScroller.setBounds (area.removeFromTop (80).reduced (8));
-        //        recordingThumbnail.setBounds (area.removeFromTop (80).reduced (8));
         
         keyScaleTextBox.setBounds(area.removeFromTop (136));
-        keyScaleTextBox.setFontHeight(1000);
         
         spectrum.setBounds(area.removeFromTop (136));
         spectralHandler.bounds  = spectrum.getBounds();
@@ -461,25 +411,6 @@ public:
         Rectangle<int> labelBounds = recordButton.getBounds().withHeight(30);
         Rectangle<int> valueBounds = labelBounds.withX(xOffset);
         
-        int labelY = explanationLabel.getY()+5;
-        
-//        sensitivitySliderLabel.setBounds(labelBounds.withY(labelY));
-//        sensitivitySlider.setBounds (valueBounds.withY(labelY));
-//        
-//        frameSliderLabel.setBounds(labelBounds.withY(labelY+=30));
-//        frameSlider.setBounds (valueBounds.withY(labelY));
-//        
-//        keyScaleLabel.setBounds(labelBounds.withY(labelY+=30));
-//        
-//        rmsLabel.setBounds(labelBounds.withY(labelY+=30));
-//        rmsTextBox.setBounds(valueBounds.withY(labelY));
-//        
-//        spectralFlatnessLabel.setBounds(labelBounds.withY(labelY+=30));
-//        spectralFlatnessTextBox.setBounds(valueBounds.withY(labelY));
-//        spectralCentroidLabel.setBounds(labelBounds.withY(labelY+=30));
-//        spectralCentroidTextBox.setBounds(valueBounds.withY(labelY));
-        
-
         
         inputMeter.setBounds(recordButton.getBounds().withX(xOffset));
         inputMeter.setSize(recordButton.getWidth()/2,recordButton.getHeight() );
@@ -502,8 +433,6 @@ private:
     AudioDeviceManager* deviceManager;
     LiveScrollingAudioDisplay liveAudioScroller;
     RecordingThumbnail recordingThumbnail;
-    //    AudioRecorder recorder;
-    //    StandardRecorder recorder;
 
     Label explanationLabel;
     TextEditor rmsTextBox, spectralFlatnessTextBox, spectralCentroidTextBox;
@@ -520,15 +449,9 @@ private:
     DatagramSocket datagramSocket;
     SimpleDeviceManagerInputLevelMeter inputMeter;
     
-    Slider sensitivitySlider;
-    Label sensitivitySliderLabel;
-    
-    Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel;
-
-    
     
     Font font;
-    DrawableText keyScaleTextBox;
+    Label keyScaleTextBox;
     
 
     
@@ -536,8 +459,6 @@ private:
     
     void startRecording()
     {
-        //        const File file (File::getSpecialLocation (File::userDocumentsDirectory)
-        //                            .getNonexistentChildFile ("Juce Demo Audio Recording", ".wav"));
         
         recorder.startRecording ();
         
@@ -578,26 +499,20 @@ private:
         << recorder.spectralFlatnessValue
         << recorder.spectralCentroidValue
         << osc::EndMessage;
-        //        << osc::BeginMessage( "/test2" )
-        //        << true << 24 << (float)10.8 << "world" << osc::EndMessage
-        //
-        //        juce::Logger *log = juce::Logger::getCurrentLogger();
-        //        String message(ipAddressTextBox.getText());
-        //        log->writeToLog(message);
-        //        message = portNumberTextBox.getText();
-        //        log->writeToLog(message);
-        
-//        datagramSocket.write(ipAddressTextBox.getText(), portNumberTextBox.getText().getIntValue(), p.Data(), p.Size());
+       
+
         datagramSocket.write(oscIP, oscPort, p.Data(), p.Size());
         
-        std::cout << oscIP;
-        std::cout << oscPort << "\n\n\n";
+//        std::cout << oscIP;
+//        std::cout << oscPort << "\n\n\n";
         
         
         if(spectralHandler.needsUpdate()){
             
-            String keyScaleString = recorder.keyString + " " + recorder.scaleString;
-            keyScaleTextBox.setText(keyScaleString);
+            String keyScaleString = recorder.keyString!=""?
+            (recorder.keyString + " " + (recorder.scaleString=="minor"?"m":"")):"";
+            
+            keyScaleTextBox.setText(keyScaleString,dontSendNotification);
             rmsTextBox.setText(String(float(recorder.rmsValue), 10));
             spectralFlatnessTextBox.setText(String(recorder.spectralFlatnessValue));
             spectralCentroidTextBox.setText(String(recorder.spectralCentroidValue));
@@ -608,7 +523,7 @@ private:
             
             spectrum.setPath(spectralHandler.getPath());
             
-            repaint();
+//            repaint();
         }
         
         //
