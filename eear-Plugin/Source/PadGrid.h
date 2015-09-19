@@ -39,7 +39,9 @@ public:
     {
         g.fillAll (Colours::darkgrey);   // clear the background
         
-        g.setColour(Colours::white);        
+//        g.setColour(Colours::white);
+        Colour textColour(135, 205, 222);
+        g.setColour(textColour);
         g.drawText(String(midiNote), 5, 5, 20, 20, Justification::left);
     }
     

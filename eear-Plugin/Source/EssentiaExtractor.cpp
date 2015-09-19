@@ -28,7 +28,7 @@ std::vector<float> EssentiaExtractor::hannWindow(int size){
 EssentiaExtractor::EssentiaExtractor(AudioFormatManager* formatManager)
 {
     //Call this globally
-//    essentia::init();
+    essentia::init();
     
 
         
@@ -40,6 +40,7 @@ EssentiaExtractor::EssentiaExtractor(AudioFormatManager* formatManager)
 EssentiaExtractor::~EssentiaExtractor()
 {
 //    delete rhythmExtractor;
+    essentia::shutdown();
 }
 
 Array<File> EssentiaExtractor::getAudioFiles(const File& audioFolder)
@@ -339,7 +340,11 @@ String EssentiaExtractor::buildDataset(const File& audioFolder, bool writeOnsets
         std::cout << "Processing file: " << currentAudioFileName << "\n";
         fileNames.appendText(filesToProcess[i].getFileName() + "\n");
         
+        std::cout << "ONE\n";
+        
         vector<Real> signal = audioFileToVector(filesToProcess[i]);
+        
+        std::cout << "TWO\n";
         
         Real BPM =  getGlobalFeatures(signal)[0];
         

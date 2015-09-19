@@ -229,7 +229,10 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles)
     for(int i=0; i< 16; i++) {
         int randomFileIndex = rand.nextInt(listOfFiles.size());
         
-        ScopedPointer<AudioFormatReader> audioReader = formatManager.createReaderFor(listOfFiles[randomFileIndex]);
+//        ScopedPointer<AudioFormatReader> audioReader = formatManager.createReaderFor(listOfFiles[randomFileIndex]);
+        ScopedPointer<AudioFormatReader> audioReader = formatManager.createReaderFor(listOfFiles[0]);
+        
+        std::cout << listOfFiles[0].getFullPathName() << "\n";
         
         BigInteger midiRange;
         midiRange.setRange(midiOffset+i, 1, true);

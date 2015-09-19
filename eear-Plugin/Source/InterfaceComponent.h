@@ -36,6 +36,8 @@ public:
     
     AudioPlayHead::CurrentPositionInfo lastDisplayedPosition;
     
+    String datasetPath;
+    
     InterfaceComponent(MidiKeyboardState& s, AudioProcessor& p) :
     midiKeyboard (s, MidiKeyboardComponent::horizontalKeyboard),
     infoLabel (String::empty),
@@ -123,14 +125,19 @@ public:
     void buttonClicked(Button* button)
     {
         if(button == &resetSynthButton) {
-            String path = "/Users/carthach/Dev/git/GiantSteps/eear/eear-demo-mhd-pd/MHD-short-loops";
-            
-            //        if(String(earOSCServer.key) != "") {
-            //            Array<File> matchingFiles = getAudioFiles(File(path), earOSCServer.key, earOSCServer.scale);
-            //            if(matchingFiles.size() > 0)
-            //                getProcessor().setSynthSamples(matchingFiles);
-            //        }
-            getProcessor().setSynthSamples(getAudioFiles(File(path), "E", "minor"));
+            if(datasetPath != "") {
+//                if(String(earOSCServer.key) != "") {
+//                    Array<File> matchingFiles = getAudioFiles(File(path), earOSCServer.key, earOSCServer.scale);
+//                    if(matchingFiles.size() > 0)
+//                        getProcessor().setSynthSamples(matchingFiles);
+//                }
+                
+                    Array<File> matchingFiles = getAudioFiles(File(datasetPath), "D", "Minor");
+                    if(matchingFiles.size() > 0)
+                        getProcessor().setSynthSamples(matchingFiles);
+                }
+
+//                getProcessor().setSynthSamples(getAudioFiles(File(datasetPath), "E", "minor"));
         }
     }
     
@@ -152,9 +159,11 @@ public:
     {
         Array<File> audioFiles;
         
-        String dirtyPattern = "*_*-*_" + key + "-" + scale + "_128_*.wav";
+        String dirtyPattern = "*_" + key + "-" + scale + "_"+ "*" +"_*.mp3";
         
         DirectoryIterator iter (audioFolder, false, dirtyPattern);
+        
+
         
         while (iter.next())
         {
@@ -215,10 +224,15 @@ public:
     //==============================================================================
     void paint (Graphics& g)
     {
-        g.setGradientFill (ColourGradient (Colours::white, 0, 0,
-                                           Colours::grey, 0, (float) getHeight(), false));
+//        g.setGradientFill (ColourGradient (Colours::white, 0, 0,
+//                                           Colours::grey, 0, (float) getHeight(), false));
         
-        g.fillAll();
+//        g.fillAll();
+        Colour backgroundColour(28, 31, 36);
+        g.fillAll(backgroundColour);
+        Colour textColour(135, 205, 222);
+        g.setColour(textColour);
+        
     }
     
     void resized()
@@ -230,10 +244,10 @@ public:
         resetSynthButton.setBounds(20, 100, 100, 25);
         
         currentKeyScaleLabel.setBounds(20, 140, 100, 20);
-        currentKeyScaleTextBox.setBounds(100, 140, 100, 20);
+        currentKeyScaleTextBox.setBounds(110, 140, 100, 20);
         
-        liveKeyScaleLabel.setBounds(200, 140, 100, 20);
-        liveKeyScaleTextBox.setBounds(300, 140, 100, 20);
+        liveKeyScaleLabel.setBounds(220, 140, 100, 20);
+        liveKeyScaleTextBox.setBounds(280, 140, 100, 20);
         
         padGrid.setBounds(20, 180, 640, 480);
         
