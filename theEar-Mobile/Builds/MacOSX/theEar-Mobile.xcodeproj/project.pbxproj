@@ -1751,6 +1751,7 @@
 		6FB41C681BAB3F280069C13F /* data */ = {
 			isa = PBXGroup;
 			children = (
+				3F8F0ECF1BADCD7C0093CC45 /* AbyssinicaSIL.Juce */,
 				6F583ED81BAB6D8900F78B6D /* AbyssinicaSIL-R.ttf */,
 				6FB41C691BAB3F340069C13F /* media */,
 			);
@@ -2721,7 +2722,6 @@
 		F697B394E28038D28E793727 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				3F8F0ECF1BADCD7C0093CC45 /* AbyssinicaSIL.Juce */,
 				6FB41C681BAB3F280069C13F /* data */,
 				77D5DCDE74CE3DA402DCBA39 /* theEar-Mobile */,
 				8E7B9B22344D33346029CDC5 /* Juce Modules */,

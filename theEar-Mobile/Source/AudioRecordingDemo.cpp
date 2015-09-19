@@ -279,7 +279,7 @@ public:
     StreamingRecorder recorder;
     
     AudioRecordingDemo(AudioDeviceManager* deviceManager)
-    : recorder (), inputMeter(*deviceManager)
+    : recorder ()//, inputMeter(*deviceManager)
     {
         setOpaque (true);
 #if defined JUCE_ANDROID || defined JUCE_IOS
@@ -316,7 +316,7 @@ public:
         addAndMakeVisible (liveAudioScroller);
         
         
-        addAndMakeVisible(inputMeter);
+//        addAndMakeVisible(inputMeter);
         
         
         
@@ -356,7 +356,7 @@ public:
         
         addAndMakeVisible(spectrum);
         spectrum.setStrokeFill(Colours::white);
-        spectrum.setStrokeThickness(6);
+        spectrum.setStrokeThickness(1);
         spectrum.setFill(Colours::white);
         spectrum.setPath(spectralHandler.getPath());
         
@@ -399,21 +399,21 @@ public:
     void resized() override
     {
         Rectangle<int> area (getLocalBounds());
+        Point <int> initSize(area.getWidth(),area.getHeight());
         area.removeFromTop(10);
-        Rectangle<int> strip = area.removeFromTop(80);
-        Rectangle<int> inputMeterBox = strip.removeFromLeft(80).removeFromTop(60).withY(20);
+        Rectangle<int> strip = area.removeFromTop(initSize.y/14);
+//        Rectangle<int> inputMeterBox = strip.removeFromLeft(80).removeFromTop(60).withY(20);
         
-        inputMeter.setBounds(inputMeterBox);//.getX(),inputMeterBox.getY(),inputMeterBox.getHeight(),inputMeterBox.getWidth());
+//        inputMeter.setBounds(inputMeterBox);//.getX(),inputMeterBox.getY(),inputMeterBox.getHeight(),inputMeterBox.getWidth());
         
-        inputMeter.setTransform(AffineTransform::rotation(-float_Pi /2.0f,
-                                                          inputMeterBox.getCentre().x,
-                                                          inputMeterBox.getCentre().y));
-        //        inputMeter.setBounds(inputMeterBox.getX(),inputMeterBox.getY(),inputMeterBox.getHeight(),inputMeterBox.getWidth());
+//        inputMeter.setTransform(AffineTransform::rotation(-float_Pi /2.0f,
+//                                                          inputMeterBox.getCentre().x,
+//                                                          inputMeterBox.getCentre().y));
         
         liveAudioScroller.setBounds (strip);
         
-        keyScaleTextBox.setBounds(area.removeFromTop (140));
-        spectrum.setBounds(area.removeFromTop (180));
+        keyScaleTextBox.setBounds(area.removeFromTop (initSize.y/4));//140));
+        spectrum.setBounds(area.removeFromTop (initSize.y/5));
         spectralHandler.bounds  = spectrum.getBounds();
         spectrum.setPath(spectralHandler.getPath());
         recordButton.setBounds (area.reduced(20));
@@ -450,7 +450,7 @@ private:
     
     
     DatagramSocket datagramSocket;
-    SimpleDeviceManagerInputLevelMeter inputMeter;
+//    SimpleDeviceManagerInputLevelMeter inputMeter;
     
     
     Font font;
@@ -526,7 +526,7 @@ private:
         if(spectralHandler.needsUpdate()){
             
             String keyScaleString = recorder.keyString!=""?
-            (recorder.keyString + " " + (recorder.scaleString=="minor"?"m":"")):"";
+            (recorder.keyString + " " + (recorder.scaleString=="M"?"":"m")):"";
             
             keyScaleTextBox.setText(keyScaleString,dontSendNotification);
             rmsTextBox.setText(String(float(recorder.rmsValue), 10));

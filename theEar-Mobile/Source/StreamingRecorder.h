@@ -218,7 +218,7 @@ public:
                 
                 if(pool.contains<std::string>("key")) {
                     keyString = pool.value<std::string>("key");
-                    scaleString = pool.value<std::string>("scale");
+                    scaleString = (pool.value<std::string>("scale")=="minor"?"m":"M");
                 }
                 
                 aggr->compute();

@@ -22,7 +22,7 @@ class  SpectralUI  {
 public:
     SpectralUI(){
         
-        rms = -.50;
+        rms = -1;
         flatness = 1.;
         centroid = .5;
         bounds.setWidth( 100);

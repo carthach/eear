@@ -108,7 +108,7 @@ private:
             waveform.addWithoutMerging (Rectangle<float> ((float) x, midY - sampleSize, 1.0f, sampleSize * 2.0f));
         }
         
-        g.setColour (Colours::lightgreen);
+        g.setColour (eear::Colour::text());
         g.fillRectList (waveform);
     }
     
