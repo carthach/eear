@@ -12,6 +12,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioRecordingDemo.cpp"
 #include "SettingsComponent.h"
+#include "Common.h"
 
 //==============================================================================
 class MainTab  : public TabbedComponent
@@ -20,8 +21,8 @@ public:
     MainTab (AudioDeviceManager& deviceManager)
     : TabbedComponent (TabbedButtonBar::TabsAtTop)
     {
-        addTab ("Interface",  Colours::grey, new AudioRecordingDemo(&deviceManager), true);
-        addTab ("Settings",  Colours::grey, new SettingsComponent((AudioRecordingDemo *)getTabContentComponent(0)), true);
+        addTab ("Interface",  eear::Colour::back(), new AudioRecordingDemo(&deviceManager), true);
+        addTab ("Settings",  eear::Colour::back(), new SettingsComponent((AudioRecordingDemo *)getTabContentComponent(0)), true);
         
     }
 };

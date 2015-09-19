@@ -27,6 +27,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "Common.h"
+
 
 //==============================================================================
 /* This component scrolls a continuous waveform showing the audio that's
@@ -92,7 +94,7 @@ private:
     
     void paint (Graphics& g) override
     {
-        g.fillAll (Colour::fromRGB(21, 24, 27));
+        g.fillAll (eear::Colour::back());
         
         const float midY = getHeight() * 0.5f;
         int samplesAgo = (nextSample + numElementsInArray (samples) - 1);

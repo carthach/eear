@@ -32,6 +32,7 @@
 
 
 #include "SpectralUI.h"
+#include "Common.h"
 
 class SimpleDeviceManagerInputLevelMeter  : public Component,
 public Timer
@@ -364,7 +365,7 @@ public:
         
         keyScaleTextBox.setJustificationType(Justification::centred);
         
-        keyScaleTextBox.setColour(juce::Label::ColourIds::textColourId,Colour::fromRGB(119,195,214));
+        keyScaleTextBox.setColour(juce::Label::ColourIds::textColourId,eear::Colour::text());
         addAndMakeVisible (keyScaleTextBox);
         
         
@@ -389,7 +390,7 @@ public:
     
     void paint (Graphics& g) override
     {
-        g.fillAll (juce::Colour::fromRGB(21, 24, 27));
+        g.fillAll (eear::Colour::back());
         g.setColour(Colours::black);
         g.setFont(60);
         
