@@ -491,12 +491,14 @@ obj/local/armeabi-v7a/objs/juce_jni/__/__/__/JuceLibraryCode/modules/juce_audio_
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnailBase.h \
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnail.h \
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnailCache.h \
+ jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioVisualiserComponent.h \
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_MidiKeyboardComponent.h \
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioAppComponent.h \
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/players/juce_AudioProcessorPlayer.h \
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioDeviceSelectorComponent.cpp \
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnail.cpp \
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnailCache.cpp \
+ jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioVisualiserComponent.cpp \
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_MidiKeyboardComponent.cpp \
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioAppComponent.cpp \
  jni/../../../JuceLibraryCode/modules/juce_audio_utils/players/juce_AudioProcessorPlayer.cpp
@@ -1483,6 +1485,8 @@ jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnail.h:
 
 jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnailCache.h:
 
+jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioVisualiserComponent.h:
+
 jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_MidiKeyboardComponent.h:
 
 jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioAppComponent.h:
@@ -1494,6 +1498,8 @@ jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioDeviceSelect
 jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnail.cpp:
 
 jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioThumbnailCache.cpp:
+
+jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_AudioVisualiserComponent.cpp:
 
 jni/../../../JuceLibraryCode/modules/juce_audio_utils/gui/juce_MidiKeyboardComponent.cpp:
 

@@ -5,6 +5,10 @@
               jucerVersion="3.2.0">
   <MAINGROUP id="HbPPUx" name="theEar-Mobile">
     <GROUP id="{4035F341-CD9A-AB8A-C692-7ADEC6081F84}" name="Source">
+      <FILE id="przXSm" name="button_no_pushed.png" compile="0" resource="1"
+            file="data/media/button_no_pushed.png"/>
+      <FILE id="BUjIC8" name="button_pushed.png" compile="0" resource="1"
+            file="data/media/button_pushed.png"/>
       <GROUP id="{623007C3-0A4F-6DA9-9950-48733DDA0377}" name="Essentia-RingBuffer">
         <FILE id="YKZo3P" name="ringbufferinput.h" compile="0" resource="0"
               file="Source/ringbufferinput.h"/>

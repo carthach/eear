@@ -21,6 +21,11 @@ public:
     Slider frameSlider;
     Label frameSliderLabel;
     
+    Slider sensitivitySlider;
+    Label sensitivitySliderLabel;
+    //    Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel;
+    
+    
     SettingsComponent(AudioRecordingDemo* recorder)
     {
         addAndMakeVisible (frameSlider);
@@ -51,6 +56,21 @@ public:
         saveButton.setButtonText("Save");
         addAndMakeVisible(saveButton);
         
+        
+        
+        addAndMakeVisible (sensitivitySlider);
+        sensitivitySlider.setRange (1.0, 44100.0/512.0, 1.0);
+        sensitivitySlider.setValue (50, dontSendNotification);
+        sensitivitySlider.setSliderStyle (Slider::LinearHorizontal);
+        sensitivitySlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
+        sensitivitySlider.addListener (this);
+        
+        addAndMakeVisible (sensitivitySliderLabel);
+        sensitivitySliderLabel.setText ("Sensitivity", dontSendNotification);
+        sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
+        
+        
+        
         this->recorder = recorder;
     }
     
@@ -63,7 +83,7 @@ public:
     void paint (Graphics& g) override
     {
         // (Our component is opaque, so we must completely fill the background with a solid colour)
-//        g.fillAll(Colours::black);
+        //        g.fillAll(Colours::black);
         
         
         // You can add your drawing code here!
@@ -80,8 +100,8 @@ public:
         
         frameSliderLabel.setBounds(labelBounds.withY(labelY+=30));
         frameSlider.setBounds (valueBounds.withY(labelY));
-
-    
+        
+        
         oscInfoLabel.setBounds(labelBounds.withY(labelY+=40));
         
         ipAddressLabel.setBounds(labelBounds.withY(labelY+=30));
@@ -91,14 +111,14 @@ public:
         
         saveButton.setBounds(labelBounds.withY(labelY+=30));
         saveButton.addListener(this);
-
+        
     }
     
     void buttonClicked (Button *) override
     {
-        recorder->oscIP = ipAddressTextBox.getText();
-        recorder->oscPort = portNumberTextBox.getText().getIntValue();
-        
+        //        recorder->ipAddress = ipAddressTextBox.getText();
+        //        recorder->portNumber = portNumberTextBox.getText().getIntValue();
+        //
     }
     
     void sliderValueChanged (Slider *slider) override
@@ -113,6 +133,8 @@ public:
             }
         }
     }
+    
+    
 };
 
 #endif

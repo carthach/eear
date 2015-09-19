@@ -14,6 +14,7 @@ LOCAL_SRC_FILES := \
   ../../../Source/AudioRecordingDemo.cpp\
   ../../../Source/Main.cpp\
   ../../../Source/MainComponent.cpp\
+  ../../../JuceLibraryCode/BinaryData.cpp\
   ../../../JuceLibraryCode/modules/danlin_oscpack/danlin_oscpack.cpp\
   ../../../JuceLibraryCode/modules/juce_audio_basics/juce_audio_basics.cpp\
   ../../../JuceLibraryCode/modules/juce_audio_devices/juce_audio_devices.cpp\
