@@ -357,7 +357,7 @@ public:
         addAndMakeVisible(spectrum);
         spectrum.setStrokeFill(Colours::white);
         spectrum.setStrokeThickness(6);
-        spectrum.setFill(Colours::transparentWhite);
+        spectrum.setFill(Colours::white);
         spectrum.setPath(spectralHandler.getPath());
         
         
@@ -412,8 +412,8 @@ public:
 
         liveAudioScroller.setBounds (strip);
 
-        keyScaleTextBox.setBounds(area.removeFromTop (136));
-        spectrum.setBounds(area.removeFromTop (136));
+        keyScaleTextBox.setBounds(area.removeFromTop (140));
+        spectrum.setBounds(area.removeFromTop (180));
         spectralHandler.bounds  = spectrum.getBounds();
         spectrum.setPath(spectralHandler.getPath());
         recordButton.setBounds (area.reduced(20));

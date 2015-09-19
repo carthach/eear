@@ -22,8 +22,8 @@ class  SpectralUI  {
 public:
     SpectralUI(){
         
-        rms = .8;
-        flatness = .5;
+        rms = -.50;
+        flatness = 1.;
         centroid = .5;
         bounds.setWidth( 100);
         bounds.setHeight(100);
@@ -64,9 +64,8 @@ public:
         
         cout << rms << " , " << flatness  << " : ";
         path.clear();
-        path.startNewSubPath(0, 1);
-        path.lineTo(1,1);
-        path.startNewSubPath(start);
+        path.startNewSubPath(bounds.getX(),bounds.getBottom());
+        path.lineTo(start);
         cout << path.getCurrentPosition().y << " , ";
         float middleStrength = (middle.x-start.x)*0.3;
         path.cubicTo(Point<float>(middleStrength,start.y), Point<float>(middle.x-middleStrength,middle.y), middle);//quadratic(Point<float>(start.x+0.25,start.y), middle);
@@ -75,7 +74,8 @@ public:
         path.cubicTo(Point<float>(middle.x+middleStrength,middle.y), Point<float>(end.x-middleStrength,end.y), end);//quadraticTo(Point<float>(end.x-0.25,end.y), end);
                 cout << path.getCurrentPosition().y << endl;
 
-        
+        path.lineTo(bounds.getRight(),bounds.getBottom());
+        path.closeSubPath();
         
 
 //        path.scaleToFit(bounds.getX(),bounds.getY() , bounds.getWidth() , bounds.getHeight(), false);
