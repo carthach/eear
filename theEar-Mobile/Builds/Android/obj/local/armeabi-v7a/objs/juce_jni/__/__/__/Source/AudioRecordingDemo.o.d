@@ -579,7 +579,8 @@ obj/local/armeabi-v7a/objs/juce_jni/__/__/__/Source/AudioRecordingDemo.o: \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/utils/tnt/tnt2essentiautils.h \
  /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/fstream \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/utils/tnt/tnt.h \
- /Users/carthach/Dev/android/modules/essentia/include/essentia/pool.h
+ /Users/carthach/Dev/android/modules/essentia/include/essentia/pool.h \
+ jni/../../../Source/SpectralUI.h
 
 jni/../../../Source/../JuceLibraryCode/JuceHeader.h:
 
@@ -1740,3 +1741,5 @@ jni/../../../Source/StandardRecorder.h:
 /Users/carthach/Dev/android/modules/essentia/include/essentia/utils/tnt/tnt.h:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/pool.h:
+
+jni/../../../Source/SpectralUI.h:

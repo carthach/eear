@@ -9,7 +9,7 @@
 #ifndef __theEar_Mobile__SpectralUI__
 #define __theEar_Mobile__SpectralUI__
 
-#include "juce_gui_basics.h"
+//#include "juce_gui_basics.h"
 
 
 

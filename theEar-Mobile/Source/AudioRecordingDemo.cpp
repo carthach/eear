@@ -275,6 +275,7 @@ private SliderListener
 public:
     String oscIP = "127.0.0.1";
     int oscPort = 8000;
+    StreamingRecorder recorder;
     
     AudioRecordingDemo(AudioDeviceManager* deviceManager)
     : recorder (), inputMeter(*deviceManager)
@@ -282,10 +283,11 @@ public:
         setOpaque (true);
 #if defined JUCE_ANDROID || defined JUCE_IOS
 #error( Need to define media Path for android / ios)
-        assert(false);
+//        assert(false);
 #else
         File Resources = File::getSpecialLocation(juce::File::SpecialLocationType::currentApplicationFile).getChildFile("Contents").getChildFile("Resources");
 #endif
+        
         
             File file(Resources.getChildFile("AbyssinicaSIL.Juce"));
             
@@ -412,16 +414,7 @@ public:
         sensitivitySliderLabel.setText ("Sensitivity", dontSendNotification);
         sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
         
-        addAndMakeVisible (frameSlider);
-        frameSlider.setRange (1.0, 44100.0/512.0, 1.0);
-        frameSlider.setValue (50, dontSendNotification);
-        frameSlider.setSliderStyle (Slider::LinearHorizontal);
-        frameSlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
-        frameSlider.addListener (this);
-        
-        addAndMakeVisible (frameSliderLabel);
-        frameSliderLabel.setText ("Size of Buffer", dontSendNotification);
-        frameSliderLabel.attachToComponent (&frameSlider, true);
+
         
         //        addAndMakeVisible (recordingThumbnail);
         
@@ -492,13 +485,24 @@ public:
         
     }
     
+    void stopRecording()
+    {
+        recorder.stop();
+        
+        
+        //        recordButton.setButtonText ("Listen!");
+        recordingThumbnail.setDisplayFullThumbnail (true);
+        
+        recording = false;
+    }
+    
 private:
     AudioDeviceManager* deviceManager;
     LiveScrollingAudioDisplay liveAudioScroller;
     RecordingThumbnail recordingThumbnail;
     //    AudioRecorder recorder;
     //    StandardRecorder recorder;
-    StreamingRecorder recorder;
+
     Label explanationLabel;
     TextEditor rmsTextBox, spectralFlatnessTextBox, spectralCentroidTextBox;
     
@@ -514,8 +518,8 @@ private:
     DatagramSocket datagramSocket;
     SimpleDeviceManagerInputLevelMeter inputMeter;
     
-    Slider frameSlider, sensitivitySlider;
-    Label frameSliderLabel, sensitivitySliderLabel;
+    Slider sensitivitySlider;
+    Label sensitivitySliderLabel;
     
     Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel;
 
@@ -541,16 +545,7 @@ private:
         recording = true;
     }
     
-    void stopRecording()
-    {
-        recorder.stop();
-        
-        
-        //        recordButton.setButtonText ("Listen!");
-        recordingThumbnail.setDisplayFullThumbnail (true);
-        
-        recording = false;
-    }
+
     
     void buttonClicked (Button* button) override
     {
@@ -565,15 +560,7 @@ private:
     
     void 	sliderValueChanged (Slider *slider) override
     {
-        if (slider == &frameSlider) {
-            int frameValue = int(slider->getValue());
-            if(frameValue != recorder.computeFrameCount) {
-                if (recorder.isRecording())
-                    stopRecording();
-                recorder.computeFrameCount = frameValue;
-                
-            }
-        }
+
     }
     
     void changeListenerCallback (ChangeBroadcaster *source)
