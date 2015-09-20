@@ -508,6 +508,7 @@ private:
     
     void changeListenerCallback (ChangeBroadcaster *source)
     {
+        if(recorder.keyString.isNotEmpty()){
         char buffer[1024];
         osc::OutboundPacketStream p( buffer, 1024 );
         
@@ -522,7 +523,7 @@ private:
         
         
         datagramSocket.write(oscIP, oscPort, p.Data(), p.Size());
-        
+        }
         //        std::     << oscIP;
         //        std::cout << oscPort << "\n\n\n";
         
