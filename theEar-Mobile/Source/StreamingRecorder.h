@@ -35,6 +35,8 @@ public:
     map< String,int > keyPoolMajor;
     map< String,int > keyPoolMinor;
     
+    float gain;
+    
     //As suggested by KeyExtractor
     int frameSize = 4096;
     int hopSize = 2048;
@@ -223,7 +225,7 @@ public:
         sampleRate = 0;
     }
     
-    void audioDeviceIOCallback (const float** inputChannelData, int /*numInputChannels*/,
+    void audioDeviceIOCallback (const float** inputChannelData, int numIn/*numInputChannels*/,
                                 float** outputChannelData, int numOutputChannels,
                                 int numSamples) override
     {
@@ -232,9 +234,9 @@ public:
             
             //Put the samples into the RingBuffer
             //According to ringbufferimpl.h Essentia should handle thread safety...
-            
-            const AudioSampleBuffer buffer (const_cast<float**> (inputChannelData), 1, numSamples);
-            
+
+            AudioSampleBuffer buffer (const_cast<float**> (inputChannelData), 1, numSamples);
+
             //            std::cout << buffer.getRMSLevel(0, 0, buffer.getNumSamples()) << "\n";
             
             ringBufferInput->add(const_cast<essentia::Real *> (inputChannelData[0]), numSamples);
@@ -275,24 +277,23 @@ public:
                 rmsValue = reals["rms"].back();
                 spectralFlatnessValue = reals["spectralFlatness"].back();
                 spectralCentroidValue = reals["spectralCentroid"].back();
-                if(scaleString=="m"){
-                    keyPoolMinor[keyString ]++;
-
-                }
-                else{
-                    keyPoolMajor[keyString ]++;
-
-                }
-                String minorBest = getBestInPool(keyPoolMinor);
-                String majorBest = getBestInPool(keyPoolMajor);
-                if(keyPoolMinor[minorBest]>keyPoolMajor[majorBest]){
-                    scaleString = "m";
-                    keyString = minorBest;
-                }
-                else{
-                    keyString = majorBest;
-                    scaleString = "M";
-                }
+               
+                // filter median
+//                if(scaleString=="m"){keyPoolMinor[keyString ]++;}
+//                else{keyPoolMajor[keyString ]++;}
+//                String minorBest = getBestInPool(keyPoolMinor);
+//                String majorBest = getBestInPool(keyPoolMajor);
+//                if(keyPoolMinor[minorBest]>keyPoolMajor[majorBest]){
+//                    scaleString = "m";
+//                    keyString = minorBest;
+//                }
+//                else{
+//                    keyString = majorBest;
+//                    scaleString = "M";
+//                }
+//                
+                
+                
                 
                 sendChangeMessage();
                 //                if(frameOutCount % 32 == 0)
@@ -302,7 +303,7 @@ public:
             //Clear out the key algorithm
             if(frameOutCount % (computeFrameCount+1) == 0 && computeFrameCount > 0) {
                 //                key->reset();
-                n->reset();
+//                n->reset();
                 aggrPool.clear();
                 frameOutCount = 0;
             }

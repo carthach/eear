@@ -23,6 +23,7 @@ public:
     
     Slider sensitivitySlider;
     Label sensitivitySliderLabel;
+    
     //    Label keyScaleLabel, rmsLabel, spectralFlatnessLabel, spectralCentroidLabel;
     
     
@@ -59,14 +60,14 @@ public:
         
         
         addAndMakeVisible (sensitivitySlider);
-        sensitivitySlider.setRange (1.0, 44100.0/512.0, 1.0);
-        sensitivitySlider.setValue (50, dontSendNotification);
-        sensitivitySlider.setSliderStyle (Slider::LinearHorizontal);
+        sensitivitySlider.setRange (0.0, 1.5, .80);
+        sensitivitySlider.setValue (.8, dontSendNotification);
+        sensitivitySlider.setSliderStyle (Slider::LinearBarVertical);
         sensitivitySlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
         sensitivitySlider.addListener (this);
         
         addAndMakeVisible (sensitivitySliderLabel);
-        sensitivitySliderLabel.setText ("Sensitivity", dontSendNotification);
+        sensitivitySliderLabel.setText ("Gain", dontSendNotification);
         sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
         
         
@@ -97,20 +98,22 @@ public:
         Rectangle<int> valueBounds(150, 0, 100, 20);
         
         int labelY = 0;
-        
-        frameSliderLabel.setBounds(labelBounds.withY(labelY+=30));
+        int height = getLocalBounds().getHeight()/10;
+        frameSliderLabel.setBounds(labelBounds.withY(labelY+=height));
         frameSlider.setBounds (valueBounds.withY(labelY));
         
         
-        oscInfoLabel.setBounds(labelBounds.withY(labelY+=40));
+        oscInfoLabel.setBounds(labelBounds.withY(labelY+=height));
         
-        ipAddressLabel.setBounds(labelBounds.withY(labelY+=30));
+        ipAddressLabel.setBounds(labelBounds.withY(labelY+=height));
         ipAddressTextBox.setBounds(valueBounds.withY(labelY));
-        portNumberLabel.setBounds(labelBounds.withY(labelY+=30));
+        portNumberLabel.setBounds(labelBounds.withY(labelY+=height));
         portNumberTextBox.setBounds(valueBounds.withY(labelY));
         
-        saveButton.setBounds(labelBounds.withY(labelY+=30));
+        saveButton.setBounds(labelBounds.withY(labelY+=height));
         saveButton.addListener(this);
+        
+        sensitivitySlider.setBounds(labelBounds.withY(labelY+=height).withHeight(height * 5));
         
     }
     
@@ -131,6 +134,10 @@ public:
                 recorder->recorder.computeFrameCount = frameValue;
                 
             }
+        }
+        else if(slider == &sensitivitySlider){
+            recorder->recorder.gain = slider->getValue();
+            
         }
     }
     
