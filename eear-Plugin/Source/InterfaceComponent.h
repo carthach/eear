@@ -8,9 +8,8 @@
 
 #ifndef eear_Plugin_InterfaceComponent_h
 #define eear_Plugin_InterfaceComponent_h
-#include "PluginProcessor.h"
-
-
+#include "EarOSCServer.h"
+#include "PadGrid.h"
 
 class InterfaceComponent : public Component,
                             public SliderListener,

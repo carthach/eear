@@ -10,14 +10,13 @@
 
 #ifndef PADGRID_H_INCLUDED
 #define PADGRID_H_INCLUDED
-
-#include "../JuceLibraryCode/JuceHeader.h"
-
+//#include "InterfaceComponent.h"
 
 class PadComponent : public Component
 {
 public:
     Point<int> initialPosition;
+//    InterfaceComponent *interfaceComponent;
     
     MidiKeyboardState& midiKeyboardState;
     int midiNote;

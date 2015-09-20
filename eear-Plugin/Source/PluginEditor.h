@@ -13,8 +13,6 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
-#include "EarOSCServer.h"
-#include "PadGrid.h"
 #include "InterfaceComponent.h"
 #include "DataComponent.h"
 

@@ -274,7 +274,8 @@ private SliderListener
 
 {
 public:
-    String oscIP = "127.0.0.1";
+//    String oscIP = "127.0.0.1";
+    String oscIP = "192.168.43.26";
     int oscPort = 8000;
     StreamingRecorder recorder;
     
@@ -492,9 +493,6 @@ private:
                 case Button::buttonDown :
                     startRecording();
                     break;
-                case Button::buttonNormal:
-
-                    break;
                 default:
                     break;
             };
@@ -510,6 +508,7 @@ private:
     
     void changeListenerCallback (ChangeBroadcaster *source)
     {
+        if(recorder.keyString.isNotEmpty()){
         char buffer[1024];
         osc::OutboundPacketStream p( buffer, 1024 );
         
@@ -524,9 +523,11 @@ private:
         
         
         datagramSocket.write(oscIP, oscPort, p.Data(), p.Size());
-        
+        }
         //        std::     << oscIP;
         //        std::cout << oscPort << "\n\n\n";
+        
+        
         
         
         if(spectralHandler.needsUpdate()){
