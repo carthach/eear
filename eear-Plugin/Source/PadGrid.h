@@ -134,8 +134,12 @@ public:
             shouldCheckState = false;
             
             for (int i = 0; i < pads.size(); ++i) {
-                if (midiKeyboardState.isNoteOnForChannels(0xffff, pads[i]->midiNote))
+                if (midiKeyboardState.isNoteOnForChannels(0xffff, pads[i]->midiNote)) {
                     pads[i]->setTopLeftPosition(pads[i]->initialPosition.getX()+2, pads[i]->initialPosition.getY()+2);
+                    
+                    if(midiKeyboardState.isNoteOnForChannels(0xffff, pads[i]->midiNote))
+                        ;
+                }
                 else
                     pads[i]->setTopLeftPosition(pads[i]->initialPosition.getX(), pads[i]->initialPosition.getY());
             }

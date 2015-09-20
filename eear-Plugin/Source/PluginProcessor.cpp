@@ -226,7 +226,7 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles)
     
     int midiOffset = 36;
     
-    for(int i=0; i< 16; i++) {
+    for(int i=0; i< 15; i++) {
         int randomFileIndex = rand.nextInt(listOfFiles.size());
         
         std::cout << "here\n";
