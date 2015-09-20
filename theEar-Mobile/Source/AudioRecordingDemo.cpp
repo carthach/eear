@@ -274,7 +274,8 @@ private SliderListener
 
 {
 public:
-    String oscIP = "127.0.0.1";
+//    String oscIP = "127.0.0.1";
+    String oscIP = "192.168.43.235";
     int oscPort = 8000;
     StreamingRecorder recorder;
     
@@ -524,6 +525,8 @@ private:
         
         //        std::     << oscIP;
         //        std::cout << oscPort << "\n\n\n";
+        
+        
         
         
         if(spectralHandler.needsUpdate()){
