@@ -16,7 +16,8 @@ class InterfaceComponent : public Component,
                             public SliderListener,
                             public Timer,
                             public Button::Listener,
-                            public ChangeListener
+                            public ChangeListener,
+                        private MidiInputCallback
 {
 public:
     MidiKeyboardComponent midiKeyboard;
@@ -35,6 +36,8 @@ public:
     Label keyScaleTextBox;
     
     AudioProcessor& processor;
+    
+    ToggleButton shouldQuantiseButton, shouldAutoUpdateButton;
     
     AudioPlayHead::CurrentPositionInfo lastDisplayedPosition;
     
@@ -147,9 +150,12 @@ public:
         addAndMakeVisible (keyScaleTextBox);
         
         
+        addAndMakeVisible(shouldQuantiseButton);
+        shouldQuantiseButton.addListener(this);
+        shouldQuantiseButton.setButtonText("Quantise On/Off");
         
         earOSCServer.addChangeListener(this);
-        
+               
         
         // set our component's initial size to be the last one that was stored in the filter's settings
         //    setSize (owner.lastUIWidth,
@@ -163,6 +169,7 @@ public:
         setSize(1024, 768);
     }
     
+
     //==============================================================================
     TheEarPluginAudioProcessor& getProcessor() const
     {
@@ -189,6 +196,10 @@ public:
 
 //                getProcessor().setSynthSamples(getAudioFiles(File(datasetPath), "E", "minor"));
         }
+        else if(button == &shouldQuantiseButton) {
+            getProcessor().shouldQuantise = button->getToggleState();
+        }
+            
     }
     
     // This timer periodically checks whether any of the filter's parameters have changed...
@@ -213,19 +224,22 @@ public:
         
 //        3_0050823 Tigerskin - Style (Original Mix) [Resopal Schallware] == Minimal === Bm.mp3_loop_1.wav
         
-        String keyScale = "Bm";
-        String dirtyPattern = "*=== " + keyScale + ".mp3.*";
+        String keyScale = key;
+        if(scale == "Minor")
+            keyScale = keyScale + "m";        
+        
+        String dirtyPattern = "*" + keyScale +".mp3_loop_*.wav";
+        
         
         DirectoryIterator iter (audioFolder, false, dirtyPattern);
         
-
         
         while (iter.next())
         {
             File theFileItFound (iter.getFile());
             audioFiles.add(theFileItFound);
             
-            std::cout << theFileItFound.getFileName() << "\n";
+            std::cout << "Recognised File" << theFileItFound.getFileName() << "\n";
         }
         
         return audioFiles;
@@ -235,6 +249,10 @@ public:
     {
         String keyScaleString = String(earOSCServer.key) + " " + String(earOSCServer.scale);
         currentKeyScaleTextBox.setText(keyScaleString);
+        
+        bool autoUpdate = true;
+        if(autoUpdate)
+            buttonClicked(&resetSynthButton);
     }
     
     // This is our Slider::Listener callback, when the user drags a slider.
@@ -306,6 +324,8 @@ public:
         
         padGrid.setBounds(20, 180, 640, 480);
         
+        shouldQuantiseButton.setBounds(280, 60, 150,50);
+        
         const int keyboardHeight = 70;
         midiKeyboard.setBounds (4, getHeight() - keyboardHeight - 4, getWidth() - 8, keyboardHeight);
         
@@ -355,6 +375,13 @@ public:
         String s;
         s << bar << '|' << beat << '|' << ticks;
         return s;
+    }
+    
+    // These methods handle callbacks from the midi device + on-screen keyboard..
+    void handleIncomingMidiMessage (MidiInput*, const MidiMessage& message) override
+    {
+        if (message.isProgramChange())
+            std::cout << "message!\n";
     }
     
 

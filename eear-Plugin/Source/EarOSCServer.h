@@ -8,7 +8,8 @@ public:
     {
         oscServer = new OscServer (this);
         // listen on port 
-        oscServer->setLocalPortNumber (localPort);
+//        oscServer->setLocalPortNumber (localPort);
+        oscServer->setLocalPortNumber (8000);
         // start listening
         oscServer->listen ();
 //        // set remote hostname (we use our self)
@@ -37,6 +38,8 @@ public:
 //            float rmsValue, spectralFlatnessValue, spectralCentroidValue;
 
             args >> key >> scale >> rmsValue >> spectralFlatnessValue >> spectralCentroidValue >> osc::EndMessage;
+            
+            std::cout << "receiving input\n";
             
 
             sendChangeMessage();

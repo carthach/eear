@@ -20,6 +20,7 @@ TheEarPluginAudioProcessorEditor::TheEarPluginAudioProcessorEditor (TheEarPlugin
 {
     Colour textColour(135, 205, 222);
     lookAndFeel.setColour(Label::ColourIds::textColourId, textColour);
+    lookAndFeel.setColour(ToggleButton::ColourIds::textColourId, textColour);
     setLookAndFeel(&lookAndFeel);
 
     
