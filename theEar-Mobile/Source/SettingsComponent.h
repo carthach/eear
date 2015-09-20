@@ -44,7 +44,7 @@ public:
         ipAddressLabel.setText ("IP Address:", dontSendNotification);
         
         addAndMakeVisible (ipAddressTextBox);
-        ipAddressTextBox.setText("127.0.0.1");
+        ipAddressTextBox.setText("192.168.43.26");
         
         addAndMakeVisible (oscInfoLabel);
         oscInfoLabel.setText ("Set OSC Info:", dontSendNotification);

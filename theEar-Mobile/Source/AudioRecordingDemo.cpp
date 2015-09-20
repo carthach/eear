@@ -275,7 +275,7 @@ private SliderListener
 {
 public:
 //    String oscIP = "127.0.0.1";
-    String oscIP = "192.168.43.235";
+    String oscIP = "192.168.43.26";
     int oscPort = 8000;
     StreamingRecorder recorder;
     
