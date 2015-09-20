@@ -10,9 +10,10 @@
 #define theEar_Mobile_SettingsComponent_h
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include <string>
 //#include "AudioRecordingDemo.cpp"
 
-class SettingsComponent : public Component, public Button::Listener, Slider::Listener {
+class SettingsComponent : public Component, public Button::Listener, Slider::Listener,TextEditor::Listener {
 public:
     Label ipAddressLabel, portNumberLabel, oscInfoLabel;
     TextEditor ipAddressTextBox, portNumberTextBox;
@@ -45,6 +46,7 @@ public:
         
         addAndMakeVisible (ipAddressTextBox);
         ipAddressTextBox.setText("127.0.0.1");
+        ipAddressTextBox.addListener(this);
         
         addAndMakeVisible (oscInfoLabel);
         oscInfoLabel.setText ("Set OSC Info:", dontSendNotification);
@@ -53,6 +55,7 @@ public:
         
         addAndMakeVisible (portNumberTextBox);
         portNumberTextBox.setText("8000");
+        portNumberTextBox.addListener(this);
         
         saveButton.setButtonText("Save");
         addAndMakeVisible(saveButton);
@@ -88,6 +91,17 @@ public:
         
         
         // You can add your drawing code here!
+    }
+    
+    void textEditorFocusLost (TextEditor& t) {
+        if(&t == &portNumberTextBox ){
+            recorder->oscPort =std::stoi(t.getText().toStdString());
+        }
+        else if (&t == &ipAddressTextBox){
+            recorder->oscIP =t.getText();
+        }
+        
+        
     }
     
     void resized() override

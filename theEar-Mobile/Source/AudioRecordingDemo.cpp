@@ -274,7 +274,7 @@ private SliderListener
 
 {
 public:
-//    String oscIP = "127.0.0.1";
+    //    String oscIP = "127.0.0.1";
     String oscIP = "192.168.43.235";
     int oscPort = 8000;
     StreamingRecorder recorder;
@@ -283,12 +283,12 @@ public:
     : recorder ()//, inputMeter(*deviceManager)
     {
         setOpaque (true);
-//#if defined JUCE_ANDROID || defined JUCE_IOS
-////#error( Need to define media Path for android / ios)
-//        //        assert(false);
-//#else
+        //#if defined JUCE_ANDROID || defined JUCE_IOS
+        ////#error( Need to define media Path for android / ios)
+        //        //        assert(false);
+        //#else
         File Resources = File::getSpecialLocation(juce::File::SpecialLocationType::currentApplicationFile).getChildFile("Contents").getChildFile("Resources");
-//#endif
+        //#endif
         
         
         File file(Resources.getChildFile("AbyssinicaSIL.Juce"));
@@ -317,7 +317,7 @@ public:
         addAndMakeVisible (liveAudioScroller);
         
         
-//        addAndMakeVisible(inputMeter);
+        //        addAndMakeVisible(inputMeter);
         
         
         
@@ -328,20 +328,20 @@ public:
         
         
         {
-//            File file(Resources.getChildFile("recordButtonPushed.png"));
-//            FileInputStream fstream(file);
-//            recordButtonImagePushed =ImageFileFormat::loadFrom (fstream);
+            //            File file(Resources.getChildFile("recordButtonPushed.png"));
+            //            FileInputStream fstream(file);
+            //            recordButtonImagePushed =ImageFileFormat::loadFrom (fstream);
             
             recordButtonImagePushed = ImageCache::getFromMemory (BinaryData::button_pushed_png,
                                                                  BinaryData::button_pushed_pngSize);
         }
         {
-//            File file(Resources.getChildFile("recordButtonNotPushed.png"));
-//            FileInputStream fstream(file);
-//            recordButtonImageNotPushed =ImageFileFormat::loadFrom (fstream);
+            //            File file(Resources.getChildFile("recordButtonNotPushed.png"));
+            //            FileInputStream fstream(file);
+            //            recordButtonImageNotPushed =ImageFileFormat::loadFrom (fstream);
             
             recordButtonImageNotPushed = ImageCache::getFromMemory (BinaryData::button_no_pushed_png,
-                                                                 BinaryData::button_no_pushed_pngSize);
+                                                                    BinaryData::button_no_pushed_pngSize);
         }
         
         {
@@ -409,13 +409,13 @@ public:
         Point <int> initSize(area.getWidth(),area.getHeight());
         area.removeFromTop(10);
         Rectangle<int> strip = area.removeFromTop(initSize.y/14);
-//        Rectangle<int> inputMeterBox = strip.removeFromLeft(80).removeFromTop(60).withY(20);
+        //        Rectangle<int> inputMeterBox = strip.removeFromLeft(80).removeFromTop(60).withY(20);
         
-//        inputMeter.setBounds(inputMeterBox);//.getX(),inputMeterBox.getY(),inputMeterBox.getHeight(),inputMeterBox.getWidth());
+        //        inputMeter.setBounds(inputMeterBox);//.getX(),inputMeterBox.getY(),inputMeterBox.getHeight(),inputMeterBox.getWidth());
         
-//        inputMeter.setTransform(AffineTransform::rotation(-float_Pi /2.0f,
-//                                                          inputMeterBox.getCentre().x,
-//                                                          inputMeterBox.getCentre().y));
+        //        inputMeter.setTransform(AffineTransform::rotation(-float_Pi /2.0f,
+        //                                                          inputMeterBox.getCentre().x,
+        //                                                          inputMeterBox.getCentre().y));
         
         liveAudioScroller.setBounds (strip);
         
@@ -436,15 +436,15 @@ public:
     void stopRecording()
     {
         recorder.stop();
-
+        
         recording = false;
     }
     
 private:
     AudioDeviceManager* deviceManager;
     LiveScrollingAudioDisplay liveAudioScroller;
-
-
+    
+    
     TextEditor rmsTextBox, spectralFlatnessTextBox, spectralCentroidTextBox;
     
     ImageButton recordButton;
@@ -457,7 +457,7 @@ private:
     
     
     DatagramSocket datagramSocket;
-//    SimpleDeviceManagerInputLevelMeter inputMeter;
+    //    SimpleDeviceManagerInputLevelMeter inputMeter;
     
     
     Font font;
@@ -479,12 +479,27 @@ private:
     
     
     void buttonClicked (Button* button) override {
-    
-                        stopRecording();
+        if(recorder.keyString.isNotEmpty()){
+            char buffer[1024];
+            osc::OutboundPacketStream p( buffer, 1024 );
+            
+            p
+            << osc::BeginMessage( "/earLast" )
+            << recorder.keyString.toRawUTF8()
+            << recorder.scaleString.toRawUTF8()
+            << recorder.rmsValue
+            << recorder.spectralFlatnessValue
+            << recorder.spectralCentroidValue
+            << osc::EndMessage;
+            
+            
+            datagramSocket.write(oscIP, oscPort, p.Data(), p.Size());
+            stopRecording();
+        }
     };
     void buttonStateChanged(Button* button) override
     {
-    
+        
         if (button == &recordButton)
         {
             cout << button->getState() << endl;;
@@ -499,7 +514,7 @@ private:
         }
     }
     
-
+    
     
     void 	sliderValueChanged (Slider *slider) override
     {
@@ -509,20 +524,20 @@ private:
     void changeListenerCallback (ChangeBroadcaster *source)
     {
         if(recorder.keyString.isNotEmpty()){
-        char buffer[1024];
-        osc::OutboundPacketStream p( buffer, 1024 );
-        
-        p
-        << osc::BeginMessage( "/earData" )
-        << recorder.keyString.toRawUTF8()
-        << recorder.scaleString.toRawUTF8()
-        << recorder.rmsValue
-        << recorder.spectralFlatnessValue
-        << recorder.spectralCentroidValue
-        << osc::EndMessage;
-        
-        
-        datagramSocket.write(oscIP, oscPort, p.Data(), p.Size());
+            char buffer[1024];
+            osc::OutboundPacketStream p( buffer, 1024 );
+            
+            p
+            << osc::BeginMessage( "/earData" )
+            << recorder.keyString.toRawUTF8()
+            << recorder.scaleString.toRawUTF8()
+            << recorder.rmsValue
+            << recorder.spectralFlatnessValue
+            << recorder.spectralCentroidValue
+            << osc::EndMessage;
+            
+            
+            datagramSocket.write(oscIP, oscPort, p.Data(), p.Size());
         }
         //        std::     << oscIP;
         //        std::cout << oscPort << "\n\n\n";
