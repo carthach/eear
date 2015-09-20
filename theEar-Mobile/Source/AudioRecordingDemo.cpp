@@ -479,8 +479,23 @@ private:
     
     
     void buttonClicked (Button* button) override {
-    
-                        stopRecording();
+        if(recorder.keyString.isNotEmpty()){
+            char buffer[1024];
+            osc::OutboundPacketStream p( buffer, 1024 );
+            
+            p
+            << osc::BeginMessage( "/earLast" )
+            << recorder.keyString.toRawUTF8()
+            << recorder.scaleString.toRawUTF8()
+            << recorder.rmsValue
+            << recorder.spectralFlatnessValue
+            << recorder.spectralCentroidValue
+            << osc::EndMessage;
+            
+            
+            datagramSocket.write(oscIP, oscPort, p.Data(), p.Size());
+            stopRecording();
+        }
     };
     void buttonStateChanged(Button* button) override
     {
