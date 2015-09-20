@@ -24,7 +24,7 @@ TheEarPluginAudioProcessorEditor::TheEarPluginAudioProcessorEditor (TheEarPlugin
 
     
     addAndMakeVisible(mainTab);
-    setSize(1024, 768);
+    setSize(800, 700);
 }
 
 TheEarPluginAudioProcessorEditor::~TheEarPluginAudioProcessorEditor()

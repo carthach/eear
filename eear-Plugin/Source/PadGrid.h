@@ -79,10 +79,11 @@ public:
         
         midiKeyboardState.addListener(this);
         
-        int midiOffset = 12;
+        int midiOffset = 36;
         
+        int midiNote = midiOffset;
         for(int i=0; i<16; i++) {
-            pads.add(new PadComponent(midiKeyboardState, (midiOffset+i)));
+            pads.add(new PadComponent(midiKeyboardState, midiOffset+i));
             addAndMakeVisible(pads[i]);
         }
         

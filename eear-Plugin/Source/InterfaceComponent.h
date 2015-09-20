@@ -26,17 +26,21 @@ public:
     ComponentBoundsConstrainer resizeLimits;
     EarOSCServer earOSCServer;
     
-    TextButton resetSynthButton;
+//    TextButton resetSynthButton;
+    ImageButton resetSynthButton;
     Label currentKeyScaleLabel, liveKeyScaleLabel;
     TextEditor currentKeyScaleTextBox, liveKeyScaleTextBox;
     
     PadGrid padGrid;
+    Label keyScaleTextBox;
     
     AudioProcessor& processor;
     
     AudioPlayHead::CurrentPositionInfo lastDisplayedPosition;
     
     String datasetPath;
+    
+    Image recordButtonImagePushed, recordButtonImageNotPushed;
     
     InterfaceComponent(MidiKeyboardState& s, AudioProcessor& p) :
     midiKeyboard (s, MidiKeyboardComponent::horizontalKeyboard),
@@ -49,26 +53,26 @@ public:
     padGrid(s),
     processor(p)
     {
-        // add some sliders..
-        addAndMakeVisible (gainSlider);
-        gainSlider.setSliderStyle (Slider::Rotary);
-        gainSlider.addListener (this);
-        gainSlider.setRange (0.0, 1.0, 0.01);
-        
-        addAndMakeVisible (delaySlider);
-        delaySlider.setSliderStyle (Slider::Rotary);
-        delaySlider.addListener (this);
-        delaySlider.setRange (0.0, 1.0, 0.01);
-        
-        // add some labels for the sliders..
-        gainLabel.attachToComponent (&gainSlider, false);
-        gainLabel.setFont (Font (11.0f));
-        
-        delayLabel.attachToComponent (&delaySlider, false);
-        delayLabel.setFont (Font (11.0f));
+//        // add some sliders..
+//        addAndMakeVisible (gainSlider);
+//        gainSlider.setSliderStyle (Slider::Rotary);
+//        gainSlider.addListener (this);
+//        gainSlider.setRange (0.0, 1.0, 0.01);
+//        
+//        addAndMakeVisible (delaySlider);
+//        delaySlider.setSliderStyle (Slider::Rotary);
+//        delaySlider.addListener (this);
+//        delaySlider.setRange (0.0, 1.0, 0.01);
+//        
+//        // add some labels for the sliders..
+//        gainLabel.attachToComponent (&gainSlider, false);
+//        gainLabel.setFont (Font (11.0f));
+//        
+//        delayLabel.attachToComponent (&delaySlider, false);
+//        delayLabel.setFont (Font (11.0f));
         
         // add the midi keyboard component..
-        addAndMakeVisible (midiKeyboard);
+//        addAndMakeVisible (midiKeyboard);
         
         // add a label that will display the current timecode and status..
         addAndMakeVisible (infoLabel);
@@ -85,19 +89,62 @@ public:
         
         //Key Scale Label
         
-        addAndMakeVisible (currentKeyScaleLabel);
-        currentKeyScaleLabel.setText ("Current Key:", dontSendNotification);
+//        addAndMakeVisible (currentKeyScaleLabel);
+//        currentKeyScaleLabel.setText ("Current Key:", dontSendNotification);
+//        
+//        addAndMakeVisible (currentKeyScaleTextBox);
+//        currentKeyScaleTextBox.setReadOnly(true);
+//        currentKeyScaleTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
+//        
+//        addAndMakeVisible (liveKeyScaleLabel);
+//        liveKeyScaleLabel.setText ("Live Key:", dontSendNotification);
+//        
+//        addAndMakeVisible (liveKeyScaleTextBox);
+//        liveKeyScaleTextBox.setReadOnly(true);
+//        liveKeyScaleTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
         
-        addAndMakeVisible (currentKeyScaleTextBox);
-        currentKeyScaleTextBox.setReadOnly(true);
-        currentKeyScaleTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
+        File Resources("/Users/carthach/Dev/git/GiantSteps/TheEar/eear-graphic-design");
+
+        {
+                        File file(Resources.getChildFile("button_pushed.png"));
+                        FileInputStream fstream(file);
+                        recordButtonImagePushed =ImageFileFormat::loadFrom (fstream);
+            
+//            recordButtonImagePushed = ImageCache::getFromMemory (BinaryData::button_pushed_png,
+//                                                                 BinaryData::button_pushed_pngSize);
+        }
+        {
+                        File file(Resources.getChildFile("button_no_pushed.png"));
+                        FileInputStream fstream(file);
+                        recordButtonImageNotPushed =ImageFileFormat::loadFrom (fstream);
+            
+//            recordButtonImageNotPushed = ImageCache::getFromMemory (BinaryData::button_no_pushed_png,
+//                                                                    BinaryData::button_no_pushed_pngSize);
+        }
         
-        addAndMakeVisible (liveKeyScaleLabel);
-        liveKeyScaleLabel.setText ("Live Key:", dontSendNotification);
+        {
+            
+            resetSynthButton.setImages(false, // resize button to image
+                                   true, // resize image if button change
+                                   true, // keep image ratio
+                                   recordButtonImageNotPushed, // normal
+                                   1.0f,
+                                   juce::Colour(),
+                                   Image(), // over
+                                   1.0f,
+                                   juce::Colour(),
+                                   recordButtonImagePushed, // pushed
+                                   1.0f,
+                                   juce::Colour());
+        }
         
-        addAndMakeVisible (liveKeyScaleTextBox);
-        liveKeyScaleTextBox.setReadOnly(true);
-        liveKeyScaleTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
+        keyScaleTextBox.setFont(Font("Arial",107,Font::FontStyleFlags::plain));
+        
+        keyScaleTextBox.setJustificationType(Justification::centred);
+        keyScaleTextBox.setText("Am", dontSendNotification);
+        
+//        keyScaleTextBox.setColour(juce::Label::ColourIds::textColourId);
+        addAndMakeVisible (keyScaleTextBox);
         
         
         
@@ -124,18 +171,21 @@ public:
     
     void buttonClicked(Button* button)
     {
+        
         if(button == &resetSynthButton) {
-            if(datasetPath != "") {
-//                if(String(earOSCServer.key) != "") {
-//                    Array<File> matchingFiles = getAudioFiles(File(path), earOSCServer.key, earOSCServer.scale);
-//                    if(matchingFiles.size() > 0)
-//                        getProcessor().setSynthSamples(matchingFiles);
-//                }
+//            if(datasetPath != "") {
+////                if(String(earOSCServer.key) != "") {
+////                    Array<File> matchingFiles = getAudioFiles(File(path), earOSCServer.key, earOSCServer.scale);
+////                    if(matchingFiles.size() > 0)
+////                        getProcessor().setSynthSamples(matchingFiles);
+////                }
+            
+            File datasetPath("/Users/carthach/Desktop/mtf-collection/dataset");
                 
                     Array<File> matchingFiles = getAudioFiles(File(datasetPath), "D", "Minor");
                     if(matchingFiles.size() > 0)
                         getProcessor().setSynthSamples(matchingFiles);
-                }
+//                }
 
 //                getProcessor().setSynthSamples(getAudioFiles(File(datasetPath), "E", "minor"));
         }
@@ -148,8 +198,8 @@ public:
         
         AudioPlayHead::CurrentPositionInfo newPos (ourProcessor.lastPosInfo);
         
-        if (lastDisplayedPosition != newPos)
-            displayPositionInfo (newPos);
+//        if (lastDisplayedPosition != newPos)
+//            displayPositionInfo (newPos);
         
         gainSlider.setValue (ourProcessor.gain->getValue(), dontSendNotification);
         delaySlider.setValue (ourProcessor.delay->getValue(), dontSendNotification);
@@ -159,7 +209,12 @@ public:
     {
         Array<File> audioFiles;
         
-        String dirtyPattern = "*_" + key + "-" + scale + "_"+ "*" +"_*.mp3";
+//        String dirtyPattern = "*_" + key + "-" + scale + "_"+ "*" +"_*.mp3";
+        
+//        3_0050823 Tigerskin - Style (Original Mix) [Resopal Schallware] == Minimal === Bm.mp3_loop_1.wav
+        
+        String keyScale = "Bm";
+        String dirtyPattern = "*=== " + keyScale + ".mp3.*";
         
         DirectoryIterator iter (audioFolder, false, dirtyPattern);
         
@@ -241,7 +296,7 @@ public:
         gainSlider.setBounds (20, 60, 150, 40);
         delaySlider.setBounds (200, 60, 150, 40);
         
-        resetSynthButton.setBounds(20, 100, 100, 25);
+        resetSynthButton.setBounds(110, 30, 120, 120);
         
         currentKeyScaleLabel.setBounds(20, 140, 100, 20);
         currentKeyScaleTextBox.setBounds(110, 140, 100, 20);
@@ -255,6 +310,8 @@ public:
         midiKeyboard.setBounds (4, getHeight() - keyboardHeight - 4, getWidth() - 8, keyboardHeight);
         
         resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
+        
+        keyScaleTextBox.setBounds(360, 40, 300, 100);
         
         //    getProcessor().lastUIWidth = getWidth();
         //    getProcessor().lastUIHeight = getHeight();

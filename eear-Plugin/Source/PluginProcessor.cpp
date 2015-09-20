@@ -179,7 +179,7 @@ private:
 };
 
 const float defaultGain = 1.0f;
-const float defaultDelay = 0.5f;
+const float defaultDelay = 0.0f;
 
 //==============================================================================
 TheEarPluginAudioProcessor::TheEarPluginAudioProcessor()
@@ -224,7 +224,7 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles)
     
     synth.clearSounds();
     
-    int midiOffset = 12;
+    int midiOffset = 36;
     
     for(int i=0; i< 16; i++) {
         int randomFileIndex = rand.nextInt(listOfFiles.size());
