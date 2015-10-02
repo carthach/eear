@@ -75,12 +75,14 @@ public:
     ListBoxContents sourceModel, destinationModel;
     TextButton selectionLeftButton, allLeftButton, selectionRightButton, allRightButton, updateFeaturesButton, outputLoopButton;
     
-    DataTableComponent tableComponent;        
+    DataTableComponent tableComponent;
+    InterfaceComponent* interfaceComponent;
 
   
-    DataComponent() : extractor(&formatManager)
+    DataComponent(InterfaceComponent* interfaceComponent) : extractor(&formatManager)
     {
         formatManager.registerBasicFormats();
+        this->interfaceComponent = interfaceComponent;
         
         String formats = formatManager.getWildcardForAllFormats();
         
@@ -139,6 +141,7 @@ public:
 
         if(propertiesFile->containsKey("lastDatasetFolder")) {
             datasetFolder = propertiesFile->getValue("lastDatasetFolder");
+            interfaceComponent->datasetPath = datasetFolder.getFullPathName();
             String lastDatasetFile = datasetFolder.getFullPathName() + "/dataset/dataset.json";
         
             if(File(lastDatasetFile).existsAsFile()) {
@@ -219,8 +222,6 @@ private:
     EssentiaExtractor extractor;
     HashMap<String, int> featureMap;
 
-
-    
     void updateListBox(ListBox& fromListBox, ListBox& toListBox, ListBoxContents& fromModel,ListBoxContents& toModel)
     {
         const SparseSet<int>& selectedRows = fromListBox.getSelectedRows();
@@ -311,6 +312,7 @@ private:
         
         tableComponent.updateData(featureList, featureMatrix);
         datasetFolderTextBox.setText(datasetFolder.getFullPathName());
+        interfaceComponent->datasetPath = datasetFolder.getFullPathName();
         
         sourceModel.data = featureList;
         sourceListBox.updateContent();

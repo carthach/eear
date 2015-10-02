@@ -179,11 +179,11 @@ private:
 };
 
 const float defaultGain = 1.0f;
-const float defaultDelay = 0.5f;
+const float defaultDelay = 0.0f;
 
 //==============================================================================
 TheEarPluginAudioProcessor::TheEarPluginAudioProcessor()
-    : delayBuffer (2, 12000)
+: delayBuffer (2, 12000)
 {
     // Set up our parameters. The base class will delete them for us.
     addParameter (gain  = new FloatParameter (defaultGain,  "Gain"));
@@ -224,12 +224,15 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles)
     
     synth.clearSounds();
     
-    int midiOffset = 12;
+    int midiOffset = 36;
     
-    for(int i=0; i< 16; i++) {
+    for(int i=0; i< 15; i++) {
         int randomFileIndex = rand.nextInt(listOfFiles.size());
         
+        std::cout << "here\n";
+        
         ScopedPointer<AudioFormatReader> audioReader = formatManager.createReaderFor(listOfFiles[randomFileIndex]);
+//        ScopedPointer<AudioFormatReader> audioReader = formatManager.createReaderFor(listOfFiles[0]);
         
         BigInteger midiRange;
         midiRange.setRange(midiOffset+i, 1, true);
@@ -239,7 +242,7 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles)
                                       *audioReader,
                                       midiRange,
                                       midiOffset+i,   // root midi note
-                                      0.1,  // attack time
+                                      0.0,  // attack time
                                       0.1,  // release time
                                       10.0  // maximum sample length
                                       ));
@@ -351,10 +354,10 @@ void TheEarPluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
     
     if(intpart != lastBeat) {
         newBeat = true;
-        std::cout << "On" << "\n";
     }
     
     lastBeat = intpart;
+    
     
     
     // Now pass any incoming midi messages to our keyboard state object, and let it
@@ -363,14 +366,16 @@ void TheEarPluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
 
     // and now get the synth to process these midi events and generate its output.
     
-    if(newBeat) {
-        synth.renderNextBlock (buffer, noteOnBuffer, 0, numSamples);
-        noteOnBuffer.clear();
+    if(shouldQuantise) {
+        if(newBeat) {
+            synth.renderNextBlock (buffer, noteOnBuffer, 0, numSamples);
+            noteOnBuffer.clear();
+        }
+        else
+            synth.renderNextBlock (buffer, normalBuffer, 0, numSamples);
+    } else {
+        synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
     }
-    else
-        synth.renderNextBlock (buffer, normalBuffer, 0, numSamples);
-    
-//    synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
 
     // Apply our delay effect to the new output..
     for (channel = 0; channel < getNumInputChannels(); ++channel)
@@ -493,6 +498,8 @@ double TheEarPluginAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
+
+
 
 //==============================================================================
 // This creates new instances of the plugin..

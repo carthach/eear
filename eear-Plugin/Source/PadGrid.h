@@ -10,8 +10,8 @@
 
 #ifndef PADGRID_H_INCLUDED
 #define PADGRID_H_INCLUDED
+//#include "InterfaceComponent.h"
 
-#include "../JuceLibraryCode/JuceHeader.h"
 
 
 class PadComponent : public Component
@@ -22,6 +22,8 @@ public:
     MidiKeyboardState& midiKeyboardState;
     int midiNote;
     bool noteDown;
+    
+
     
     DropShadower dropShadower;
     PadComponent(MidiKeyboardState& s, int midiNote) : midiKeyboardState(s), dropShadower(DropShadow(Colours::white,5, Point<int>(0,0)))
@@ -39,7 +41,9 @@ public:
     {
         g.fillAll (Colours::darkgrey);   // clear the background
         
-        g.setColour(Colours::white);        
+//        g.setColour(Colours::white);
+        Colour textColour(135, 205, 222);
+        g.setColour(textColour);
         g.drawText(String(midiNote), 5, 5, 20, 20, Justification::left);
     }
     
@@ -62,10 +66,14 @@ public:
 class PadGrid    : public Component, public MidiKeyboardStateListener, public Timer
 {
 public:
+//    InterfaceComponent* interfaceComponent;
+    
     bool shouldCheckState = false;
     OwnedArray<PadComponent> pads;
     DropShadower dropShadower;
 //    DropShadow dropShadow;
+    
+        bool resetEvent = false;
     
     float horizontalOffset, verticalOffset;
     
@@ -77,10 +85,11 @@ public:
         
         midiKeyboardState.addListener(this);
         
-        int midiOffset = 12;
+        int midiOffset = 36;
         
+        int midiNote = midiOffset;
         for(int i=0; i<16; i++) {
-            pads.add(new PadComponent(midiKeyboardState, (midiOffset+i)));
+            pads.add(new PadComponent(midiKeyboardState, midiOffset+i));
             addAndMakeVisible(pads[i]);
         }
         
@@ -131,10 +140,18 @@ public:
             shouldCheckState = false;
             
             for (int i = 0; i < pads.size(); ++i) {
-                if (midiKeyboardState.isNoteOnForChannels(0xffff, pads[i]->midiNote))
+                if (midiKeyboardState.isNoteOnForChannels(0xffff, pads[i]->midiNote)) {
                     pads[i]->setTopLeftPosition(pads[i]->initialPosition.getX()+2, pads[i]->initialPosition.getY()+2);
-                else
+                    
+                    if(midiKeyboardState.isNoteOnForChannels(0xffff, 51))
+                        resetEvent = true;
+                        
+                }
+                else {
                     pads[i]->setTopLeftPosition(pads[i]->initialPosition.getX(), pads[i]->initialPosition.getY());
+                    
+                    resetEvent = false;
+                }
             }
         }
     }

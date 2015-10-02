@@ -13,8 +13,6 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
-#include "EarOSCServer.h"
-#include "PadGrid.h"
 #include "InterfaceComponent.h"
 #include "DataComponent.h"
 
@@ -22,11 +20,13 @@
 class MainTab  : public TabbedComponent
 {
 public:
+
+    
     MainTab (MidiKeyboardState& s, AudioProcessor& p)
     : TabbedComponent (TabbedButtonBar::TabsAtTop)
     {
         addTab ("Interface",  Colours::grey, new InterfaceComponent(s, p), true);
-        addTab ("Data",  Colours::grey, new DataComponent(), true);
+        addTab ("Data",  Colours::grey, new DataComponent((InterfaceComponent *)getTabContentComponent(0)), true);
     }
 };
 
@@ -43,6 +43,8 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+    
+       LookAndFeel_V3 lookAndFeel; 
 
 private:
     MainTab mainTab;

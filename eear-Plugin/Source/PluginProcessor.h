@@ -85,8 +85,9 @@ public:
     void setUsingSineWaveSound();
     
     void setSynthSamples(const Array<File>& listOfFiles);
-
-
+    
+    bool shouldQuantise = false;
+    
 private:
     //==============================================================================
     AudioSampleBuffer delayBuffer;

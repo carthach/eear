@@ -8,7 +8,6 @@
   ==============================================================================
 */
 
-#include "PluginProcessor.h"
 #include "PluginEditor.h"
 
 //==============================================================================
@@ -18,8 +17,14 @@ TheEarPluginAudioProcessorEditor::TheEarPluginAudioProcessorEditor (TheEarPlugin
 
 
 {
+    Colour textColour(135, 205, 222);
+    lookAndFeel.setColour(Label::ColourIds::textColourId, textColour);
+    lookAndFeel.setColour(ToggleButton::ColourIds::textColourId, textColour);
+    setLookAndFeel(&lookAndFeel);
+
+    
     addAndMakeVisible(mainTab);
-    setSize(1024, 768);
+    setSize(800, 700);
 }
 
 TheEarPluginAudioProcessorEditor::~TheEarPluginAudioProcessorEditor()
@@ -30,10 +35,11 @@ TheEarPluginAudioProcessorEditor::~TheEarPluginAudioProcessorEditor()
 //==============================================================================
 void TheEarPluginAudioProcessorEditor::paint (Graphics& g)
 {
-    g.setGradientFill (ColourGradient (Colours::white, 0, 0,
-                                       Colours::grey, 0, (float) getHeight(), false));
+//    g.setGradientFill (ColourGradient (Colours::white, 0, 0,
+//                                       Colours::grey, 0, (float) getHeight(), false));
     
-    g.fillAll();
+    Colour backgroundColour(28, 31, 36);
+    g.fillAll(backgroundColour);
 }
 
 void TheEarPluginAudioProcessorEditor::resized()

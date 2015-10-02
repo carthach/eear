@@ -10,7 +10,7 @@
 		002609330CB85D274814435E /* juce_audio_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15B2C985E678BD7758A15273 /* juce_audio_basics.mm */; };
 		03FC8DF014F0FF15C6141803 /* juce_graphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2007FBDD8E86B31D9B005D04 /* juce_graphics.mm */; };
 		06F4C19F0FFA28125EEEFF43 /* juce_core.mm in Sources */ = {isa = PBXBuildFile; fileRef = C84FADC58752BA96DC6E14D7 /* juce_core.mm */; };
-		075592CD1BADAC00007A8B07 /* EssentiaExtractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 075592CB1BADAC00007A8B07 /* EssentiaExtractor.cpp */; };
+		078070CB1BADD51C00F0F5F2 /* EssentiaExtractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 078070C71BADD51C00F0F5F2 /* EssentiaExtractor.cpp */; };
 		08F249FCDB43B941C3ECFCBD /* AUBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2BC7498839B9E16C4609D85F /* AUBase.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		0B37975FFCF4E14C0E5D63F7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE9ACA19939511434FB31533 /* WebKit.framework */; };
 		15540EE25422FB54463C0D11 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FFB1BD6553AAC9C1D5A8A14 /* CoreAudioKit.framework */; };
@@ -116,12 +116,12 @@
 		069AC4CFE76741592A19977E /* juce_DrawableComposite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_DrawableComposite.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/drawables/juce_DrawableComposite.h; sourceTree = SOURCE_ROOT; };
 		06AA3B9365770953D4122963 /* juce_CaretComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_CaretComponent.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/keyboard/juce_CaretComponent.h; sourceTree = SOURCE_ROOT; };
 		06BAF312D7468628DE5F02AB /* danlin_oscserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = danlin_oscserver.h; path = ../../JuceLibraryCode/modules/danlin_oscserver/danlin_oscserver.h; sourceTree = SOURCE_ROOT; };
-		075592C71BADA33C007A8B07 /* InterfaceComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceComponent.h; sourceTree = "<group>"; };
-		075592C91BADAC00007A8B07 /* DataComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataComponent.h; sourceTree = "<group>"; };
-		075592CA1BADAC00007A8B07 /* DataTableComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataTableComponent.h; sourceTree = "<group>"; };
-		075592CB1BADAC00007A8B07 /* EssentiaExtractor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EssentiaExtractor.cpp; sourceTree = "<group>"; };
-		075592CC1BADAC00007A8B07 /* EssentiaExtractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EssentiaExtractor.h; sourceTree = "<group>"; };
-		075592CE1BADAE18007A8B07 /* MyIncludes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyIncludes.h; sourceTree = "<group>"; };
+		078070C51BADD51C00F0F5F2 /* DataComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataComponent.h; path = ../../Source/DataComponent.h; sourceTree = "<group>"; };
+		078070C61BADD51C00F0F5F2 /* DataTableComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataTableComponent.h; path = ../../Source/DataTableComponent.h; sourceTree = "<group>"; };
+		078070C71BADD51C00F0F5F2 /* EssentiaExtractor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EssentiaExtractor.cpp; path = ../../Source/EssentiaExtractor.cpp; sourceTree = "<group>"; };
+		078070C81BADD51C00F0F5F2 /* EssentiaExtractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EssentiaExtractor.h; path = ../../Source/EssentiaExtractor.h; sourceTree = "<group>"; };
+		078070C91BADD51C00F0F5F2 /* InterfaceComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InterfaceComponent.h; path = ../../Source/InterfaceComponent.h; sourceTree = "<group>"; };
+		078070CA1BADD51C00F0F5F2 /* MyIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyIncludes.h; path = ../../Source/MyIncludes.h; sourceTree = "<group>"; };
 		07ABBD97B9296687E4D7FA5D /* juce_UndoManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_UndoManager.cpp; path = ../../JuceLibraryCode/modules/juce_data_structures/undomanager/juce_UndoManager.cpp; sourceTree = SOURCE_ROOT; };
 		07B7A3A4A133A5BC567EF424 /* juce_linux_Threads.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_linux_Threads.cpp; path = ../../JuceLibraryCode/modules/juce_core/native/juce_linux_Threads.cpp; sourceTree = SOURCE_ROOT; };
 		0862054EE676859802BBB839 /* juce_android_OpenSL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_android_OpenSL.cpp; path = ../../JuceLibraryCode/modules/juce_audio_devices/native/juce_android_OpenSL.cpp; sourceTree = SOURCE_ROOT; };
@@ -2161,17 +2161,17 @@
 		81AC75931B5106B59435DFA9 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				075592CE1BADAE18007A8B07 /* MyIncludes.h */,
-				075592C91BADAC00007A8B07 /* DataComponent.h */,
-				075592CA1BADAC00007A8B07 /* DataTableComponent.h */,
-				075592CB1BADAC00007A8B07 /* EssentiaExtractor.cpp */,
-				075592CC1BADAC00007A8B07 /* EssentiaExtractor.h */,
+				078070C51BADD51C00F0F5F2 /* DataComponent.h */,
+				078070C61BADD51C00F0F5F2 /* DataTableComponent.h */,
+				078070C71BADD51C00F0F5F2 /* EssentiaExtractor.cpp */,
+				078070C81BADD51C00F0F5F2 /* EssentiaExtractor.h */,
+				078070C91BADD51C00F0F5F2 /* InterfaceComponent.h */,
+				078070CA1BADD51C00F0F5F2 /* MyIncludes.h */,
 				865015FB523CE0720D8EB898 /* EarOSCServer.h */,
 				6D4149E4C16112996BCD83F5 /* PluginEditor.cpp */,
 				C74E18A9BB240E467523A131 /* PluginEditor.h */,
 				BA0780C00E3F8B359F603D50 /* PluginProcessor.cpp */,
 				86449048A5ED38773A87028C /* PluginProcessor.h */,
-				075592C71BADA33C007A8B07 /* InterfaceComponent.h */,
 				734A32926DE3ED05252984F1 /* PadGrid.h */,
 			);
 			name = Source;
@@ -3128,7 +3128,7 @@
 				7E471BC4E2CC134ED9E2253A /* juce_cryptography.mm in Sources */,
 				576833C047574D8755DAFC66 /* juce_data_structures.mm in Sources */,
 				B1BFB582818DAC345A2F79DC /* juce_events.mm in Sources */,
-				075592CD1BADAC00007A8B07 /* EssentiaExtractor.cpp in Sources */,
+				078070CB1BADD51C00F0F5F2 /* EssentiaExtractor.cpp in Sources */,
 				03FC8DF014F0FF15C6141803 /* juce_graphics.mm in Sources */,
 				71BDBAB3A69C5D19B3454F9A /* juce_gui_basics.mm in Sources */,
 				33C0DE8CED5EEFBB853D8CE4 /* juce_gui_extra.mm in Sources */,
