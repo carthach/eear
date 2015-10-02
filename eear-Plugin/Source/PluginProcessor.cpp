@@ -242,7 +242,7 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles)
                                       *audioReader,
                                       midiRange,
                                       midiOffset+i,   // root midi note
-                                      0.1,  // attack time
+                                      0.0,  // attack time
                                       0.1,  // release time
                                       10.0  // maximum sample length
                                       ));

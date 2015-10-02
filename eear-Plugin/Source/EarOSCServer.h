@@ -9,7 +9,7 @@ public:
         oscServer = new OscServer (this);
         // listen on port 
 //        oscServer->setLocalPortNumber (localPort);
-        oscServer->setLocalPortNumber (8000);
+        oscServer->setLocalPortNumber (12347);
         // start listening
         oscServer->listen ();
 //        // set remote hostname (we use our self)

@@ -12,15 +12,18 @@
 #define PADGRID_H_INCLUDED
 //#include "InterfaceComponent.h"
 
+
+
 class PadComponent : public Component
 {
 public:
     Point<int> initialPosition;
-//    InterfaceComponent *interfaceComponent;
     
     MidiKeyboardState& midiKeyboardState;
     int midiNote;
     bool noteDown;
+    
+
     
     DropShadower dropShadower;
     PadComponent(MidiKeyboardState& s, int midiNote) : midiKeyboardState(s), dropShadower(DropShadow(Colours::white,5, Point<int>(0,0)))
@@ -63,10 +66,14 @@ public:
 class PadGrid    : public Component, public MidiKeyboardStateListener, public Timer
 {
 public:
+//    InterfaceComponent* interfaceComponent;
+    
     bool shouldCheckState = false;
     OwnedArray<PadComponent> pads;
     DropShadower dropShadower;
 //    DropShadow dropShadow;
+    
+        bool resetEvent = false;
     
     float horizontalOffset, verticalOffset;
     
@@ -136,11 +143,15 @@ public:
                 if (midiKeyboardState.isNoteOnForChannels(0xffff, pads[i]->midiNote)) {
                     pads[i]->setTopLeftPosition(pads[i]->initialPosition.getX()+2, pads[i]->initialPosition.getY()+2);
                     
-                    if(midiKeyboardState.isNoteOnForChannels(0xffff, pads[i]->midiNote))
-                        ;
+                    if(midiKeyboardState.isNoteOnForChannels(0xffff, 51))
+                        resetEvent = true;
+                        
                 }
-                else
+                else {
                     pads[i]->setTopLeftPosition(pads[i]->initialPosition.getX(), pads[i]->initialPosition.getY());
+                    
+                    resetEvent = false;
+                }
             }
         }
     }

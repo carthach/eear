@@ -51,7 +51,7 @@ public:
     delayLabel ("", "Delay:"),
     gainSlider ("gain"),
     delaySlider ("delay"),
-    earOSCServer(8000),
+    earOSCServer(12347),
     padGrid(s),
     processor(p)
     {
@@ -177,7 +177,8 @@ public:
     
     void buttonClicked(Button* button)
     {
-        
+     
+        File datasetPath("/Users/carthach/Desktop/slovenia_mtf/dataset");
         if(button == &resetSynthButton) {
 //            if(datasetPath != "") {
 ////                if(String(earOSCServer.key) != "") {
@@ -186,14 +187,20 @@ public:
 ////                        getProcessor().setSynthSamples(matchingFiles);
 ////                }
             
-            File datasetPath("/Users/carthach/Desktop/mtf-collection/dataset");
+//            File datasetPath("/Users/carthach/Desktop/mtf-collection/dataset");
+
+            
+
+//            if(String(earOSCServer.key) != "") {
+
                 
-                    Array<File> matchingFiles = getAudioFiles(File(datasetPath), "D", "Minor");
+                    Array<File> matchingFiles = getAudioFiles(File(datasetPath), earOSCServer.key, earOSCServer.scale);
                     if(matchingFiles.size() > 0)
                         getProcessor().setSynthSamples(matchingFiles);
 //                }
 
 //                getProcessor().setSynthSamples(getAudioFiles(File(datasetPath), "E", "minor"));
+//            }
         }
         else if(button == &shouldQuantiseButton) {
             getProcessor().shouldQuantise = button->getToggleState();
@@ -213,6 +220,11 @@ public:
         
         gainSlider.setValue (ourProcessor.gain->getValue(), dontSendNotification);
         delaySlider.setValue (ourProcessor.delay->getValue(), dontSendNotification);
+        
+        if(padGrid.resetEvent) {
+            buttonClicked(&resetSynthButton);
+            padGrid.resetEvent = false;
+        }
     }
     
     Array<File> getAudioFiles(const File& audioFolder, String key, String scale)
@@ -224,8 +236,8 @@ public:
 //        3_0050823 Tigerskin - Style (Original Mix) [Resopal Schallware] == Minimal === Bm.mp3_loop_1.wav
         
         String keyScale = key;
-        if(scale == "Minor")
-            keyScale = keyScale + "m";        
+        if(scale == "m")
+            keyScale = keyScale + "m";
         
         String dirtyPattern = "*" + keyScale +".mp3_loop_*.wav";
         
@@ -248,6 +260,7 @@ public:
     {
         String keyScaleString = String(earOSCServer.key) + " " + String(earOSCServer.scale);
         currentKeyScaleTextBox.setText(keyScaleString);
+        keyScaleTextBox.setText(keyScaleString, dontSendNotification);
         
         bool autoUpdate = true;
         if(autoUpdate)
