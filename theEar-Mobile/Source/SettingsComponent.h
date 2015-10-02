@@ -95,7 +95,8 @@ public:
     
     void textEditorFocusLost (TextEditor& t) {
         if(&t == &portNumberTextBox ){
-            recorder->oscPort =std::stoi(t.getText().toStdString());
+//            recorder->oscPort =std::stoi(t.getText().toStdString());
+            recorder->oscPort= t.getText().getIntValue();
         }
         else if (&t == &ipAddressTextBox){
             recorder->oscIP =t.getText();
