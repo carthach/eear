@@ -10,8 +10,8 @@
 
 */
 
-#ifndef __APPHEADERFILE_Z0LO3C__
-#define __APPHEADERFILE_Z0LO3C__
+#ifndef __APPHEADERFILE_JUGKQB__
+#define __APPHEADERFILE_JUGKQB__
 
 #include "AppConfig.h"
 #include "modules/danlin_oscpack/danlin_oscpack.h"
@@ -31,6 +31,7 @@
 #include "modules/juce_gui_extra/juce_gui_extra.h"
 #include "modules/juce_opengl/juce_opengl.h"
 #include "modules/juce_video/juce_video.h"
+#include "BinaryData.h"
 
 #if ! DONT_SET_USING_JUCE_NAMESPACE
  // If your code uses a lot of JUCE classes, then this will obviously save you
@@ -47,4 +48,4 @@ namespace ProjectInfo
 }
 #endif
 
-#endif   // __APPHEADERFILE_Z0LO3C__
+#endif   // __APPHEADERFILE_JUGKQB__

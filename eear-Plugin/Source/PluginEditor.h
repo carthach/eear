@@ -20,7 +20,6 @@
 class MainTab  : public TabbedComponent
 {
 public:
-
     
     MainTab (MidiKeyboardState& s, AudioProcessor& p)
     : TabbedComponent (TabbedButtonBar::TabsAtTop)
@@ -44,7 +43,7 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     
-       LookAndFeel_V3 lookAndFeel; 
+    LookAndFeel_V1 lookAndFeel;
 
 private:
     MainTab mainTab;

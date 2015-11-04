@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "D7A93BCF1062B621BA553DD13F864479A653BC67",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D7A93BCF1062B621BA553DD13F864479A653BC67" : 0,
+    "56CD70D52AC6EFD0AC9C6302D3853354F01DD974" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "9E76E154-10BE-40DC-AC31-137AA6821C76",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D7A93BCF1062B621BA553DD13F864479A653BC67" : "eear\/",
+    "56CD70D52AC6EFD0AC9C6302D3853354F01DD974" : "..\/JUCE_MODULES\/danlin_modules"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "eear-Plugin",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "eear-Plugin\/Builds\/MacOSX\/eear-Plugin.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/danlin\/danlin_modules.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "56CD70D52AC6EFD0AC9C6302D3853354F01DD974"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/GiantSteps\/TheEar.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D7A93BCF1062B621BA553DD13F864479A653BC67"
+    }
+  ]
+}

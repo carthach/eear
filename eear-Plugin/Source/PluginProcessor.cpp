@@ -228,9 +228,7 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles)
     
     for(int i=0; i< 15; i++) {
         int randomFileIndex = rand.nextInt(listOfFiles.size());
-        
-        std::cout << "here\n";
-        
+                
         ScopedPointer<AudioFormatReader> audioReader = formatManager.createReaderFor(listOfFiles[randomFileIndex]);
 //        ScopedPointer<AudioFormatReader> audioReader = formatManager.createReaderFor(listOfFiles[0]);
         
@@ -359,7 +357,6 @@ void TheEarPluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
     lastBeat = intpart;
     
     
-    
     // Now pass any incoming midi messages to our keyboard state object, and let it
     // add messages to the buffer if the user is clicking on the on-screen keys
     keyboardState.processNextMidiBuffer (midiMessages, 0, numSamples, true);
@@ -376,6 +373,9 @@ void TheEarPluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
     } else {
         synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
     }
+    
+    //Not sure why I'm getting the assert if this isn't enabled
+    midiMessages.clear();
 
     // Apply our delay effect to the new output..
     for (channel = 0; channel < getNumInputChannels(); ++channel)

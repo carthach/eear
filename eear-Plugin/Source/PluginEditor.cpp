@@ -17,11 +17,21 @@ TheEarPluginAudioProcessorEditor::TheEarPluginAudioProcessorEditor (TheEarPlugin
 
 
 {
-    Colour textColour(135, 205, 222);
-    lookAndFeel.setColour(Label::ColourIds::textColourId, textColour);
-    lookAndFeel.setColour(ToggleButton::ColourIds::textColourId, textColour);
-    setLookAndFeel(&lookAndFeel);
+    Colour backgroundColour(154, 32, 32);
+    Colour purpleColour(170, 165, 190);
+    Colour mainColour(135, 205, 222);
+    Colour greyOne(55, 69, 72);
+    Colour greyTwo(28, 31, 36);
 
+    
+//    lookAndFeel.setColour(MainTab::ColourIds::backgroundColourId, backgroundColour);
+    lookAndFeel.setColour(Label::ColourIds::textColourId, mainColour);
+    lookAndFeel.setColour(TextButton::ColourIds::buttonColourId, mainColour);
+    lookAndFeel.setColour(TextButton::ColourIds::textColourOffId, greyOne);
+    lookAndFeel.setColour(TextButton::ColourIds::textColourOnId, greyTwo);
+    lookAndFeel.setColour(ToggleButton::ColourIds::textColourId, mainColour);
+
+    setLookAndFeel(&lookAndFeel);
     
     addAndMakeVisible(mainTab);
     setSize(800, 700);

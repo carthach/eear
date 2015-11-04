@@ -40,9 +40,9 @@ public:
     
     AudioPlayHead::CurrentPositionInfo lastDisplayedPosition;
     
-    String datasetPath;
-    
     Image recordButtonImagePushed, recordButtonImageNotPushed;
+    
+    File datasetDirectory;
     
     InterfaceComponent(MidiKeyboardState& s, AudioProcessor& p) :
     midiKeyboard (s, MidiKeyboardComponent::horizontalKeyboard),
@@ -105,24 +105,13 @@ public:
 //        liveKeyScaleTextBox.setReadOnly(true);
 //        liveKeyScaleTextBox.setColour(TextEditor::backgroundColourId, Colours::lightgrey);
         
-        File Resources("/Users/carthach/Dev/git/GiantSteps/TheEar/eear-graphic-design");
 
-        {
-                        File file(Resources.getChildFile("button_pushed.png"));
-                        FileInputStream fstream(file);
-                        recordButtonImagePushed =ImageFileFormat::loadFrom (fstream);
             
-//            recordButtonImagePushed = ImageCache::getFromMemory (BinaryData::button_pushed_png,
-//                                                                 BinaryData::button_pushed_pngSize);
-        }
-        {
-                        File file(Resources.getChildFile("button_no_pushed.png"));
-                        FileInputStream fstream(file);
-                        recordButtonImageNotPushed =ImageFileFormat::loadFrom (fstream);
-            
-//            recordButtonImageNotPushed = ImageCache::getFromMemory (BinaryData::button_no_pushed_png,
-//                                                                    BinaryData::button_no_pushed_pngSize);
-        }
+        recordButtonImagePushed = ImageCache::getFromMemory (BinaryData::button_pushed_png,
+                                                             BinaryData::button_pushed_pngSize);
+       
+        recordButtonImageNotPushed = ImageCache::getFromMemory (BinaryData::button_no_pushed_png,
+                                                                BinaryData::button_no_pushed_pngSize);
         
         {
             
@@ -175,37 +164,27 @@ public:
         return static_cast<TheEarPluginAudioProcessor&> (processor);
     }
     
-    void buttonClicked(Button* button)
+    //Clean up this shit
+    void buttonClicked(Button* button) override
     {
-     
-        File datasetPath("/Users/carthach/Desktop/slovenia_mtf/dataset");
         if(button == &resetSynthButton) {
-//            if(datasetPath != "") {
-////                if(String(earOSCServer.key) != "") {
-////                    Array<File> matchingFiles = getAudioFiles(File(path), earOSCServer.key, earOSCServer.scale);
-////                    if(matchingFiles.size() > 0)
-////                        getProcessor().setSynthSamples(matchingFiles);
-////                }
             
-//            File datasetPath("/Users/carthach/Desktop/mtf-collection/dataset");
-
+            //Debug
+//            Array<File> matchingFiles = getAudioFiles(datasetDirectory, "E", "minor");
+//            if(matchingFiles.size() > 0)
+//                getProcessor().setSynthSamples(matchingFiles);
+            
+            if(datasetDirectory.exists() && earOSCServer.key != "") {
+                Array<File> matchingFiles = getAudioFiles(datasetDirectory, earOSCServer.key, earOSCServer.scale);
+                if(matchingFiles.size() > 0)
+                    getProcessor().setSynthSamples(matchingFiles);
+            }
             
 
-//            if(String(earOSCServer.key) != "") {
-
-                
-                    Array<File> matchingFiles = getAudioFiles(File(datasetPath), earOSCServer.key, earOSCServer.scale);
-                    if(matchingFiles.size() > 0)
-                        getProcessor().setSynthSamples(matchingFiles);
-//                }
-
-//                getProcessor().setSynthSamples(getAudioFiles(File(datasetPath), "E", "minor"));
-//            }
         }
         else if(button == &shouldQuantiseButton) {
             getProcessor().shouldQuantise = button->getToggleState();
         }
-            
     }
     
     // This timer periodically checks whether any of the filter's parameters have changed...
@@ -220,7 +199,7 @@ public:
         
         gainSlider.setValue (ourProcessor.gain->getValue(), dontSendNotification);
         delaySlider.setValue (ourProcessor.delay->getValue(), dontSendNotification);
-        
+
         if(padGrid.resetEvent) {
             buttonClicked(&resetSynthButton);
             padGrid.resetEvent = false;

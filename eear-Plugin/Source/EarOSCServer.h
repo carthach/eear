@@ -1,7 +1,7 @@
 class EarOSCServer : public OscMessageListener, public ChangeBroadcaster
 {
 public:
-    const char *key, *scale;
+    String key, scale;
     float rmsValue, spectralFlatnessValue, spectralCentroidValue;
     
     EarOSCServer (int localPort)
@@ -17,6 +17,8 @@ public:
 //        // set remote port (send to listening port)
 //        oscServer->setRemotePortNumber (8000);
         
+        key = "";
+        scale = "";
     }
     ~EarOSCServer ()
     {
@@ -36,12 +38,14 @@ public:
             
 //            const char *currentKey, *currentScale;
 //            float rmsValue, spectralFlatnessValue, spectralCentroidValue;
+            
+            const char *key, *scale;
 
             args >> key >> scale >> rmsValue >> spectralFlatnessValue >> spectralCentroidValue >> osc::EndMessage;
             
-            std::cout << "receiving input\n";
-            
-
+            this->key = String(key);
+            this->scale = String(scale);
+        
             sendChangeMessage();
             
         }

@@ -14,7 +14,7 @@
 
 
 
-class PadComponent : public Component
+class PadCell : public Component
 {
 public:
     Point<int> initialPosition;
@@ -26,18 +26,18 @@ public:
 
     
     DropShadower dropShadower;
-    PadComponent(MidiKeyboardState& s, int midiNote) : midiKeyboardState(s), dropShadower(DropShadow(Colours::white,5, Point<int>(0,0)))
+    PadCell(MidiKeyboardState& s, int midiNote) : midiKeyboardState(s), dropShadower(DropShadow(Colours::white,5, Point<int>(0,0)))
     {
         this->midiNote = midiNote;
         dropShadower.setOwner(this);
     }
     
-    ~PadComponent()
+    ~PadCell()
     {
 
     }
     
-    void paint (Graphics& g)
+    void paint (Graphics& g) override
     {
         g.fillAll (Colours::darkgrey);   // clear the background
         
@@ -55,21 +55,21 @@ public:
     
     void mouseUp	(	const MouseEvent & 	event	) override
     {
-        midiKeyboardState.noteOff(1, midiNote);
+        midiKeyboardState.noteOff(1, midiNote, 100);
         noteDown = false;
     }
+private:
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PadCell)
 };
 
 //==============================================================================
 /*
 */
-class PadGrid    : public Component, public MidiKeyboardStateListener, public Timer
+class PadGrid    : public Component, public Timer, private MidiKeyboardStateListener
 {
 public:
-//    InterfaceComponent* interfaceComponent;
-    
     bool shouldCheckState = false;
-    OwnedArray<PadComponent> pads;
+    OwnedArray<PadCell> pads;
     DropShadower dropShadower;
 //    DropShadow dropShadow;
     
@@ -79,7 +79,7 @@ public:
     
     MidiKeyboardState& midiKeyboardState;
     
-    PadGrid(MidiKeyboardState& s) : midiKeyboardState(s), dropShadower(DropShadow(Colours::black,5, Point<int>(0,0)))
+    PadGrid(MidiKeyboardState& s) : dropShadower(DropShadow(Colours::black,5, Point<int>(0,0))), midiKeyboardState(s)
     {
         dropShadower.setOwner(this);
         
@@ -89,7 +89,7 @@ public:
         
         int midiNote = midiOffset;
         for(int i=0; i<16; i++) {
-            pads.add(new PadComponent(midiKeyboardState, midiOffset+i));
+            pads.add(new PadCell(midiKeyboardState, midiOffset+i));
             addAndMakeVisible(pads[i]);
         }
         
@@ -101,7 +101,7 @@ public:
         midiKeyboardState.removeListener(this);
     }
     
-    void paint (Graphics& g)
+    void paint (Graphics& g) override
     {
         /* This demo code just fills the component's background and
            draws some placeholder text to get you started.
@@ -122,12 +122,12 @@ public:
 //                    Justification::centred, true);   // draw some placeholder text
     }
     
-    void 	handleNoteOn (MidiKeyboardState *source, int midiChannel, int midiNoteNumber, float velocity) override
+    void handleNoteOn (MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override
     {
         shouldCheckState = true;
     }
     
-    void 	handleNoteOff (MidiKeyboardState *source, int midiChannel, int midiNoteNumber) override
+    void handleNoteOff (MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override
     {
         shouldCheckState = true;
     }

@@ -11,8 +11,8 @@
 
 */
 
-#ifndef __JUCE_APPCONFIG_Z0LO3C__
-#define __JUCE_APPCONFIG_Z0LO3C__
+#ifndef __JUCE_APPCONFIG_JUGKQB__
+#define __JUCE_APPCONFIG_JUGKQB__
 
 //==============================================================================
 // [BEGIN_USER_CODE_SECTION]
@@ -247,7 +247,7 @@
  #define JucePlugin_ManufacturerCode       'Manu'
 #endif
 #ifndef  JucePlugin_PluginCode
- #define JucePlugin_PluginCode             'Z0lo'
+ #define JucePlugin_PluginCode             'Jugk'
 #endif
 #ifndef  JucePlugin_MaxNumInputChannels
  #define JucePlugin_MaxNumInputChannels    2
@@ -259,13 +259,13 @@
  #define JucePlugin_PreferredChannelConfigurations  {1, 1}, {2, 2}
 #endif
 #ifndef  JucePlugin_IsSynth
- #define JucePlugin_IsSynth                0
+ #define JucePlugin_IsSynth                1
 #endif
 #ifndef  JucePlugin_WantsMidiInput
  #define JucePlugin_WantsMidiInput         1
 #endif
 #ifndef  JucePlugin_ProducesMidiOutput
- #define JucePlugin_ProducesMidiOutput     1
+ #define JucePlugin_ProducesMidiOutput     0
 #endif
 #ifndef  JucePlugin_SilenceInProducesSilenceOut
  #define JucePlugin_SilenceInProducesSilenceOut  0
@@ -286,10 +286,10 @@
  #define JucePlugin_VSTUniqueID            JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_VSTCategory
- #define JucePlugin_VSTCategory            kPlugCategEffect
+ #define JucePlugin_VSTCategory            kPlugCategSynth
 #endif
 #ifndef  JucePlugin_AUMainType
- #define JucePlugin_AUMainType             kAudioUnitType_MusicEffect
+ #define JucePlugin_AUMainType             kAudioUnitType_MusicDevice
 #endif
 #ifndef  JucePlugin_AUSubType
  #define JucePlugin_AUSubType              JucePlugin_PluginCode
@@ -307,7 +307,7 @@
  #define JucePlugin_CFBundleIdentifier     com.yourcompany.eearPlugin
 #endif
 #ifndef  JucePlugin_RTASCategory
- #define JucePlugin_RTASCategory           ePlugInCategory_None
+ #define JucePlugin_RTASCategory           ePlugInCategory_SWGenerators
 #endif
 #ifndef  JucePlugin_RTASManufacturerCode
  #define JucePlugin_RTASManufacturerCode   JucePlugin_ManufacturerCode
@@ -340,4 +340,4 @@
  #define JucePlugin_AAXDisableMultiMono    0
 #endif
 
-#endif  // __JUCE_APPCONFIG_Z0LO3C__
+#endif  // __JUCE_APPCONFIG_JUGKQB__

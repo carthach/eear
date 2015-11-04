@@ -91,17 +91,14 @@ public:
         addAndMakeVisible (fileLoadButton);
         fileLoadButton.setButtonText ("Load Folder");
         fileLoadButton.addListener(this);
-        fileLoadButton.setColour (TextButton::buttonColourId, Colour (0xff79ed7f));
         
         addAndMakeVisible (buildDatasetButton);
         buildDatasetButton.setButtonText ("Build Dataset");
         buildDatasetButton.addListener(this);
-        buildDatasetButton.setColour (TextButton::buttonColourId, Colour (0xff79ed7f));
         
         addAndMakeVisible (outputLoopButton);
         outputLoopButton.setButtonText ("Output Loop");
         outputLoopButton.addListener(this);
-        outputLoopButton.setColour (TextButton::buttonColourId, Colour (0xff79ed7f));
         
         sourceListBox.setModel(&sourceModel);
         sourceListBox.setMultipleSelectionEnabled (true);        
@@ -133,15 +130,15 @@ public:
         updateFeaturesButton.addListener(this);
     
         PropertiesFile::Options options;
-        options.applicationName = "sliceAnalyser";
-        options.osxLibrarySubFolder = "Application Support/sliceAnalyser";
+        options.applicationName = "eear-Plugin";
+        options.osxLibrarySubFolder = "Application Support/eear-Plugin";
         applicationProperties.setStorageParameters(options);
         
         propertiesFile = applicationProperties.getUserSettings();
 
         if(propertiesFile->containsKey("lastDatasetFolder")) {
             datasetFolder = propertiesFile->getValue("lastDatasetFolder");
-            interfaceComponent->datasetPath = datasetFolder.getFullPathName();
+            interfaceComponent->datasetDirectory = datasetFolder.getFullPathName();
             String lastDatasetFile = datasetFolder.getFullPathName() + "/dataset/dataset.json";
         
             if(File(lastDatasetFile).existsAsFile()) {
@@ -157,6 +154,11 @@ public:
         datasetFolderTextBox.setText(datasetFolder.getFullPathName());
         
         addAndMakeVisible(tableComponent);
+    }
+    
+    void paint(Graphics &g) override
+    {
+    
     }
     
     void resized () override
@@ -188,7 +190,7 @@ public:
         allRightButton.setBounds(buttonPos.withY(200));
 
         updateFeaturesButton.setSize(75, 25);
-        updateFeaturesButton.setCentrePosition(buttonPos.getX(), 250);
+        updateFeaturesButton.setCentrePosition(buttonPos.getX()+25, 250);
         
         
         tableComponent.setBounds(bottom);
@@ -267,6 +269,9 @@ private:
                 
                 if(File(datasetFilename).existsAsFile())
                     loadDataset(datasetFilename);
+                
+                datasetFolderTextBox.setText(datasetFolder.getFullPathName());
+                interfaceComponent->datasetDirectory = datasetFolder.getFullPathName();
             }
         }
         else if (buttonThatWasClicked == &buildDatasetButton)
@@ -312,7 +317,6 @@ private:
         
         tableComponent.updateData(featureList, featureMatrix);
         datasetFolderTextBox.setText(datasetFolder.getFullPathName());
-        interfaceComponent->datasetPath = datasetFolder.getFullPathName();
         
         sourceModel.data = featureList;
         sourceListBox.updateContent();

@@ -30,11 +30,7 @@ EssentiaExtractor::EssentiaExtractor(AudioFormatManager* formatManager)
     //Call this globally
     essentia::init();
     
-
-        
     this->formatManager = formatManager;
-    
-
 }
 
 EssentiaExtractor::~EssentiaExtractor()
