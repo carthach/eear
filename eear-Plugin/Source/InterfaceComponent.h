@@ -8,15 +8,16 @@
 
 #ifndef eear_Plugin_InterfaceComponent_h
 #define eear_Plugin_InterfaceComponent_h
-#include "EarOSCServer.h"
+//#include "EarOSCServer.h"
 #include "PadGrid.h"
 
 class InterfaceComponent : public Component,
                             public SliderListener,
                             public Timer,
                             public Button::Listener,
-                            public ChangeListener,
-                        private MidiInputCallback
+                            private MidiInputCallback,
+                            private OSCReceiver,
+                            private OSCReceiver::ListenerWithOSCAddress<OSCReceiver::MessageLoopCallback>
 {
 public:
     MidiKeyboardComponent midiKeyboard;
@@ -24,7 +25,6 @@ public:
     Slider gainSlider, delaySlider;
     ScopedPointer<ResizableCornerComponent> resizer;
     ComponentBoundsConstrainer resizeLimits;
-    EarOSCServer earOSCServer;
     
 //    TextButton resetSynthButton;
     ImageButton resetSynthButton;
@@ -44,6 +44,8 @@ public:
     
     File datasetDirectory;
     
+    String currentKey, currentScale;
+    
     InterfaceComponent(MidiKeyboardState& s, AudioProcessor& p) :
     midiKeyboard (s, MidiKeyboardComponent::horizontalKeyboard),
     infoLabel (String::empty),
@@ -51,9 +53,10 @@ public:
     delayLabel ("", "Delay:"),
     gainSlider ("gain"),
     delaySlider ("delay"),
-    earOSCServer(12347),
     padGrid(s),
-    processor(p)
+    processor(p),
+    currentKey("A"),
+    currentScale("m")
     {
 //        // add some sliders..
 //        addAndMakeVisible (gainSlider);
@@ -142,19 +145,44 @@ public:
         shouldQuantiseButton.addListener(this);
         shouldQuantiseButton.setButtonText("Quantise On/Off");
         
-        earOSCServer.addChangeListener(this);
-               
+        // specify here on which UDP port number to receive incoming OSC messages
+        if (! connect (8000))
+            ;
+        
+        addListener (this, "/earData");
         
         // set our component's initial size to be the last one that was stored in the filter's settings
         //    setSize (owner.lastUIWidth,
         //             owner.lastUIHeight);
         
-        
-        startTimer (50);
-        
         addAndMakeVisible(padGrid);
         
+        
+        startTimer (50);
         setSize(1024, 768);
+    }
+    
+    //
+    void oscMessageReceived (const OSCMessage& message) override
+    {
+        if(message.getAddressPattern() == OSCAddressPattern("/earData") && message.size() > 1)
+        {
+            if(message[0].getString() != "" && message[1].getString() != "") {
+                updateKeyInfo(message[0].getString(), message[1].getString());
+                buttonClicked(&resetSynthButton);
+            }
+        }
+    }
+    
+    void updateKeyInfo(String key, String scale)
+    {
+        currentKey = key;
+        currentScale = scale;
+        
+        String keyScaleString = currentKey;
+        if(scale == "m")
+             keyScaleString += " " + currentScale;
+        keyScaleTextBox.setText(keyScaleString, dontSendNotification);
     }
     
 
@@ -169,18 +197,16 @@ public:
     {
         if(button == &resetSynthButton) {
             
-            //Debug
+//            //Debug
 //            Array<File> matchingFiles = getAudioFiles(datasetDirectory, "E", "minor");
 //            if(matchingFiles.size() > 0)
 //                getProcessor().setSynthSamples(matchingFiles);
             
-            if(datasetDirectory.exists() && earOSCServer.key != "") {
-                Array<File> matchingFiles = getAudioFiles(datasetDirectory, earOSCServer.key, earOSCServer.scale);
+            if(datasetDirectory.exists() && currentKey != "") {
+                Array<File> matchingFiles = getAudioFiles(datasetDirectory, currentKey, currentScale);
                 if(matchingFiles.size() > 0)
                     getProcessor().setSynthSamples(matchingFiles);
             }
-            
-
         }
         else if(button == &shouldQuantiseButton) {
             getProcessor().shouldQuantise = button->getToggleState();
@@ -235,17 +261,7 @@ public:
         return audioFiles;
     }
     
-    void changeListenerCallback (ChangeBroadcaster *source)
-    {
-        String keyScaleString = String(earOSCServer.key) + " " + String(earOSCServer.scale);
-        currentKeyScaleTextBox.setText(keyScaleString);
-        keyScaleTextBox.setText(keyScaleString, dontSendNotification);
-        
-        bool autoUpdate = true;
-        if(autoUpdate)
-            buttonClicked(&resetSynthButton);
-    }
-    
+
     // This is our Slider::Listener callback, when the user drags a slider.
     void sliderValueChanged (Slider* slider)
     {

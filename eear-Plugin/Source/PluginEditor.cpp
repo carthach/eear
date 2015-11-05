@@ -42,6 +42,8 @@ TheEarPluginAudioProcessorEditor::~TheEarPluginAudioProcessorEditor()
 }
 
 
+
+
 //==============================================================================
 void TheEarPluginAudioProcessorEditor::paint (Graphics& g)
 {

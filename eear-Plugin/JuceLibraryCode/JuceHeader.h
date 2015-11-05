@@ -14,8 +14,6 @@
 #define __APPHEADERFILE_JUGKQB__
 
 #include "AppConfig.h"
-#include "modules/danlin_oscpack/danlin_oscpack.h"
-#include "modules/danlin_oscserver/danlin_oscserver.h"
 #include "modules/juce_audio_basics/juce_audio_basics.h"
 #include "modules/juce_audio_devices/juce_audio_devices.h"
 #include "modules/juce_audio_formats/juce_audio_formats.h"
@@ -30,6 +28,7 @@
 #include "modules/juce_gui_basics/juce_gui_basics.h"
 #include "modules/juce_gui_extra/juce_gui_extra.h"
 #include "modules/juce_opengl/juce_opengl.h"
+#include "modules/juce_osc/juce_osc.h"
 #include "modules/juce_video/juce_video.h"
 #include "BinaryData.h"
 
