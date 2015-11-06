@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "D7A93BCF1062B621BA553DD13F864479A653BC67",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D7A93BCF1062B621BA553DD13F864479A653BC67" : 0,
+    "DEBAC9C6799FD4E8074B3BAF720718E3C3499FA0" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "D5A0F2E9-27C7-4A87-810E-C0C0CEB96E8A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D7A93BCF1062B621BA553DD13F864479A653BC67" : "eear\/",
+    "DEBAC9C6799FD4E8074B3BAF720718E3C3499FA0" : "..\/JUCE"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "eear-Mobile",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "eear-Mobile\/Builds\/MacOSX\/eear-Mobile.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/GiantSteps\/TheEar.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D7A93BCF1062B621BA553DD13F864479A653BC67"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/julianstorer\/JUCE.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DEBAC9C6799FD4E8074B3BAF720718E3C3499FA0"
+    }
+  ]
+}
