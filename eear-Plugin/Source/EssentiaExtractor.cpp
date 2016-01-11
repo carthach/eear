@@ -298,6 +298,8 @@ vector<Real> EssentiaExtractor::randomLoop(const vector<Real>& onsetTimes, const
     float startTimeInSamples;
     float endTimeInSamples;
     
+    int audioLength = audio.size();
+    
     do  {
         int randomOnsetIndex = random.nextInt(onsetTimes.size());
         startTimeInSamples = onsetTimes[randomOnsetIndex] * 44100.0;

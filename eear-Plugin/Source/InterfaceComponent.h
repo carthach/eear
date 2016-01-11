@@ -203,9 +203,10 @@ public:
 //                getProcessor().setSynthSamples(matchingFiles);
             
             if(datasetDirectory.exists() && currentKey != "") {
-                Array<File> matchingFiles = getAudioFiles(datasetDirectory, currentKey, currentScale);
+                Array<float> bpms;
+                Array<File> matchingFiles = getAudioFiles(datasetDirectory, currentKey, currentScale, bpms);
                 if(matchingFiles.size() > 0)
-                    getProcessor().setSynthSamples(matchingFiles);
+                    getProcessor().setSynthSamples(matchingFiles, bpms);
             }
         }
         else if(button == &shouldQuantiseButton) {
@@ -232,7 +233,7 @@ public:
         }
     }
     
-    Array<File> getAudioFiles(const File& audioFolder, String key, String scale)
+    Array<File> getAudioFiles(const File& audioFolder, String key, String scale, Array<float>& bpms)
     {
         Array<File> audioFiles;
         

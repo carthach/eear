@@ -13,6 +13,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MyIncludes.h"
+#include "CustomSampler.h"
 
 
 //==============================================================================
@@ -82,9 +83,7 @@ public:
     AudioProcessorParameter* gain;
     AudioProcessorParameter* delay;
     
-    void setUsingSineWaveSound();
-    
-    void setSynthSamples(const Array<File>& listOfFiles);
+    void setSynthSamples(const Array<File>& listOfFiles, Array<float> bpms);
     
     bool shouldQuantise = false;
     

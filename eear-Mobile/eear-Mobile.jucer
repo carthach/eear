@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="LcdcDd" name="eear-Mobile" projectType="guiapp" version="1.0.0"
               bundleIdentifier="com.yourcompany.eearMobile" includeBinaryInAppConfig="1"
-              jucerVersion="4.0.1">
+              jucerVersion="4.1.0">
   <MAINGROUP id="pwdpG5" name="eear-Mobile">
     <GROUP id="{64DD5A5E-6EF6-016E-CF03-E1135206AC57}" name="Source">
       <FILE id="dmEp0V" name="AudioLiveScrollingDisplay.h" compile="0" resource="0"
@@ -27,15 +27,15 @@
           file="../eear-graphic-design/button_pushed.png"/>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX" externalLibraries="essentia&#10;tag&#10;yaml"
-               smallIcon="urMcEr" bigIcon="urMcEr">
+    <XCODE_MAC targetFolder="Builds/MacOSX" externalLibraries="z" smallIcon="urMcEr"
+               bigIcon="urMcEr" extraLinkerFlags="/usr/local/lib/libessentia.a">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="10.10 SDK" osxArchitecture="default"
+        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="10.9 SDK" osxArchitecture="default"
                        isDebug="1" optimisation="1" targetName="eear-Mobile" headerPath="/usr/local/include"
                        libraryPath="/usr/local/lib"/>
-        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="10.10 SDK"
-                       osxArchitecture="default" isDebug="0" optimisation="3" targetName="eear-Mobile"
-                       headerPath="/usr/local/include" libraryPath="/usr/local/lib"/>
+        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="10.9 SDK" osxArchitecture="default"
+                       isDebug="0" optimisation="3" targetName="eear-Mobile" headerPath="/usr/local/include"
+                       libraryPath="/usr/local/lib"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
@@ -60,7 +60,8 @@
              androidKeyStorePass="android" androidKeyAlias="androiddebugkey"
              androidKeyAliasPass="android" androidCpp11="1" targetFolder="Builds/Android"
              androidSDKPath="" androidNDKPath="" androidStaticLibraries="essentia"
-             smallIcon="urMcEr" bigIcon="urMcEr" toolset="4.9" androidMicNeeded="1">
+             smallIcon="urMcEr" bigIcon="urMcEr" toolset="4.9" androidMicNeeded="1"
+             androidBluetoothNeeded="1">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" androidArchitectures="armeabi-v7a" isDebug="1" optimisation="1"
                        targetName="eear-Mobile" headerPath="/Users/carthach/Dev/android/modules/essentia/include"/>
@@ -85,6 +86,33 @@
         <MODULEPATH id="juce_audio_basics" path="../../../JUCE/modules"/>
       </MODULEPATHS>
     </ANDROID>
+    <XCODE_IPHONE targetFolder="Builds/iOS" externalLibraries="essentia">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" iosCompatibility="default" isDebug="1" optimisation="1"
+                       targetName="eear-Mobile" headerPath="dependencies/essentia/include"
+                       libraryPath="dependencies/essentia/lib"/>
+        <CONFIGURATION name="Release" iosCompatibility="default" isDebug="0" optimisation="3"
+                       targetName="eear-Mobile" headerPath="dependencies/essentia/include"
+                       libraryPath="dependencies/essentia/lib"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_osc" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_IPHONE>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="1"/>

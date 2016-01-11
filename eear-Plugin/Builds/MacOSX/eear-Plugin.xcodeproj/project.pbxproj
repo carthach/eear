@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		01B63B363F4962E39F08FFAD /* CarbonEventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EE39BCDA91C68EDE111272F3 /* CarbonEventHandler.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		035F0B5BD6476D6E52CCF6DA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234254F4FB072FF1E5EE890E /* Accelerate.framework */; };
+		0791C6B41BF1176000AA8819 /* CustomSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0791C6B21BF1176000AA8819 /* CustomSampler.cpp */; };
 		08DA8C76F699FA6FABD1DE01 /* juce_graphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = BFFDDB6C2B430303C8BF5A3C /* juce_graphics.mm */; };
 		0E5BB130EE36052141FD6289 /* juce_RTAS_DigiCode3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7157B2A5278CBC9FCE16683 /* juce_RTAS_DigiCode3.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		0EEA9AB87CE4A222DE1D44F9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F59DB3366BE66393B5F7A30 /* Carbon.framework */; };
@@ -103,6 +104,8 @@
 		06C5A7E9202E42063CAD2D28 /* juce_Viewport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Viewport.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/layout/juce_Viewport.h; sourceTree = SOURCE_ROOT; };
 		0728422969459CFDD7182730 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		076D04153A7DA8B7FE3CB815 /* juce_ActionBroadcaster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_ActionBroadcaster.h; path = ../../JuceLibraryCode/modules/juce_events/broadcasters/juce_ActionBroadcaster.h; sourceTree = SOURCE_ROOT; };
+		0791C6B21BF1176000AA8819 /* CustomSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CustomSampler.cpp; path = ../../Source/CustomSampler.cpp; sourceTree = "<group>"; };
+		0791C6B31BF1176000AA8819 /* CustomSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CustomSampler.h; path = ../../Source/CustomSampler.h; sourceTree = "<group>"; };
 		0799C8D70FF93780B66D1C3F /* AUOutputElement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AUOutputElement.cpp; path = ../../JuceLibraryCode/modules/juce_audio_plugin_client/AU/CoreAudioUtilityClasses/AUOutputElement.cpp; sourceTree = SOURCE_ROOT; };
 		07AC15262CB5EA13490D3CB9 /* juce_OSCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_OSCTypes.h; path = ../../JuceLibraryCode/modules/juce_osc/osc/juce_OSCTypes.h; sourceTree = SOURCE_ROOT; };
 		07DF26577CF31784F1DD0C09 /* juce_VST_Wrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = juce_VST_Wrapper.mm; path = ../../JuceLibraryCode/modules/juce_audio_plugin_client/VST/juce_VST_Wrapper.mm; sourceTree = SOURCE_ROOT; };
@@ -2891,6 +2894,8 @@
 		EE9B635725416141614BBE7D /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				0791C6B21BF1176000AA8819 /* CustomSampler.cpp */,
+				0791C6B31BF1176000AA8819 /* CustomSampler.h */,
 				948264CB8A744009A5BD6B00 /* DataComponent.h */,
 				548B69E3C60FE8E3E5A44C81 /* DataTableComponent.h */,
 				C2CBFD030A91492D928E4042 /* EssentiaExtractor.cpp */,
@@ -3137,6 +3142,7 @@
 				A5A80E5729DB17C55223626A /* CAMutex.cpp in Sources */,
 				01B63B363F4962E39F08FFAD /* CarbonEventHandler.cpp in Sources */,
 				DEBF07A3CA00B00B150AFB72 /* CAStreamBasicDescription.cpp in Sources */,
+				0791C6B41BF1176000AA8819 /* CustomSampler.cpp in Sources */,
 				D63C8A7CD00394C9E4CE9A6C /* CAVectorUnit.cpp in Sources */,
 				1FE3CFFD0834E7BB1DBDFE9D /* ComponentBase.cpp in Sources */,
 				67A312EC43EA2004AB24193D /* juce_AAX_Wrapper.cpp in Sources */,
