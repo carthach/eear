@@ -619,7 +619,7 @@ struct MouseInputSource::SourceList  : public Timer
     MouseInputSource* getOrCreateMouseInputSource (int touchIndex)
     {
         jassert (touchIndex >= 0 && touchIndex < 100); // sanity-check on number of fingers
-        
+
         for (;;)
         {
             if (MouseInputSource* mouse = getMouseSource (touchIndex))

@@ -2227,6 +2227,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				OTHER_LDFLAGS = "/usr/local/lib/libessentia.a -lz";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.eearMobile;
 				SDKROOT_ppc = macosx10.5; }; name = Debug; };
 		59926FFE02E6AE077AB1554A = {isa = XCBuildConfiguration; buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
@@ -2251,10 +2252,12 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				OTHER_LDFLAGS = "/usr/local/lib/libessentia.a -lz";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.eearMobile;
 				SDKROOT_ppc = macosx10.5; }; name = Release; };
 		AB05E59F2F4A18AD45A886E7 = {isa = XCBuildConfiguration; buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf";
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_MODEL_TUNING = G5;

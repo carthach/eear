@@ -60,8 +60,8 @@
              androidKeyStorePass="android" androidKeyAlias="androiddebugkey"
              androidKeyAliasPass="android" androidCpp11="1" targetFolder="Builds/Android"
              androidSDKPath="" androidNDKPath="" androidStaticLibraries="essentia"
-             smallIcon="urMcEr" bigIcon="urMcEr" toolset="4.9" androidMicNeeded="1"
-             androidBluetoothNeeded="1">
+             smallIcon="urMcEr" bigIcon="urMcEr" toolset="" androidMicNeeded="1"
+             androidBluetoothNeeded="1" androidScreenOrientation="unspecified">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" androidArchitectures="armeabi-v7a" isDebug="1" optimisation="1"
                        targetName="eear-Mobile" headerPath="/Users/carthach/Dev/android/modules/essentia/include"/>
