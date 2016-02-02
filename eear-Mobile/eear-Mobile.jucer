@@ -10,6 +10,8 @@
       <FILE id="t1orap" name="AudioRecordingDemo.cpp" compile="1" resource="0"
             file="Source/AudioRecordingDemo.cpp"/>
       <FILE id="svKKij" name="Common.h" compile="0" resource="0" file="Source/Common.h"/>
+      <FILE id="uxUzMf" name="CustomLookAndFeel.h" compile="0" resource="0"
+            file="Source/CustomLookAndFeel.h"/>
       <FILE id="t9nZ2G" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="p5Zl7U" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>

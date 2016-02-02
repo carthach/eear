@@ -32,14 +32,14 @@ public:
     {
         addAndMakeVisible (frameSlider);
         frameSlider.setRange (1.0, 44100.0/512.0, 1.0);
-        frameSlider.setValue (50, dontSendNotification);
+        frameSlider.setValue (8, dontSendNotification);
         frameSlider.setSliderStyle (Slider::LinearHorizontal);
-        frameSlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
+        frameSlider.setTextBoxStyle (Slider::TextBoxRight, false, 30, 20);
         frameSlider.addListener (this);
         
         addAndMakeVisible (frameSliderLabel);
         frameSliderLabel.setText ("Size of Buffer", dontSendNotification);
-        frameSliderLabel.attachToComponent (&frameSlider, true);
+//        frameSliderLabel.attachToComponent (&frameSlider, true);
         
         addAndMakeVisible (ipAddressLabel);
         ipAddressLabel.setText ("IP Address:", dontSendNotification);
@@ -57,21 +57,21 @@ public:
         portNumberTextBox.setText("8000");
         portNumberTextBox.addListener(this);
         
-        saveButton.setButtonText("Save");
-        addAndMakeVisible(saveButton);
+//        saveButton.setButtonText("Save");
+//        addAndMakeVisible(saveButton);
         
         
         
-        addAndMakeVisible (sensitivitySlider);
-        sensitivitySlider.setRange (0.0, 1.5, .80);
-        sensitivitySlider.setValue (.8, dontSendNotification);
-        sensitivitySlider.setSliderStyle (Slider::LinearBarVertical);
-        sensitivitySlider.setTextBoxStyle (Slider::TextBoxRight, false, 50, 20);
-        sensitivitySlider.addListener (this);
-        
-        addAndMakeVisible (sensitivitySliderLabel);
-        sensitivitySliderLabel.setText ("Gain", dontSendNotification);
-        sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
+//        addAndMakeVisible (sensitivitySlider);
+//        sensitivitySlider.setRange (0.0, 1.5, .80);
+//        sensitivitySlider.setValue (.8, dontSendNotification);
+//        sensitivitySlider.setSliderStyle (Slider::LinearBarVertical);
+//        sensitivitySlider.setTextBoxStyle (Slider::TextBoxRight, false, 30, 20);
+//        sensitivitySlider.addListener (this);
+//        
+//        addAndMakeVisible (sensitivitySliderLabel);
+//        sensitivitySliderLabel.setText ("Gain", dontSendNotification);
+//        sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
         
         
         
@@ -109,24 +109,24 @@ public:
     {
         //Just one sub component
         
-        Rectangle<int> labelBounds(20, 0, 100, 20);
-        Rectangle<int> valueBounds(150, 0, 100, 20);
+        Rectangle<int> labelBounds(20, 0, 100, 30);
+        Rectangle<int> valueBounds(125, 0, 150, 25);
         
         int labelY = 0;
-        int height = getLocalBounds().getHeight()/10;
-        frameSliderLabel.setBounds(labelBounds.withY(labelY+=height));
-        frameSlider.setBounds (valueBounds.withY(labelY));
+        int height = 50;
         
-        
-        oscInfoLabel.setBounds(labelBounds.withY(labelY+=height));
+//        oscInfoLabel.setBounds(labelBounds.withY(labelY+=height));
         
         ipAddressLabel.setBounds(labelBounds.withY(labelY+=height));
         ipAddressTextBox.setBounds(valueBounds.withY(labelY));
         portNumberLabel.setBounds(labelBounds.withY(labelY+=height));
         portNumberTextBox.setBounds(valueBounds.withY(labelY));
         
-        saveButton.setBounds(labelBounds.withY(labelY+=height));
-        saveButton.addListener(this);
+        frameSliderLabel.setBounds(labelBounds.withY(labelY+=height));
+        frameSlider.setBounds (valueBounds.withY(labelY));
+        
+//        saveButton.setBounds(labelBounds.withY(labelY+=height));
+//        saveButton.addListener(this);
         
         sensitivitySlider.setBounds(labelBounds.withY(labelY+=height).withHeight(height * 5));
         
@@ -141,17 +141,20 @@ public:
     
     void sliderValueChanged (Slider *slider) override
     {
-        if (slider == &frameSlider) {
+        if (slider == &frameSlider)
+        {
             int frameValue = int(slider->getValue());
-            if(frameValue != recorder->recorder.computeFrameCount) {
+            if(frameValue != recorder->recorder.computeFrameCount)
+            {
                 if (recorder->recorder.isRecording())
                     recorder->stopRecording();
                 recorder->recorder.computeFrameCount = frameValue;
                 
             }
         }
-        else if(slider == &sensitivitySlider){
-            recorder->recorder.gain = slider->getValue();
+        else if(slider == &sensitivitySlider)
+        {
+            recorder->recorder.rmsThreshold = slider->getValue();
             
         }
     }

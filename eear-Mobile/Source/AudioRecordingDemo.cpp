@@ -504,13 +504,14 @@ private:
     
         if (button == &recordButton)
         {
-            cout << button->getState() << endl;;
+//            cout << button->getState() << endl;
             switch(button->getState()){
                     
                 case Button::buttonDown :
                     startRecording();
                     break;
                 default:
+//                    stopRecording();
                     break;
             };
         }

@@ -88,23 +88,22 @@ obj/local/armeabi-v7a/objs/juce_jni/__/__/__/JuceLibraryCode/modules/juce_core/j
  jni/../../../JuceLibraryCode/modules/juce_core/juce_core.h \
  jni/../../../JuceLibraryCode/modules/juce_core/system/juce_TargetPlatform.h \
  jni/../../../JuceLibraryCode/modules/juce_core/system/juce_StandardHeader.h \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/vector \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/vector \
  jni/../../../JuceLibraryCode/modules/juce_core/system/juce_CompilerSupport.h \
  jni/../../../JuceLibraryCode/modules/juce_core/system/juce_PlatformDefs.h \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdlib \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdarg \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/climits \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/limits \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cmath \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cwchar \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/stdexcept \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/typeinfo \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdio \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/algorithm \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/functional \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/atomic \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdlib \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdarg \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/climits \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/limits \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cmath \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cwchar \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/stdexcept \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/typeinfo \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstring \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdio \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/algorithm \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/atomic \
  /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/byteswap.h \
  jni/../../../JuceLibraryCode/modules/juce_core/memory/juce_Memory.h \
  jni/../../../JuceLibraryCode/modules/juce_core/maths/juce_MathsFunctions.h \
@@ -211,7 +210,7 @@ obj/local/armeabi-v7a/objs/juce_jni/__/__/__/JuceLibraryCode/modules/juce_core/j
  jni/../../../JuceLibraryCode/modules/juce_core/zip/juce_ZipFile.h \
  jni/../../../JuceLibraryCode/modules/juce_core/containers/juce_PropertySet.h \
  jni/../../../JuceLibraryCode/modules/juce_core/memory/juce_SharedResourcePointer.h \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/locale \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/locale \
  /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/sys/socket.h \
  /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/linux/socket.h \
  /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/asm/socket.h \
@@ -509,39 +508,37 @@ jni/../../../JuceLibraryCode/modules/juce_core/system/juce_TargetPlatform.h:
 
 jni/../../../JuceLibraryCode/modules/juce_core/system/juce_StandardHeader.h:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/vector:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/vector:
 
 jni/../../../JuceLibraryCode/modules/juce_core/system/juce_CompilerSupport.h:
 
 jni/../../../JuceLibraryCode/modules/juce_core/system/juce_PlatformDefs.h:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdlib:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdlib:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdarg:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdarg:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/climits:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/climits:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/limits:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/limits:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cmath:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cmath:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cwchar:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cwchar:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/stdexcept:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/stdexcept:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/typeinfo:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/typeinfo:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstring:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdio:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdio:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/algorithm:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/algorithm:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/functional:
-
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/atomic:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/atomic:
 
 /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/byteswap.h:
 
@@ -755,7 +752,7 @@ jni/../../../JuceLibraryCode/modules/juce_core/containers/juce_PropertySet.h:
 
 jni/../../../JuceLibraryCode/modules/juce_core/memory/juce_SharedResourcePointer.h:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/locale:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/locale:
 
 /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/sys/socket.h:
 

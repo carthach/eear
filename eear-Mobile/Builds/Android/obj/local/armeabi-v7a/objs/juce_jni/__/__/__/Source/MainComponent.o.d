@@ -7,23 +7,22 @@ obj/local/armeabi-v7a/objs/juce_jni/__/__/__/Source/MainComponent.o: \
  jni/../../../Source/../JuceLibraryCode/modules/juce_audio_basics/../juce_core/system/juce_TargetPlatform.h \
  ../../JuceLibraryCode/AppConfig.h \
  jni/../../../Source/../JuceLibraryCode/modules/juce_audio_basics/../juce_core/system/juce_StandardHeader.h \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/vector \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/vector \
  jni/../../../Source/../JuceLibraryCode/modules/juce_audio_basics/../juce_core/system/juce_CompilerSupport.h \
  jni/../../../Source/../JuceLibraryCode/modules/juce_audio_basics/../juce_core/system/juce_PlatformDefs.h \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdlib \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdarg \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/climits \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/limits \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cmath \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cwchar \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/stdexcept \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/typeinfo \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdio \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/algorithm \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/functional \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/atomic \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdlib \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdarg \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/climits \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/limits \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cmath \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cwchar \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/stdexcept \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/typeinfo \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstring \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdio \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/algorithm \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/atomic \
  /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/byteswap.h \
  /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/endian.h \
  /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/sys/endian.h \
@@ -526,17 +525,17 @@ obj/local/armeabi-v7a/objs/juce_jni/__/__/__/Source/MainComponent.o: \
  jni/../../../Source/AudioLiveScrollingDisplay.h \
  jni/../../../Source/Common.h jni/../../../Source/StreamingRecorder.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/algorithmfactory.h \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/map \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/sstream \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/map \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/types.h \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cassert \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cassert \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/config.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/version.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/debugging.h \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/deque \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/deque \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/streamutil.h \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/set \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/complex \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/set \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/complex \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/stringutil.h \
  /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/inttypes.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/essentia.h \
@@ -598,17 +597,18 @@ obj/local/armeabi-v7a/objs/juce_jni/__/__/__/Source/MainComponent.o: \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/streaming/algorithms/../../utils/tnt/tnt.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/streaming/algorithms/../../essentiautil.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/scheduler/network.h \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/stack \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/stack \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/scheduler/../streaming/streamingalgorithm.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/scheduler/../essentiautil.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/streaming/algorithms/ringbufferinput.h \
  jni/../../../Source/StandardRecorder.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/essentiamath.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/utils/tnt/tnt2essentiautils.h \
- /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/fstream \
+ /usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/fstream \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/utils/tnt/tnt.h \
  /Users/carthach/Dev/android/modules/essentia/include/essentia/pool.h \
- jni/../../../Source/SpectralUI.h jni/../../../Source/SettingsComponent.h
+ jni/../../../Source/SpectralUI.h jni/../../../Source/SettingsComponent.h \
+ jni/../../../Source/CustomLookAndFeel.h
 
 jni/../../../Source/../JuceLibraryCode/JuceHeader.h:
 
@@ -624,39 +624,37 @@ jni/../../../Source/../JuceLibraryCode/modules/juce_audio_basics/../juce_core/sy
 
 jni/../../../Source/../JuceLibraryCode/modules/juce_audio_basics/../juce_core/system/juce_StandardHeader.h:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/vector:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/vector:
 
 jni/../../../Source/../JuceLibraryCode/modules/juce_audio_basics/../juce_core/system/juce_CompilerSupport.h:
 
 jni/../../../Source/../JuceLibraryCode/modules/juce_audio_basics/../juce_core/system/juce_PlatformDefs.h:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdlib:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdlib:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdarg:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdarg:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/climits:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/climits:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/limits:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/limits:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cmath:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cmath:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cwchar:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cwchar:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/stdexcept:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/stdexcept:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/typeinfo:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/typeinfo:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstring:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdio:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cstdio:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/algorithm:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/algorithm:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/functional:
-
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/atomic:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/atomic:
 
 /usr/local/Cellar/android-ndk/r10e/platforms/android-9/arch-arm/usr/include/byteswap.h:
 
@@ -1664,13 +1662,13 @@ jni/../../../Source/StreamingRecorder.h:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/algorithmfactory.h:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/map:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/map:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/sstream:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/types.h:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cassert:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/cassert:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/config.h:
 
@@ -1678,13 +1676,13 @@ jni/../../../Source/StreamingRecorder.h:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/debugging.h:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/deque:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/deque:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/streamutil.h:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/set:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/set:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/complex:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/complex:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/stringutil.h:
 
@@ -1808,7 +1806,7 @@ jni/../../../Source/StreamingRecorder.h:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/scheduler/network.h:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/stack:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/stack:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/scheduler/../streaming/streamingalgorithm.h:
 
@@ -1822,7 +1820,7 @@ jni/../../../Source/StandardRecorder.h:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/utils/tnt/tnt2essentiautils.h:
 
-/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/fstream:
+/usr/local/Cellar/android-ndk/r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/fstream:
 
 /Users/carthach/Dev/android/modules/essentia/include/essentia/utils/tnt/tnt.h:
 
@@ -1831,3 +1829,5 @@ jni/../../../Source/StandardRecorder.h:
 jni/../../../Source/SpectralUI.h:
 
 jni/../../../Source/SettingsComponent.h:
+
+jni/../../../Source/CustomLookAndFeel.h:

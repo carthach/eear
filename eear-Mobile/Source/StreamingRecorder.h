@@ -35,7 +35,8 @@ public:
     map< String,int > keyPoolMajor;
     map< String,int > keyPoolMinor;
     
-    float gain;
+    float rmsLevel = 0.0f;
+    float rmsThreshold = 0.05f;
     
     //As suggested by KeyExtractor
     int frameSize = 4096;
@@ -49,7 +50,8 @@ public:
     }
     
     
-    void clearKeyPool(map<String,int > & keyPool){
+    void clearKeyPool(map<String,int > & keyPool)
+    {
         keyPool["A"] = 0;
         keyPool["A#"] = 0;
         keyPool["B"] = 0;
@@ -67,7 +69,8 @@ public:
         
     }
     
-    String getBestInPool(map<String,int > & keyPool){
+    String getBestInPool(map<String,int > & keyPool)
+    {
         String res;
         int max = 0;
         for(auto k:keyPool){
@@ -77,9 +80,7 @@ public:
             }
         }
         
-        
         return res;
-        
     }
     
     
@@ -206,7 +207,7 @@ public:
     void stop()
     {
         recording = false;
-
+        
     }
     
     bool isRecording() const
@@ -236,7 +237,9 @@ public:
             //According to ringbufferimpl.h Essentia should handle thread safety...
 
             AudioSampleBuffer buffer (const_cast<float**> (inputChannelData), 1, numSamples);
-
+            
+            rmsLevel = buffer.getRMSLevel(0, 0, buffer.getNumSamples());
+            
             //            std::cout << buffer.getRMSLevel(0, 0, buffer.getNumSamples()) << "\n";
             
             ringBufferInput->add(const_cast<essentia::Real *> (inputChannelData[0]), numSamples);
@@ -248,7 +251,7 @@ public:
                 FloatVectorOperations::clear (outputChannelData[i], numSamples);
     }
     
-    void run()
+    void run() override
     {
         int frameOutCount = 0;
         bool shouldClear = false;
@@ -262,11 +265,12 @@ public:
             
             //Dirty filthy hack
             //If we've got X frames send a forced message to the key thing to stop and output the key
-            if(frameOutCount % computeFrameCount == 0 && computeFrameCount > 0) {
+            if(frameOutCount % computeFrameCount == 0 && computeFrameCount > 0 && rmsLevel >= rmsThreshold) {
                 key->shouldStop(true);
                 key->process();
                 
-                if(pool.contains<std::string>("key")) {
+                if(pool.contains<std::string>("key"))
+                {
                     keyString = pool.value<std::string>("key");
                     scaleString = (pool.value<std::string>("scale")=="minor"?"m":"M");
                 }
@@ -302,9 +306,9 @@ public:
             
             //Clear out the key algorithm
             if(frameOutCount % (computeFrameCount+1) == 0 && computeFrameCount > 0) {
-                //                key->reset();
+                key->reset(asdfa);
 //                n->reset();
-                aggrPool.clear();
+//                aggrPool.clear();
                 frameOutCount = 0;
             }
             

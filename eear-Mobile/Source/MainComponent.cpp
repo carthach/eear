@@ -13,6 +13,7 @@
 #include "AudioRecordingDemo.cpp"
 #include "SettingsComponent.h"
 #include "Common.h"
+#include "CustomLookAndFeel.h"
 
 //==============================================================================
 class MainTab  : public TabbedComponent
@@ -21,9 +22,10 @@ public:
     MainTab (AudioDeviceManager& deviceManager)
     : TabbedComponent (TabbedButtonBar::TabsAtTop)
     {
-        addTab ("Interface",  eear::Colour::back(), new AudioRecordingDemo(&deviceManager), true);
-        addTab ("Settings",  eear::Colour::back(), new SettingsComponent((AudioRecordingDemo *)getTabContentComponent(0)), true);
+        setTabBarDepth(60);
         
+        addTab ("Interface",  eear::Colour::back(), new AudioRecordingDemo(&deviceManager), true);
+        addTab ("Settings",  eear::Colour::back(), new SettingsComponent((AudioRecordingDemo *)getTabContentComponent(0)), true);        
     }
 };
 
@@ -51,6 +53,13 @@ public:
         //        deviceManager.in
         
         addAndMakeVisible(mainTab);
+        
+        LookAndFeel::setDefaultLookAndFeel (&lookAndFeel);
+
+        lookAndFeel.setColour(Label::ColourIds::textColourId, Colours::white);
+        lookAndFeel.setColour(TextEditor::ColourIds::backgroundColourId, Colours::grey);
+        lookAndFeel.setColour(Slider::ColourIds::textBoxBackgroundColourId, Colours::grey);
+//        lookAndFeel.setColour(Label::ColourIds::textColourId, juce::Colour::fromRGB(119,195,214));
     }
     
     ~MainContentComponent()
@@ -115,9 +124,11 @@ private:
     //    AudioRecordingDemo recorder;
     
     MainTab mainTab;
+    CustomLookAndFeel lookAndFeel;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };
+
 
 
 // (This function is called by the app startup code to create our main component)
