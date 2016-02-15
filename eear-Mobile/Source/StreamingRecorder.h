@@ -37,12 +37,14 @@ public:
     
     float rmsLevel = 0.0f;
     float rmsThreshold = 0.05f;
-    
+//    alpha filter on rms values
+    float rmsAlpha = 0.1;
     //As suggested by KeyExtractor
     int frameSize = 4096;
     int hopSize = 2048;
     
     int computeFrameCount = 8;
+    int  sensitivity = 5;
     
     StreamingRecorder () : Thread("ESSENTIA_THREAD"), sampleRate (0), recording(false)
     {
@@ -167,7 +169,7 @@ public:
                                                             "defaultStats", essentia::arrayToVector<std::string>(stats));
         aggr->input("input").set(pool);
         aggr->output("output").set(aggrPool);
-        
+
         n = new essentia::scheduler::Network(ringBufferInput);
         n->runPrepare();
         startThread();
@@ -175,6 +177,13 @@ public:
     
     ~StreamingRecorder()
     {
+        
+        // thread is waiting conditionBuffer from ringBufInput...
+        ringBufferInput->shouldStop(true);
+        vector<float> dumb(2*frameSize);
+        ringBufferInput->add(&dumb[0], 2*frameSize);
+        stopThread(1000);
+        
         
         n->clear(); //This takes care of deleting the algorithms in the network...
         
@@ -184,7 +193,7 @@ public:
         
         essentia::shutdown();
         
-        stopThread(1000);
+        
     }
     
     //==============================================================================
@@ -238,7 +247,7 @@ public:
 
             AudioSampleBuffer buffer (const_cast<float**> (inputChannelData), 1, numSamples);
             
-            rmsLevel = buffer.getRMSLevel(0, 0, buffer.getNumSamples());
+            rmsLevel = rmsAlpha * rmsLevel + (1-rmsAlpha)*buffer.getRMSLevel(0, 0, buffer.getNumSamples());
             
             //            std::cout << buffer.getRMSLevel(0, 0, buffer.getNumSamples()) << "\n";
             
@@ -257,7 +266,7 @@ public:
         bool shouldClear = false;
         
         //This is the Essentia thread, you need to consume the RingBuffer and do your work
-        while(!threadShouldExit())
+        while(isThreadRunning() && !threadShouldExit())
         {
             //                const ScopedLock sl (writerLock);
             
@@ -265,7 +274,7 @@ public:
             
             //Dirty filthy hack
             //If we've got X frames send a forced message to the key thing to stop and output the key
-            if(frameOutCount % computeFrameCount == 0 && computeFrameCount > 0 && rmsLevel >= rmsThreshold) {
+            if(frameOutCount % computeFrameCount == 0 && computeFrameCount > 0  ){//&& rmsLevel >= rmsThreshold) {
                 key->shouldStop(true);
                 key->process();
                 
@@ -275,6 +284,20 @@ public:
                     scaleString = (pool.value<std::string>("scale")=="minor"?"m":"M");
                 }
                 
+                
+                
+                // aggregator dont add .mean if only one element so subsequent computations will throw exceptions
+                if(pool.contains<vector<std::vector<essentia::Real> > >("mfcc")){
+                    if(pool.getVectorRealPool().at("mfcc").size() ==1){
+                        pool.add("mfcc",pool.getVectorRealPool().at("mfcc")[0]);
+                    }
+                }
+                if(pool.contains<vector<std::vector<essentia::Real> > >("hpcp")){
+                    if(pool.getVectorRealPool().at("hpcp").size() ==1){
+                        pool.add("hpcp",pool.getVectorRealPool().at("hpcp")[0]);
+                    }
+                }
+
                 aggr->compute();
                 std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
                 
@@ -283,19 +306,28 @@ public:
                 spectralCentroidValue = reals["spectralCentroid"].back();
                
                 // filter median
-//                if(scaleString=="m"){keyPoolMinor[keyString ]++;}
-//                else{keyPoolMajor[keyString ]++;}
-//                String minorBest = getBestInPool(keyPoolMinor);
-//                String majorBest = getBestInPool(keyPoolMajor);
-//                if(keyPoolMinor[minorBest]>keyPoolMajor[majorBest]){
-//                    scaleString = "m";
-//                    keyString = minorBest;
-//                }
-//                else{
-//                    keyString = majorBest;
-//                    scaleString = "M";
-//                }
-//                
+                
+                for(auto & k:keyPoolMajor){
+                   k.second = jmin(20,jmax(0,k.second-1));
+                }
+                for(auto & k:keyPoolMinor){
+                    k.second = jmin(20,jmax(0,k.second-1));
+                }
+                if(scaleString=="m"){keyPoolMinor[keyString ]+=sensitivity;}
+                else{keyPoolMajor[keyString ]+=5;}
+                String minorBest = getBestInPool(keyPoolMinor);
+                String majorBest = getBestInPool(keyPoolMajor);
+                if(keyPoolMinor[minorBest]>keyPoolMajor[majorBest]){
+                    scaleString = "m";
+                    keyString = minorBest;
+                }
+                else{
+                    keyString = majorBest;
+                    scaleString = "M";
+                }
+                
+                
+                //
                 
                 
                 
@@ -306,7 +338,7 @@ public:
             
             //Clear out the key algorithm
             if(frameOutCount % (computeFrameCount+1) == 0 && computeFrameCount > 0) {
-                key->reset(asdfa);
+                key->reset();
 //                n->reset();
 //                aggrPool.clear();
                 frameOutCount = 0;
@@ -327,8 +359,14 @@ public:
             //            sleep (1);
         }
     }
-    
+
+
 private:
+
+vector<int> oldKeyValues;
+vector<float> oldStrengths;
+
+
     //    AudioThumbnail& thumbnail;
     double sampleRate;
     bool recording = false;

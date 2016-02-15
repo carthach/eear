@@ -160,7 +160,7 @@ public:
         
         spectralPeaks = factory.create("SpectralPeaks",
                                        "orderBy", "magnitude", "magnitudeThreshold", 1e-05,
-                                       "minFrequency", 40, "maxFrequency", 5000, "maxPeaks", 10000);
+                                       "minFrequency", 500, "maxFrequency", 5000, "maxPeaks", 10000);
         
         spectralPeaks->input("spectrum").set(spectrum);
         spectralPeaks->output("frequencies").set(frequencies);

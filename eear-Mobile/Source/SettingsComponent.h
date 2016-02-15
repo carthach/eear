@@ -148,7 +148,7 @@ public:
             {
                 if (recorder->recorder.isRecording())
                     recorder->stopRecording();
-                recorder->recorder.computeFrameCount = frameValue;
+                recorder->recorder.sensitivity = slider->getValue();
                 
             }
         }
