@@ -624,7 +624,7 @@ struct MouseInputSource::SourceList  : public Timer
         {
             if (MouseInputSource* mouse = getMouseSource (touchIndex))
                 return mouse;
-            
+
             if (! addSource())
             {
                 for(int i = sourceArray.size() ; i < touchIndex+1 ; i++){
@@ -634,8 +634,8 @@ struct MouseInputSource::SourceList  : public Timer
                 
                 
                 
-                //                jassertfalse; // not enough mouse sources!
-                //                return nullptr;
+//                jassertfalse; // not enough mouse sources!
+//                return nullptr;
             }
         }
     }

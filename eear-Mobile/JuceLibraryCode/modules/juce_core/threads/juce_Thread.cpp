@@ -26,11 +26,12 @@
   ==============================================================================
 */
 
-Thread::Thread (const String& threadName_)
+Thread::Thread (const String& threadName_, const size_t stackSize)
     : threadName (threadName_),
       threadHandle (nullptr),
       threadId (0),
       threadPriority (5),
+      threadStackSize (stackSize),
       affinityMask (0),
       shouldExit (false)
 {
@@ -100,8 +101,9 @@ void Thread::threadEntryPoint()
         {
             run();
         }
-        catch (...)
+        catch (std::exception e)
         {
+            DBG(String(e.what()));
             jassertfalse; // Your run() method mustn't throw any exceptions!
         }
     }

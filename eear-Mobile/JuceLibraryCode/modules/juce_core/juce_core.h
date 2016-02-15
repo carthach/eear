@@ -133,6 +133,10 @@
 //=============================================================================
 //=============================================================================
 
+#if JUCE_CORE_INCLUDE_NATIVE_HEADERS
+ #include "native/juce_BasicNativeHeaders.h"
+#endif
+
 #include "system/juce_StandardHeader.h"
 
 namespace juce
@@ -188,6 +192,7 @@ extern JUCE_API void JUCE_CALLTYPE logAssertion (const char* file, int line) noe
 #include "threads/juce_CriticalSection.h"
 #include "maths/juce_Range.h"
 #include "maths/juce_NormalisableRange.h"
+#include "maths/juce_StatisticsAccumulator.h"
 #include "containers/juce_ElementComparator.h"
 #include "containers/juce_ArrayAllocationBase.h"
 #include "containers/juce_Array.h"
@@ -268,6 +273,19 @@ extern JUCE_API void JUCE_CALLTYPE logAssertion (const char* file, int line) noe
 #include "zip/juce_ZipFile.h"
 #include "containers/juce_PropertySet.h"
 #include "memory/juce_SharedResourcePointer.h"
+
+#if JUCE_CORE_INCLUDE_OBJC_HELPERS && (JUCE_MAC || JUCE_IOS)
+ #include "native/juce_osx_ObjCHelpers.h"
+#endif
+
+#if JUCE_CORE_INCLUDE_COM_SMART_PTR && JUCE_WINDOWS
+ #include "native/juce_win32_ComSmartPtr.h"
+#endif
+
+#if JUCE_CORE_INCLUDE_JNI_HELPERS && JUCE_ANDROID
+ #include "native/juce_android_JNIHelpers.h"
+#endif
+
 
 #ifndef DOXYGEN
  /*
