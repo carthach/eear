@@ -32,14 +32,14 @@ public:
     {
         addAndMakeVisible (frameSlider);
         frameSlider.setRange (1.0, 44100.0/512.0, 1.0);
-        frameSlider.setValue (8, dontSendNotification);
+        frameSlider.setValue (recorder->recorder.computeFrameCount, dontSendNotification);
         frameSlider.setSliderStyle (Slider::LinearHorizontal);
         frameSlider.setTextBoxStyle (Slider::TextBoxRight, false, 30, 20);
         frameSlider.addListener (this);
         
         addAndMakeVisible (frameSliderLabel);
         frameSliderLabel.setText ("Size of Buffer", dontSendNotification);
-//        frameSliderLabel.attachToComponent (&frameSlider, true);
+        //        frameSliderLabel.attachToComponent (&frameSlider, true);
         
         addAndMakeVisible (ipAddressLabel);
         ipAddressLabel.setText ("IP Address:", dontSendNotification);
@@ -57,21 +57,21 @@ public:
         portNumberTextBox.setText("8000");
         portNumberTextBox.addListener(this);
         
-//        saveButton.setButtonText("Save");
-//        addAndMakeVisible(saveButton);
+        //        saveButton.setButtonText("Save");
+        //        addAndMakeVisible(saveButton);
         
         
         
-//        addAndMakeVisible (sensitivitySlider);
-//        sensitivitySlider.setRange (0.0, 1.5, .80);
-//        sensitivitySlider.setValue (.8, dontSendNotification);
-//        sensitivitySlider.setSliderStyle (Slider::LinearBarVertical);
-//        sensitivitySlider.setTextBoxStyle (Slider::TextBoxRight, false, 30, 20);
-//        sensitivitySlider.addListener (this);
-//        
-//        addAndMakeVisible (sensitivitySliderLabel);
-//        sensitivitySliderLabel.setText ("Gain", dontSendNotification);
-//        sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
+        addAndMakeVisible (sensitivitySlider);
+        sensitivitySlider.setRange (0, 20, 1);
+        sensitivitySlider.setValue (20 - recorder->recorder.sensitivity, dontSendNotification);
+        sensitivitySlider.setSliderStyle (Slider::LinearHorizontal);
+        sensitivitySlider.setTextBoxStyle (Slider::TextBoxRight, false, 30, 20);
+        sensitivitySlider.addListener (this);
+        //
+        addAndMakeVisible (sensitivitySliderLabel);
+        sensitivitySliderLabel.setText ("New chords sensitivity", dontSendNotification);
+        sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
         
         
         
@@ -84,18 +84,11 @@ public:
     }
     
     //=======================================================================
-    void paint (Graphics& g) override
-    {
-        // (Our component is opaque, so we must completely fill the background with a solid colour)
-        //        g.fillAll(Colours::black);
-        
-        
-        // You can add your drawing code here!
-    }
+    
     
     void textEditorFocusLost (TextEditor& t) {
         if(&t == &portNumberTextBox ){
-//            recorder->oscPort =std::stoi(t.getText().toStdString());
+            //            recorder->oscPort =std::stoi(t.getText().toStdString());
             recorder->oscPort= t.getText().getIntValue();
         }
         else if (&t == &ipAddressTextBox){
@@ -107,59 +100,67 @@ public:
     
     void resized() override
     {
-        //Just one sub component
-        
-        Rectangle<int> labelBounds(20, 0, 100, 30);
-        Rectangle<int> valueBounds(125, 0, 150, 25);
-        
-        int labelY = 0;
-        int height = 50;
-        
-//        oscInfoLabel.setBounds(labelBounds.withY(labelY+=height));
-        
-        ipAddressLabel.setBounds(labelBounds.withY(labelY+=height));
-        ipAddressTextBox.setBounds(valueBounds.withY(labelY));
-        portNumberLabel.setBounds(labelBounds.withY(labelY+=height));
-        portNumberTextBox.setBounds(valueBounds.withY(labelY));
-        
-        frameSliderLabel.setBounds(labelBounds.withY(labelY+=height));
-        frameSlider.setBounds (valueBounds.withY(labelY));
-        
-//        saveButton.setBounds(labelBounds.withY(labelY+=height));
-//        saveButton.addListener(this);
-        
-        sensitivitySlider.setBounds(labelBounds.withY(labelY+=height).withHeight(height * 5));
-        
-    }
+    //Just one sub component
     
-    void buttonClicked (Button *) override
-    {
-        //        recorder->ipAddress = ipAddressTextBox.getText();
-        //        recorder->portNumber = portNumberTextBox.getText().getIntValue();
-        //
-    }
+    Rectangle<int> labelBounds(20, 0, 100, 30);
+    Rectangle<int> valueBounds(125, 0, 150, 25);
     
-    void sliderValueChanged (Slider *slider) override
+    int labelY = 0;
+    int height = 50;
+    
+    //        oscInfoLabel.setBounds(labelBounds.withY(labelY+=height));
+    
+    ipAddressLabel.setBounds(labelBounds.withY(labelY+=height));
+    ipAddressTextBox.setBounds(valueBounds.withY(labelY));
+    portNumberLabel.setBounds(labelBounds.withY(labelY+=height));
+    portNumberTextBox.setBounds(valueBounds.withY(labelY));
+    
+    frameSliderLabel.setBounds(labelBounds.withY(labelY+=height));
+    frameSlider.setBounds (valueBounds.withY(labelY));
+    
+    
+    sensitivitySliderLabel.setBounds(labelBounds.withY(labelY+=height));
+    sensitivitySlider.setBounds (valueBounds.withY(labelY));
+    
+    
+}
+
+void buttonClicked (Button *) override
+{
+//        recorder->ipAddress = ipAddressTextBox.getText();
+//        recorder->portNumber = portNumberTextBox.getText().getIntValue();
+//
+}
+
+void sliderValueChanged (Slider *slider) override
+{
+if (slider == &frameSlider)
+{
+    int frameValue = int(slider->getValue());
+    if(frameValue != recorder->recorder.computeFrameCount)
     {
-        if (slider == &frameSlider)
-        {
-            int frameValue = int(slider->getValue());
-            if(frameValue != recorder->recorder.computeFrameCount)
-            {
-                if (recorder->recorder.isRecording())
-                    recorder->stopRecording();
-                recorder->recorder.sensitivity = slider->getValue();
-                
+        if (recorder->recorder.isRecording())
+            recorder->stopRecording();
             }
-        }
-        else if(slider == &sensitivitySlider)
-        {
-            recorder->recorder.rmsThreshold = slider->getValue();
-            
-        }
-    }
+    recorder->recorder.computeFrameCount = slider->getValue();
+}
+else if(slider == &sensitivitySlider)
+{
+    recorder->recorder.sensitivity = jmax(2.0,slider->getMaximum() - slider->getValue());
     
-    
+}
+}
+
+
+void paint (Graphics& g) override
+{
+// (Our component is opaque, so we must completely fill the background with a solid colour)
+//        g.fillAll(Colours::black);
+
+
+// You can add your drawing code here!
+}
+
 };
 
 #endif

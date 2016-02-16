@@ -27,10 +27,11 @@ public:
     
     essentia::scheduler::Network* n;
     
-    essentia::Pool pool, aggrPool;
-    essentia::standard::Algorithm* aggr;
+    essentia::Pool pool;//, aggrPool;
+//    essentia::standard::Algorithm* aggr;
     
     String keyString, scaleString;
+    float keyStrength;
     essentia::Real rmsValue, spectralFlatnessValue, spectralCentroidValue;
     map< String,int > keyPoolMajor;
     map< String,int > keyPoolMinor;
@@ -43,8 +44,8 @@ public:
     int frameSize = 4096;
     int hopSize = 2048;
     
-    int computeFrameCount = 8;
-    int  sensitivity = 5;
+    int computeFrameCount = 10;
+    int  sensitivity = 13;
     
     StreamingRecorder () : Thread("ESSENTIA_THREAD"), sampleRate (0), recording(false)
     {
@@ -165,10 +166,10 @@ public:
         
         const char* stats[] = { "mean"};
         
-        aggr = essentia::standard::AlgorithmFactory::create("PoolAggregator",
-                                                            "defaultStats", essentia::arrayToVector<std::string>(stats));
-        aggr->input("input").set(pool);
-        aggr->output("output").set(aggrPool);
+//        aggr = essentia::standard::AlgorithmFactory::create("PoolAggregator",
+//                                                            "defaultStats", essentia::arrayToVector<std::string>(stats));
+//        aggr->input("input").set(pool);
+//        aggr->output("output").set(aggrPool);
 
         n = new essentia::scheduler::Network(ringBufferInput);
         n->runPrepare();
@@ -189,7 +190,7 @@ public:
         
         //But the network and aggr were allocated manually...
         delete n;
-        delete aggr;
+//        delete aggr;
         
         essentia::shutdown();
         
@@ -207,7 +208,7 @@ public:
             clearKeyPool(keyPoolMajor);
             clearKeyPool(keyPoolMinor);
             
-            aggrPool.clear();
+//            aggrPool.clear();
             
             recording = true;
         }
@@ -282,23 +283,28 @@ public:
                 {
                     keyString = pool.value<std::string>("key");
                     scaleString = (pool.value<std::string>("scale")=="minor"?"m":"M");
+                    keyStrength = pool.value<essentia::Real>("strength");
+
                 }
+                    else{
+                        keyStrength = 0;
+                    }
                 
                 
                 
                 // aggregator dont add .mean if only one element so subsequent computations will throw exceptions
-                if(pool.contains<vector<std::vector<essentia::Real> > >("mfcc")){
-                    if(pool.getVectorRealPool().at("mfcc").size() ==1){
-                        pool.add("mfcc",pool.getVectorRealPool().at("mfcc")[0]);
-                    }
-                }
-                if(pool.contains<vector<std::vector<essentia::Real> > >("hpcp")){
-                    if(pool.getVectorRealPool().at("hpcp").size() ==1){
-                        pool.add("hpcp",pool.getVectorRealPool().at("hpcp")[0]);
-                    }
-                }
+//                if(pool.contains<vector<std::vector<essentia::Real> > >("mfcc")){
+//                    if(pool.getVectorRealPool().at("mfcc").size() ==1){
+//                        pool.add("mfcc",pool.getVectorRealPool().at("mfcc")[0]);
+//                    }
+//                }
+//                if(pool.contains<vector<std::vector<essentia::Real> > >("hpcp")){
+//                    if(pool.getVectorRealPool().at("hpcp").size() ==1){
+//                        pool.add("hpcp",pool.getVectorRealPool().at("hpcp")[0]);
+//                    }
+//                }
 
-                aggr->compute();
+//                aggr->compute();
                 std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
                 
                 rmsValue = reals["rms"].back();
@@ -313,8 +319,8 @@ public:
                 for(auto & k:keyPoolMinor){
                     k.second = jmin(20,jmax(0,k.second-1));
                 }
-                if(scaleString=="m"){keyPoolMinor[keyString ]+=sensitivity;}
-                else{keyPoolMajor[keyString ]+=5;}
+                if(scaleString=="m"){keyPoolMinor[keyString ]+=sensitivity*keyStrength;}
+                else{keyPoolMajor[keyString ]+=sensitivity*keyStrength;}
                 String minorBest = getBestInPool(keyPoolMinor);
                 String majorBest = getBestInPool(keyPoolMajor);
                 if(keyPoolMinor[minorBest]>keyPoolMajor[majorBest]){
