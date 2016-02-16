@@ -45,7 +45,7 @@ public:
         setOpaque (true);
         clear();
         
-        startTimerHz (75); // use a timer to keep repainting this component
+        startTimerHz (25); // use a timer to keep repainting this component
     }
     
     //==============================================================================
