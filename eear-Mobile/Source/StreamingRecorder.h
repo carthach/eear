@@ -23,29 +23,28 @@ class StreamingRecorder  : public AudioIODeviceCallback, public Thread, public C
     
 public:
     essentia::streaming::RingBufferInput* ringBufferInput;
-    essentia::streaming::Algorithm *fc, *w, *spectrum, *spectralPeaks, *hpcpKey, *key, *mfcc, *rms, *spectralCentroid, *spectralFlatness;
+    essentia::streaming::Algorithm *fc, *w, *spectrum, *spectralPeaks, *hpcpKey, *key, *mfcc, *rms, *spectralCentroid, *spectralFlatness , *highPass;
     
     essentia::scheduler::Network* n;
     
-    essentia::Pool pool;//, aggrPool;
-//    essentia::standard::Algorithm* aggr;
+    essentia::Pool pool;
     
     String keyString, scaleString;
     float keyStrength;
     essentia::Real rmsValue, spectralFlatnessValue, spectralCentroidValue;
-    map< String,int > keyPoolMajor;
-    map< String,int > keyPoolMinor;
+    map< String,float > keyPoolMajor;
+    map< String,float > keyPoolMinor;
     
     float rmsLevel = 0.0f;
     float rmsThreshold = 0.05f;
-//    alpha filter on rms values
+    //    alpha filter on rms values
     float rmsAlpha = 0.1;
     //As suggested by KeyExtractor
     int frameSize = 4096;
     int hopSize = 2048;
     
-    int computeFrameCount = 10;
-    int  sensitivity = 13;
+    int computeFrameCount = 15;
+    int  sensitivity = 1;
     
     StreamingRecorder () : Thread("ESSENTIA_THREAD"), sampleRate (0), recording(false)
     {
@@ -53,7 +52,7 @@ public:
     }
     
     
-    void clearKeyPool(map<String,int > & keyPool)
+    void clearKeyPool(map<String,float > & keyPool)
     {
         keyPool["A"] = 0;
         keyPool["A#"] = 0;
@@ -72,7 +71,7 @@ public:
         
     }
     
-    String getBestInPool(map<String,int > & keyPool)
+    String getBestInPool(map<String,float > & keyPool)
     {
         String res;
         int max = 0;
@@ -108,6 +107,8 @@ public:
         //        fc = factory.create("FrameCutter");
         
         // instantiate all required algorithms
+        
+        highPass =  factory.create("HighPass","cutoffFrequency",300,"sampleRate",44100);
         fc = factory.create("FrameCutter",
                             "frameSize", frameSize,
                             "hopSize", hopSize,
@@ -115,13 +116,13 @@ public:
                             "startFromZero", false);
         //
         // instantiate all required algorithms
-        fc = factory.create("FrameCutter");
+        //        fc = factory.create("FrameCutter");
         
         w     = factory.create("Windowing", "type", "blackmanharris62");
         spectrum      = factory.create("Spectrum");
         spectralPeaks = factory.create("SpectralPeaks",
-                                       "orderBy", "magnitude", "magnitudeThreshold", 1e-05,
-                                       "minFrequency", 40, "maxFrequency", 5000, "maxPeaks", 10000);
+                                       "orderBy", "magnitude", "magnitudeThreshold", 1e-08,
+                                       "minFrequency", 40, "maxFrequency", 6000, "maxPeaks", 10000);
         hpcpKey       = factory.create("HPCP");
         key           = factory.create("Key");
         key->configure();
@@ -132,7 +133,8 @@ public:
         
         
         // Audio -> FrameCutter
-        ringBufferInput->output("signal")    >>  fc->input("signal");
+        ringBufferInput->output("signal")    >> highPass->input("signal");
+        highPass->output("signal") >> fc->input("signal");
         
         // connect inner algorithms
         fc->output("frame")          >>  w->input("frame");
@@ -164,13 +166,7 @@ public:
         spectrum->output("spectrum") >> spectralCentroid->input("array");
         spectralCentroid->output("centroid") >> PC(pool, "spectralCentroid");
         
-        const char* stats[] = { "mean"};
         
-//        aggr = essentia::standard::AlgorithmFactory::create("PoolAggregator",
-//                                                            "defaultStats", essentia::arrayToVector<std::string>(stats));
-//        aggr->input("input").set(pool);
-//        aggr->output("output").set(aggrPool);
-
         n = new essentia::scheduler::Network(ringBufferInput);
         n->runPrepare();
         startThread();
@@ -190,7 +186,7 @@ public:
         
         //But the network and aggr were allocated manually...
         delete n;
-//        delete aggr;
+        //        delete aggr;
         
         essentia::shutdown();
         
@@ -208,7 +204,7 @@ public:
             clearKeyPool(keyPoolMajor);
             clearKeyPool(keyPoolMinor);
             
-//            aggrPool.clear();
+            //            aggrPool.clear();
             
             recording = true;
         }
@@ -228,143 +224,133 @@ public:
     //==============================================================================
     void audioDeviceAboutToStart (AudioIODevice* device) override
     {
-        sampleRate = device->getCurrentSampleRate();
-    }
-    
-    void audioDeviceStopped() override
-    {
-        sampleRate = 0;
-    }
-    
-    void audioDeviceIOCallback (const float** inputChannelData, int numIn/*numInputChannels*/,
-                                float** outputChannelData, int numOutputChannels,
-                                int numSamples) override
-    {
-        if(recording) {
-            //            const ScopedLock sl (writerLock);
-            
-            //Put the samples into the RingBuffer
-            //According to ringbufferimpl.h Essentia should handle thread safety...
+    sampleRate = device->getCurrentSampleRate();
+}
 
-            AudioSampleBuffer buffer (const_cast<float**> (inputChannelData), 1, numSamples);
-            
-            rmsLevel = rmsAlpha * rmsLevel + (1-rmsAlpha)*buffer.getRMSLevel(0, 0, buffer.getNumSamples());
-            
-            //            std::cout << buffer.getRMSLevel(0, 0, buffer.getNumSamples()) << "\n";
-            
-            ringBufferInput->add(const_cast<essentia::Real *> (inputChannelData[0]), numSamples);
+void audioDeviceStopped() override
+{
+sampleRate = 0;
+}
+
+void audioDeviceIOCallback (const float** inputChannelData, int numIn/*numInputChannels*/,
+                            float** outputChannelData, int numOutputChannels,
+                            int numSamples) override
+{
+if(recording) {
+    //            const ScopedLock sl (writerLock);
+    
+    //Put the samples into the RingBuffer
+    //According to ringbufferimpl.h Essentia should handle thread safety...
+    
+    AudioSampleBuffer buffer (const_cast<float**> (inputChannelData), 1, numSamples);
+    
+    rmsLevel = rmsAlpha * rmsLevel + (1-rmsAlpha)*buffer.getRMSLevel(0, 0, buffer.getNumSamples());
+    
+    //            std::cout << buffer.getRMSLevel(0, 0, buffer.getNumSamples()) << "\n";
+    
+    ringBufferInput->add(const_cast<essentia::Real *> (inputChannelData[0]), numSamples);
+}
+
+// We need to clear the output buffers, in case they're full of junk..
+for (int i = 0; i < numOutputChannels; ++i)
+if (outputChannelData[i] != nullptr)
+FloatVectorOperations::clear (outputChannelData[i], numSamples);
+}
+
+void run() override
+{
+
+int frameOutCount = 0;
+bool inited = false;
+
+//This is the Essentia thread, you need to consume the RingBuffer and do your work
+while(isThreadRunning() && !threadShouldExit())
+{
+    //                const ScopedLock sl (writerLock);
+    
+    n->runStep();
+    frameOutCount++;
+    //Dirty filthy hack
+    //If we've got X frames send a forced message to the key thing to stop and output the key
+    
+    
+    if(frameOutCount % computeFrameCount == 0 && computeFrameCount > 0  ){//&& rmsLevel >= rmsThreshold) {
+        
+        key->shouldStop(true);
+        bool enoughFramesForHPCP = true;
+        try{
+            key->process();
+        }
+        catch(essentia::EssentiaException e){
+            DBG(e.what());
+            enoughFramesForHPCP = false;
         }
         
-        // We need to clear the output buffers, in case they're full of junk..
-        for (int i = 0; i < numOutputChannels; ++i)
-            if (outputChannelData[i] != nullptr)
-                FloatVectorOperations::clear (outputChannelData[i], numSamples);
-    }
-    
-    void run() override
-    {
-        int frameOutCount = 0;
-        bool shouldClear = false;
-        
-        //This is the Essentia thread, you need to consume the RingBuffer and do your work
-        while(isThreadRunning() && !threadShouldExit())
-        {
-            //                const ScopedLock sl (writerLock);
-            
+        if(enoughFramesForHPCP){
             n->runStep();
-            
-            //Dirty filthy hack
-            //If we've got X frames send a forced message to the key thing to stop and output the key
-            if(frameOutCount % computeFrameCount == 0 && computeFrameCount > 0  ){//&& rmsLevel >= rmsThreshold) {
-                key->shouldStop(true);
-                key->process();
+            if(pool.contains<std::string>("key"))
+            {
+                keyString = pool.value<std::string>("key");
+                scaleString = (pool.value<std::string>("scale")=="minor"?"m":"M");
+                keyStrength = pool.value<essentia::Real>("strength");
                 
-                if(pool.contains<std::string>("key"))
-                {
-                    keyString = pool.value<std::string>("key");
-                    scaleString = (pool.value<std::string>("scale")=="minor"?"m":"M");
-                    keyStrength = pool.value<essentia::Real>("strength");
-
-                }
-                    else{
-                        keyStrength = 0;
-                    }
-                
-                
-                
-                // aggregator dont add .mean if only one element so subsequent computations will throw exceptions
-//                if(pool.contains<vector<std::vector<essentia::Real> > >("mfcc")){
-//                    if(pool.getVectorRealPool().at("mfcc").size() ==1){
-//                        pool.add("mfcc",pool.getVectorRealPool().at("mfcc")[0]);
-//                    }
-//                }
-//                if(pool.contains<vector<std::vector<essentia::Real> > >("hpcp")){
-//                    if(pool.getVectorRealPool().at("hpcp").size() ==1){
-//                        pool.add("hpcp",pool.getVectorRealPool().at("hpcp")[0]);
-//                    }
-//                }
-
-//                aggr->compute();
-                std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
-                
-                rmsValue = reals["rms"].back();
-                spectralFlatnessValue = reals["spectralFlatness"].back();
-                spectralCentroidValue = reals["spectralCentroid"].back();
-               
-                // filter median
-                
-                for(auto & k:keyPoolMajor){
-                   k.second = jmin(20,jmax(0,k.second-1));
-                }
-                for(auto & k:keyPoolMinor){
-                    k.second = jmin(20,jmax(0,k.second-1));
-                }
-                if(scaleString=="m"){keyPoolMinor[keyString ]+=sensitivity*keyStrength;}
-                else{keyPoolMajor[keyString ]+=sensitivity*keyStrength;}
-                String minorBest = getBestInPool(keyPoolMinor);
-                String majorBest = getBestInPool(keyPoolMajor);
-                if(keyPoolMinor[minorBest]>keyPoolMajor[majorBest]){
-                    scaleString = "m";
-                    keyString = minorBest;
-                }
-                else{
-                    keyString = majorBest;
-                    scaleString = "M";
-                }
-                
-                
-                //
-                
-                
-                
-                sendChangeMessage();
-                //                if(frameOutCount % 32 == 0)
-                //                    key->reset();
+            }
+            else{
+                keyStrength = 0;
+            }
+            if(rmsLevel<0.005){
+                keyStrength = 0;
             }
             
-            //Clear out the key algorithm
-            if(frameOutCount % (computeFrameCount+1) == 0 && computeFrameCount > 0) {
-                key->reset();
-//                n->reset();
-//                aggrPool.clear();
-                frameOutCount = 0;
+            
+            std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
+            
+            rmsValue = reals["rms"].back();
+            spectralFlatnessValue = reals["spectralFlatness"].back();
+            spectralCentroidValue = reals["spectralCentroid"].back();
+            
+            // filter median
+            
+            for(auto & k:keyPoolMajor){
+                k.second = jmin(40.0f,jmax(0.0f,k.second*0.9f -1));
+            }
+            for(auto & k:keyPoolMinor){
+                k.second = jmin(40.0f,jmax(0.0f,k.second*0.9f -1));
+            }
+            if(scaleString=="m"){keyPoolMinor[keyString ]+=sensitivity*keyStrength;}
+            else{keyPoolMajor[keyString ]+=sensitivity*keyStrength;}
+            String minorBest = getBestInPool(keyPoolMinor);
+            String majorBest = getBestInPool(keyPoolMajor);
+            if(keyPoolMinor[minorBest]>keyPoolMajor[majorBest]){
+                scaleString = "m";
+                keyString = minorBest;
+            }
+            else{
+                keyString = majorBest;
+                scaleString = "M";
             }
             
-            //            std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
+            
             //
-            //            rmsValue = reals["rms"].back();
-            //            spectralFlatnessValue = reals["spectralFlatness"].back();
-            //            spectralCentroidValue = reals["spectralCentroid"].back();
             
             
             
-            //Notify of change
-            
-            frameOutCount++;
-            
-            //            sleep (1);
         }
+        
+        sendChangeMessage();
+        
+        frameOutCount = 0;
+        key->reset();
+        key->shouldStop(false);
     }
+    
+    //                if(frameOutCount % 32 == 0)
+    //                    key->reset();
+}
+
+
+
+}
 
 
 private:
@@ -373,10 +359,10 @@ vector<int> oldKeyValues;
 vector<float> oldStrengths;
 
 
-    //    AudioThumbnail& thumbnail;
-    double sampleRate;
-    bool recording = false;
-    
+//    AudioThumbnail& thumbnail;
+double sampleRate;
+bool recording = false;
+
 };
 
 #endif

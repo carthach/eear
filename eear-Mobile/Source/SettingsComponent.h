@@ -17,7 +17,7 @@ class SettingsComponent : public Component, public Button::Listener, Slider::Lis
 public:
     Label ipAddressLabel, portNumberLabel, oscInfoLabel;
     TextEditor ipAddressTextBox, portNumberTextBox;
-    TextButton saveButton;
+    TextButton continuousRecording;
     AudioRecordingDemo* recorder;
     Slider frameSlider;
     Label frameSliderLabel;
@@ -31,7 +31,7 @@ public:
     SettingsComponent(AudioRecordingDemo* recorder)
     {
         addAndMakeVisible (frameSlider);
-        frameSlider.setRange (1.0, 44100.0/512.0, 1.0);
+        frameSlider.setRange (3.0, 40, 1.0);
         frameSlider.setValue (recorder->recorder.computeFrameCount, dontSendNotification);
         frameSlider.setSliderStyle (Slider::LinearHorizontal);
         frameSlider.setTextBoxStyle (Slider::TextBoxRight, false, 30, 20);
@@ -43,35 +43,40 @@ public:
         
         addAndMakeVisible (ipAddressLabel);
         ipAddressLabel.setText ("IP Address:", dontSendNotification);
-        
+        ipAddressLabel.setMouseClickGrabsKeyboardFocus(true);
+        ipAddressLabel.setWantsKeyboardFocus(true);
         addAndMakeVisible (ipAddressTextBox);
         ipAddressTextBox.setText("127.0.0.1");
         ipAddressTextBox.addListener(this);
-        
+
         addAndMakeVisible (oscInfoLabel);
         oscInfoLabel.setText ("Set OSC Info:", dontSendNotification);
         addAndMakeVisible (portNumberLabel);
         portNumberLabel.setText ("Port Number:", dontSendNotification);
+        portNumberLabel.setMouseClickGrabsKeyboardFocus(true);
+        portNumberLabel.setWantsKeyboardFocus(true);
+        
         
         addAndMakeVisible (portNumberTextBox);
         portNumberTextBox.setText("8000");
         portNumberTextBox.addListener(this);
-        
-        //        saveButton.setButtonText("Save");
-        //        addAndMakeVisible(saveButton);
-        
+    
+        continuousRecording.setButtonText("Set continuous recording");
+        continuousRecording.setClickingTogglesState(true);
+        addAndMakeVisible(continuousRecording);
+        continuousRecording.addListener(this);
         
         
         addAndMakeVisible (sensitivitySlider);
-        sensitivitySlider.setRange (0, 20, 1);
-        sensitivitySlider.setValue (20 - recorder->recorder.sensitivity, dontSendNotification);
+        sensitivitySlider.setRange (1, 20, 1);
+        sensitivitySlider.setValue (recorder->recorder.sensitivity, dontSendNotification);
         sensitivitySlider.setSliderStyle (Slider::LinearHorizontal);
         sensitivitySlider.setTextBoxStyle (Slider::TextBoxRight, false, 30, 20);
         sensitivitySlider.addListener (this);
         //
         addAndMakeVisible (sensitivitySliderLabel);
-        sensitivitySliderLabel.setText ("New chords sensitivity", dontSendNotification);
-        sensitivitySliderLabel.attachToComponent (&sensitivitySlider, true);
+        sensitivitySliderLabel.setText ("Keep chords", dontSendNotification);
+
         
         
         
@@ -102,33 +107,47 @@ public:
     {
     //Just one sub component
     
-    Rectangle<int> labelBounds(20, 0, 100, 30);
-    Rectangle<int> valueBounds(125, 0, 150, 25);
-    
-    int labelY = 0;
-    int height = 50;
-    
+    Rectangle<int> labelBounds= getLocalBounds().withWidth(160);
+    Rectangle<int> valueBounds=labelBounds.withWidth(getLocalBounds().getWidth()-labelBounds.getWidth());
+    valueBounds.setX(labelBounds.getRight() );
+
+
+    int height = getLocalBounds().getHeight() / 7;
+    int pad = 20;
+    // max height
+    int toReduce = jmax(0, height/2-25);
     //        oscInfoLabel.setBounds(labelBounds.withY(labelY+=height));
+    valueBounds.removeFromTop(pad);labelBounds.removeFromTop(pad);
     
-    ipAddressLabel.setBounds(labelBounds.withY(labelY+=height));
-    ipAddressTextBox.setBounds(valueBounds.withY(labelY));
-    portNumberLabel.setBounds(labelBounds.withY(labelY+=height));
-    portNumberTextBox.setBounds(valueBounds.withY(labelY));
+    ipAddressLabel.setBounds(labelBounds.removeFromTop(height));
     
-    frameSliderLabel.setBounds(labelBounds.withY(labelY+=height));
-    frameSlider.setBounds (valueBounds.withY(labelY));
+    ipAddressTextBox.setBounds(valueBounds.removeFromTop(height).reduced(0,toReduce));
+
     
+    valueBounds.removeFromTop(pad);labelBounds.removeFromTop(pad);
+    portNumberLabel.setBounds(labelBounds.removeFromTop(height));
+    portNumberTextBox.setBounds(valueBounds.removeFromTop(height).reduced(0,toReduce));
     
-    sensitivitySliderLabel.setBounds(labelBounds.withY(labelY+=height));
-    sensitivitySlider.setBounds (valueBounds.withY(labelY));
+    valueBounds.removeFromTop(pad);labelBounds.removeFromTop(pad);
+    frameSliderLabel.setBounds(labelBounds.removeFromTop(height));
+    frameSlider.setBounds (valueBounds.removeFromTop(height));
+    
+    valueBounds.removeFromTop(pad);labelBounds.removeFromTop(pad);
+    sensitivitySliderLabel.setBounds(labelBounds.removeFromTop(height));
+    sensitivitySlider.setBounds (valueBounds.removeFromTop(height));
+    
+    valueBounds.removeFromTop(pad);labelBounds.removeFromTop(pad);
+    continuousRecording.setBounds(valueBounds.removeFromTop(height).getUnion(labelBounds.removeFromTop(height)));
     
     
 }
 
-void buttonClicked (Button *) override
+void buttonClicked (Button * b) override
 {
 //        recorder->ipAddress = ipAddressTextBox.getText();
 //        recorder->portNumber = portNumberTextBox.getText().getIntValue();
+    recorder->setContinuousRecording(b->getToggleState());
+
 //
 }
 
@@ -137,17 +156,18 @@ void sliderValueChanged (Slider *slider) override
 if (slider == &frameSlider)
 {
     int frameValue = int(slider->getValue());
-    if(frameValue != recorder->recorder.computeFrameCount)
-    {
-        if (recorder->recorder.isRecording())
-            recorder->stopRecording();
-            }
+//    if(frameValue != recorder->recorder.computeFrameCount)
+//    {
+//        if (recorder->recorder.isRecording())
+//            recorder->stopRecording();
+//     }
     recorder->recorder.computeFrameCount = slider->getValue();
 }
 else if(slider == &sensitivitySlider)
 {
-    recorder->recorder.sensitivity = jmax(2.0,slider->getMaximum() - slider->getValue());
-    
+    recorder->recorder.sensitivity = jmax(1.0, slider->getValue());
+    recorder->recorder.clearKeyPool(recorder->recorder.keyPoolMajor);
+    recorder->recorder.clearKeyPool(recorder->recorder.keyPoolMinor);
 }
 }
 

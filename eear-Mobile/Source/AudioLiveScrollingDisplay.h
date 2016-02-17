@@ -71,7 +71,7 @@ public:
                 if (inputChannelData[chan] != nullptr)
                     inputSample += std::abs (inputChannelData[chan][i]);  // find the sum of all the channels
             
-            pushSample (10.0f * inputSample); // boost the level to make it more easily visible.
+            pushSample (20.0f * inputSample); // boost the level to make it more easily visible.
         }
         
         // We need to clear the output buffers before returning, in case they're full of junk..
@@ -97,15 +97,29 @@ private:
         g.fillAll (eear::Colour::back());
         
         const float midY = getHeight() * 0.5f;
-        int samplesAgo = (nextSample + numElementsInArray (samples) - 1);
-        
+        // reduce amount to be painted
+        const int sampleHop = 5;
+        const int numToAverage = sampleHop;
+        float barWidthPct = .2;
+
+// twice as big for avoiding wrapping errors as everything is modulo
+        int samplesAgo = (nextSample + 2*numElementsInArray (samples) -sampleHop);
+// try to have the same reference point eachTime
+        samplesAgo-=samplesAgo%sampleHop + sampleHop/2;
+
+
         RectangleList<float> waveform;
         waveform.ensureStorageAllocated ((int) numElementsInArray (samples));
-        
-        for (int x = 0; ++x < jmin (getWidth(), (int) numElementsInArray (samples));)
+
+        for (int x = 0; x < jmin (getWidth(), (int) numElementsInArray (samples));x+=sampleHop)
         {
-            const float sampleSize = midY * samples [samplesAgo-- % numElementsInArray (samples)];
-            waveform.addWithoutMerging (Rectangle<float> ((float) x, midY - sampleSize, 1.0f, sampleSize * 2.0f));
+            float sampleSize =0;// midY * samples [(samplesAgo) % numElementsInArray (samples)];
+            for(int j = 0 ; j < numToAverage ; j++){
+                sampleSize += midY * samples [(samplesAgo+ j) % numElementsInArray (samples)];
+            }
+            sampleSize/= 1.0*numToAverage;
+            samplesAgo= (samplesAgo - sampleHop);
+            waveform.addWithoutMerging (Rectangle<float> ((float) x, midY - sampleSize, sampleHop*barWidthPct, sampleSize * 2.0f));
         }
         
         g.setColour (eear::Colour::text());

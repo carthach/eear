@@ -443,6 +443,22 @@ public:
         recording = false;
     }
     
+    
+    void setContinuousRecording(bool t){
+        
+        // safe to use even if already removed/added
+        if(t){
+            recordButton.setToggleState(true, sendNotificationSync);
+            recordButton.removeListener(this);
+            
+        }
+        else{
+
+            recordButton.addListener(this);
+            recordButton.setToggleState(false, sendNotificationSync);
+        }
+    }
+    
 private:
     AudioDeviceManager* deviceManager;
     LiveScrollingAudioDisplay liveAudioScroller;
@@ -505,14 +521,12 @@ private:
         if (button == &recordButton)
         {
 //            cout << button->getState() << endl;
-            switch(button->getState()){
-                    
-                case Button::buttonDown :
+            if(button->getToggleState() || button->isDown()){
                     startRecording();
-                    break;
-                default:
-//                    stopRecording();
-                    break;
+            }
+            else{
+                    stopRecording();
+                
             };
         }
     }
