@@ -459,6 +459,12 @@ public:
         }
     }
     
+    
+    bool setOSCInfo(const  String & ip,int port){
+        oscIP = ip;
+        oscPort = port;
+        return sender.connect(ip, port);
+    }
 private:
     AudioDeviceManager* deviceManager;
     LiveScrollingAudioDisplay liveAudioScroller;
@@ -558,7 +564,7 @@ private:
             rmsTextBox.setText(String(float(recorder.rmsValue), 10));
             spectralFlatnessTextBox.setText(String(recorder.spectralFlatnessValue));
             spectralCentroidTextBox.setText(String(recorder.spectralCentroidValue));
-            spectralHandler.rms = 2000*log(1+recorder.rmsValue);
+            spectralHandler.rms = 10*log(1+recorder.rmsValue);
             spectralHandler.flatness = recorder.spectralFlatnessValue;
             spectralHandler.centroid = juce::jmap(log2(recorder.spectralCentroidValue),log2(400.0f),log2(5000.0f),0.0f,1.0f);
             

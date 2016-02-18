@@ -28,7 +28,6 @@
 #include "modules/juce_gui_extra/juce_gui_extra.h"
 #include "modules/juce_opengl/juce_opengl.h"
 #include "modules/juce_osc/juce_osc.h"
-#include "modules/juce_video/juce_video.h"
 #include "BinaryData.h"
 
 #if ! DONT_SET_USING_JUCE_NAMESPACE
@@ -40,7 +39,7 @@
 #if ! JUCE_DONT_DECLARE_PROJECTINFO
 namespace ProjectInfo
 {
-    const char* const  projectName    = "eear-Mobile";
+    const char* const  projectName    = "eearMobile";
     const char* const  versionString  = "1.0.0";
     const int          versionNumber  = 0x10000;
 }

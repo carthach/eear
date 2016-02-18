@@ -29,7 +29,7 @@ public:
     
     essentia::Pool pool;
     
-    String keyString, scaleString;
+    String keyString, scaleString,oldKey,oldScale;
     float keyStrength;
     essentia::Real rmsValue, spectralFlatnessValue, spectralCentroidValue;
     map< String,float > keyPoolMajor;
@@ -43,8 +43,8 @@ public:
     int frameSize = 4096;
     int hopSize = 2048;
     
-    int computeFrameCount = 15;
-    int  sensitivity = 1;
+    int computeFrameCount = 22;
+    int  sensitivity = 0;
     
     StreamingRecorder () : Thread("ESSENTIA_THREAD"), sampleRate (0), recording(false)
     {
@@ -74,7 +74,7 @@ public:
     String getBestInPool(map<String,float > & keyPool)
     {
         String res;
-        int max = 0;
+        float max = 0;
         for(auto k:keyPool){
             if(k.second>max){
                 max = k.second;
@@ -245,9 +245,7 @@ if(recording) {
     AudioSampleBuffer buffer (const_cast<float**> (inputChannelData), 1, numSamples);
     
     rmsLevel = rmsAlpha * rmsLevel + (1-rmsAlpha)*buffer.getRMSLevel(0, 0, buffer.getNumSamples());
-    
-    //            std::cout << buffer.getRMSLevel(0, 0, buffer.getNumSamples()) << "\n";
-    
+
     ringBufferInput->add(const_cast<essentia::Real *> (inputChannelData[0]), numSamples);
 }
 
@@ -272,8 +270,6 @@ while(isThreadRunning() && !threadShouldExit())
     frameOutCount++;
     //Dirty filthy hack
     //If we've got X frames send a forced message to the key thing to stop and output the key
-    
-    
     if(frameOutCount % computeFrameCount == 0 && computeFrameCount > 0  ){//&& rmsLevel >= rmsThreshold) {
         
         key->shouldStop(true);
@@ -300,36 +296,63 @@ while(isThreadRunning() && !threadShouldExit())
             }
             if(rmsLevel<0.005){
                 keyStrength = 0;
+                clearKeyPool(keyPoolMajor);
+                clearKeyPool(keyPoolMinor);
             }
             
             
             std::map<std::string, std::vector<essentia::Real>  > reals = pool.getRealPool();
             
-            rmsValue = reals["rms"].back();
+            
+            rmsValue = rmsLevel;
+            if(reals.count("spectralFlatness")){
             spectralFlatnessValue = reals["spectralFlatness"].back();
             spectralCentroidValue = reals["spectralCentroid"].back();
-            
+            }
             // filter median
-            
+            DBG("\nMajor");
             for(auto & k:keyPoolMajor){
-                k.second = jmin(40.0f,jmax(0.0f,k.second*0.9f -1));
+                std::cout << (int)k.second << "," ;
+                k.second = jmin(10.0f,jmax(0.0f,k.second -2));
+                
+                
             }
+            DBG("\nMinor");
             for(auto & k:keyPoolMinor){
-                k.second = jmin(40.0f,jmax(0.0f,k.second*0.9f -1));
+                std::cout << (int)k.second << "," ;
+                k.second = jmin(10.0f,jmax(0.0f,k.second -2));
+                
             }
-            if(scaleString=="m"){keyPoolMinor[keyString ]+=sensitivity*keyStrength;}
-            else{keyPoolMajor[keyString ]+=sensitivity*keyStrength;}
+
+                if(scaleString=="m"){keyPoolMinor[keyString ]+=3.0*keyStrength;}
+                else{keyPoolMajor[keyString ]+=3.0*keyStrength;}
             String minorBest = getBestInPool(keyPoolMinor);
             String majorBest = getBestInPool(keyPoolMajor);
-            if(keyPoolMinor[minorBest]>keyPoolMajor[majorBest]){
-                scaleString = "m";
-                keyString = minorBest;
-            }
-            else{
-                keyString = majorBest;
-                scaleString = "M";
-            }
+                
+                if(keyPoolMinor[minorBest]>sensitivity || keyPoolMajor[majorBest]>sensitivity ){
+                if(keyPoolMinor[minorBest]>keyPoolMajor[majorBest]){
+                        scaleString = "m";
+                        keyString = minorBest;
+                    }
+                else{
+                    keyString = majorBest;
+                    scaleString = "M";
+                    }
+                }
+                else if ((keyString!= oldKey || scaleString !=oldScale)){
+                        keyString = "";
+                        scaleString="";
+                    }
+                else{
+                    
+//                    keyString = "";
+//                    scaleString="";
+                    
+                }
+                oldKey = keyString;
+                oldScale = scaleString;
             
+                
             
             //
             
@@ -343,9 +366,7 @@ while(isThreadRunning() && !threadShouldExit())
         key->reset();
         key->shouldStop(false);
     }
-    
-    //                if(frameOutCount % 32 == 0)
-    //                    key->reset();
+
 }
 
 

@@ -101,9 +101,8 @@ void Thread::threadEntryPoint()
         {
             run();
         }
-        catch (std::exception e)
+        catch (...)
         {
-            DBG(String(e.what()));
             jassertfalse; // Your run() method mustn't throw any exceptions!
         }
     }

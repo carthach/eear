@@ -30,12 +30,23 @@ public:
     
     SettingsComponent(AudioRecordingDemo* recorder)
     {
+        PropertiesFile::Options options;
+        options.applicationName = File::createLegalFileName ("eearMobile");
+        options.commonToAllUsers = true;
+        options.osxLibrarySubFolder = "Application Support";
+        properties.setStorageParameters(options );
+        
+        PropertiesFile * pFile = properties.getUserSettings();
+        
+        
+        
         addAndMakeVisible (frameSlider);
         frameSlider.setRange (3.0, 40, 1.0);
-        frameSlider.setValue (recorder->recorder.computeFrameCount, dontSendNotification);
+        frameSlider.addListener (this);
+        frameSlider.setValue (pFile->getIntValue("BufSize" , 23), sendNotification);
         frameSlider.setSliderStyle (Slider::LinearHorizontal);
         frameSlider.setTextBoxStyle (Slider::TextBoxRight, false, 30, 20);
-        frameSlider.addListener (this);
+        
         
         addAndMakeVisible (frameSliderLabel);
         frameSliderLabel.setText ("Size of Buffer", dontSendNotification);
@@ -46,9 +57,10 @@ public:
         ipAddressLabel.setMouseClickGrabsKeyboardFocus(true);
         ipAddressLabel.setWantsKeyboardFocus(true);
         addAndMakeVisible (ipAddressTextBox);
-        ipAddressTextBox.setText("127.0.0.1");
+        
         ipAddressTextBox.addListener(this);
-
+        ipAddressTextBox.setText(pFile->getValue("ipAddress" , "127.0.0.1"), sendNotification);
+        ipAddressTextBox.
         addAndMakeVisible (oscInfoLabel);
         oscInfoLabel.setText ("Set OSC Info:", dontSendNotification);
         addAndMakeVisible (portNumberLabel);
@@ -58,26 +70,31 @@ public:
         
         
         addAndMakeVisible (portNumberTextBox);
-        portNumberTextBox.setText("8000");
         portNumberTextBox.addListener(this);
-    
+        portNumberTextBox.setText(pFile->getValue("port" , "8000"), sendNotification);
+        
+        
         continuousRecording.setButtonText("Set continuous recording");
         continuousRecording.setClickingTogglesState(true);
         addAndMakeVisible(continuousRecording);
         continuousRecording.addListener(this);
-        
+        if(pFile->getBoolValue("continuous" , false))
+           continuousRecording.triggerClick();
         
         addAndMakeVisible (sensitivitySlider);
-        sensitivitySlider.setRange (1, 20, 1);
-        sensitivitySlider.setValue (recorder->recorder.sensitivity, dontSendNotification);
+        sensitivitySlider.setRange (0, 10, .1);
+        sensitivitySlider.addListener (this);
+        
+        
+        sensitivitySlider.setValue (pFile->getDoubleValue("filterOut" , 0), sendNotification);
         sensitivitySlider.setSliderStyle (Slider::LinearHorizontal);
         sensitivitySlider.setTextBoxStyle (Slider::TextBoxRight, false, 30, 20);
-        sensitivitySlider.addListener (this);
+        
         //
         addAndMakeVisible (sensitivitySliderLabel);
-        sensitivitySliderLabel.setText ("Keep chords", dontSendNotification);
+        sensitivitySliderLabel.setText ("Filter out chords", dontSendNotification);
 
-        
+
         
         
         this->recorder = recorder;
@@ -85,21 +102,23 @@ public:
     
     ~SettingsComponent()
     {
+        properties.saveIfNeeded();
         
     }
-    
+    ApplicationProperties properties;
     //=======================================================================
     
     
     void textEditorFocusLost (TextEditor& t) {
-        if(&t == &portNumberTextBox ){
-            //            recorder->oscPort =std::stoi(t.getText().toStdString());
-            recorder->oscPort= t.getText().getIntValue();
-        }
-        else if (&t == &ipAddressTextBox){
-            recorder->oscIP =t.getText();
-        }
         
+            //            recorder->oscPort =std::stoi(t.getText().toStdString());
+            int port= portNumberTextBox.getText().getIntValue();
+            properties.getUserSettings()->setValue("port", port);
+
+            String ip =ipAddressTextBox.getText();
+            properties.getUserSettings()->setValue("ipAddress", ip);
+        
+        jassert(recorder->setOSCInfo(ip,port));
         
     }
     
@@ -107,8 +126,9 @@ public:
     {
     //Just one sub component
     
-    Rectangle<int> labelBounds= getLocalBounds().withWidth(160);
-    Rectangle<int> valueBounds=labelBounds.withWidth(getLocalBounds().getWidth()-labelBounds.getWidth());
+    int padBorder = 10;
+    Rectangle<int> labelBounds= getLocalBounds().withWidth(160).withX(padBorder);
+    Rectangle<int> valueBounds=labelBounds.withWidth(getLocalBounds().getWidth()-labelBounds.getRight() - padBorder);
     valueBounds.setX(labelBounds.getRight() );
 
 
@@ -147,7 +167,7 @@ void buttonClicked (Button * b) override
 //        recorder->ipAddress = ipAddressTextBox.getText();
 //        recorder->portNumber = portNumberTextBox.getText().getIntValue();
     recorder->setContinuousRecording(b->getToggleState());
-
+    properties.getUserSettings()->setValue("continuous", b->getToggleState());
 //
 }
 
@@ -156,16 +176,14 @@ void sliderValueChanged (Slider *slider) override
 if (slider == &frameSlider)
 {
     int frameValue = int(slider->getValue());
-//    if(frameValue != recorder->recorder.computeFrameCount)
-//    {
-//        if (recorder->recorder.isRecording())
-//            recorder->stopRecording();
-//     }
+
     recorder->recorder.computeFrameCount = slider->getValue();
+    properties.getUserSettings()->setValue("BufSize", frameValue);
 }
 else if(slider == &sensitivitySlider)
 {
-    recorder->recorder.sensitivity = jmax(1.0, slider->getValue());
+    recorder->recorder.sensitivity =  slider->getValue();
+    properties.getUserSettings()->setValue("filterOut", recorder->recorder.sensitivity);
     recorder->recorder.clearKeyPool(recorder->recorder.keyPoolMajor);
     recorder->recorder.clearKeyPool(recorder->recorder.keyPoolMinor);
 }
