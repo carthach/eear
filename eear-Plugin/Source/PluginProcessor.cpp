@@ -112,16 +112,25 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles,
         
         float sampleLength = (float)audioReader->lengthInSamples / audioReader->sampleRate;
         
-        synth.addSound (new SeekSamplerSound ("demo sound",
-                                      *audioReader,
-                                      midiRange,
-                                      midiOffset+i,   // root midi note
-                                      0.0,  // attack time
-                                      0.1,  // release time
-                                      sampleLength,  // maximum sample length
-                                      bpms[i],
-                                      120.0
-                                      ));
+//        synth.addSound (new SeekSamplerSound ("demo sound",
+//                                      *audioReader,
+//                                      midiRange,
+//                                      midiOffset+i,   // root midi note
+//                                      0.0,  // attack time
+//                                      0.1,  // release time
+//                                      sampleLength,  // maximum sample length
+//                                      bpms[i],
+//                                      120.0
+//                                      ));
+        
+        synth.addSound (new SamplerSound ("demo sound",
+                                              *audioReader,
+                                              midiRange,
+                                              midiOffset+i,   // root midi note
+                                              0.0,  // attack time
+                                              0.1,  // release time
+                                              sampleLength  // maximum sample length
+                                              ));
     }
 }
 
@@ -177,6 +186,12 @@ MidiBuffer noteOnBuffer;
 
 void TheEarPluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
+    // In case we have more outputs than inputs, we'll clear any output
+    // channels that didn't contain input data, (because these aren't
+    // guaranteed to be empty - they may contain garbage).
+    for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
+        buffer.clear (i, 0, buffer.getNumSamples());
+    
     // ask the host for the current time so we can display it...
     AudioPlayHead::CurrentPositionInfo newTime;
     
@@ -273,12 +288,6 @@ void TheEarPluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
     }
 
     delayPosition = dp;
-
-    // In case we have more outputs than inputs, we'll clear any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
 }
 
 //==============================================================================

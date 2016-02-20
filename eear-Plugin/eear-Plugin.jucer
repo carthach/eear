@@ -8,17 +8,20 @@
               pluginIsSynth="1" pluginWantsMidiIn="1" pluginProducesMidiOut="0"
               pluginSilenceInIsSilenceOut="0" pluginEditorRequiresKeys="0"
               pluginAUExportPrefix="eearPluginAU" pluginRTASCategory="" aaxIdentifier="com.yourcompany.eearPlugin"
-              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.0.1">
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.1.0"
+              pluginIsMidiEffectPlugin="0">
   <MAINGROUP id="mMxrfW" name="eear-Plugin">
     <FILE id="UGOhMG" name="button_no_pushed.png" compile="0" resource="1"
           file="../eear-graphic-design/button_no_pushed.png"/>
     <FILE id="XWKkQJ" name="button_pushed.png" compile="0" resource="1"
           file="../eear-graphic-design/button_pushed.png"/>
     <GROUP id="{339C5746-E19D-44AE-64B1-3B52F42C119D}" name="Source">
+      <FILE id="qyXKim" name="CustomSampler.cpp" compile="1" resource="0"
+            file="Source/CustomSampler.cpp"/>
+      <FILE id="xg1MEm" name="CustomSampler.h" compile="0" resource="0" file="Source/CustomSampler.h"/>
       <FILE id="tWwy8b" name="DataComponent.h" compile="0" resource="0" file="Source/DataComponent.h"/>
       <FILE id="a7zrzB" name="DataTableComponent.h" compile="0" resource="0"
             file="Source/DataTableComponent.h"/>
-      <FILE id="ywiqCQ" name="EarOSCServer.h" compile="0" resource="0" file="Source/EarOSCServer.h"/>
       <FILE id="cR6qWG" name="EssentiaExtractor.cpp" compile="1" resource="0"
             file="Source/EssentiaExtractor.cpp"/>
       <FILE id="r7llCu" name="EssentiaExtractor.h" compile="0" resource="0"

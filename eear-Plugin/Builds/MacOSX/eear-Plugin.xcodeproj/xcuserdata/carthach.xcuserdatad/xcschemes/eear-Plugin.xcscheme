@@ -44,8 +44,8 @@
       allowLocationSimulation = "YES">
       <PathRunnable
          runnableDebuggingMode = "0"
-         BundleIdentifier = "com.rawmaterialsoftware.pluginhost"
-         FilePath = "/Users/carthach/Dev/git/JUCE/examples/audio plugin host/Builds/MacOSX/build/Debug/Plugin Host.app">
+         BundleIdentifier = "com.ableton.live"
+         FilePath = "/Applications/Ableton Live 9 Suite.app">
       </PathRunnable>
       <MacroExpansion>
          <BuildableReference
