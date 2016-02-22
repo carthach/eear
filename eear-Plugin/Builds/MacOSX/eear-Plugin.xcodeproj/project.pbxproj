@@ -348,7 +348,6 @@
 		4492A3290EE3DF3B463E6EE4 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_JSON.h"; path = "../../JuceLibraryCode/modules/juce_core/javascript/juce_JSON.h"; sourceTree = "SOURCE_ROOT"; };
 		44A9CB9B2307EDC0C27A8869 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_StretchableObjectResizer.h"; path = "../../JuceLibraryCode/modules/juce_gui_basics/layout/juce_StretchableObjectResizer.h"; sourceTree = "SOURCE_ROOT"; };
 		44F3DE21573A07D8E1F680B6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_Line.h"; path = "../../JuceLibraryCode/modules/juce_graphics/geometry/juce_Line.h"; sourceTree = "SOURCE_ROOT"; };
-		453EA257C68881C32AA607F8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_ListenerList.h"; path = "../../JuceLibraryCode/modules/juce_events/broadcasters/juce_ListenerList.h"; sourceTree = "SOURCE_ROOT"; };
 		456207F53963FF2FBC240E2D = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_LADSPAPluginFormat.cpp"; path = "../../JuceLibraryCode/modules/juce_audio_processors/format_types/juce_LADSPAPluginFormat.cpp"; sourceTree = "SOURCE_ROOT"; };
 		45B6EEE8F482BFCC9BECB030 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_LuaCodeTokeniser.h"; path = "../../JuceLibraryCode/modules/juce_gui_extra/code_editor/juce_LuaCodeTokeniser.h"; sourceTree = "SOURCE_ROOT"; };
 		465DBF7A669D7A364B7CC1E0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_mac_CoreGraphicsContext.h"; path = "../../JuceLibraryCode/modules/juce_graphics/native/juce_mac_CoreGraphicsContext.h"; sourceTree = "SOURCE_ROOT"; };
@@ -1712,8 +1711,7 @@
 					3B25DA93987486E904C0DB97,
 					16763E8C13F00E5901B857B3,
 					9E12F7206AB1ECF599C36638,
-					F33C2EAE1ECB355F9B05D017,
-					453EA257C68881C32AA607F8, ); name = broadcasters; sourceTree = "<group>"; };
+					F33C2EAE1ECB355F9B05D017, ); name = broadcasters; sourceTree = "<group>"; };
 		F2DF04B4B6F351AE047EE79C = {isa = PBXGroup; children = (
 					362C26609B86AC6CC1D7BDE5,
 					53F66E3B313B073A879E04DE,

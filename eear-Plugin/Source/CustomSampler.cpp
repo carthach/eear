@@ -120,7 +120,7 @@ void SeekSamplerVoice::startNote (const int midiNoteNumber,
 //        pitchRatio = pow (2.0, (midiNoteNumber - sound->midiRootNote) / 12.0)
 //                        * sound->sourceSampleRate / getSampleRate();
         
-        pitchRatio = sound->sampleBPM / sound->trackBPM;
+        pitchRatio = (sound->trackBPM /sound->sampleBPM) * sound->sourceSampleRate / getSampleRate();
         
 
 //        sourceSamplePosition = 0.0;

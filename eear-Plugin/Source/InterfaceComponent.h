@@ -202,7 +202,8 @@ public:
 //            if(matchingFiles.size() > 0)
 //                getProcessor().setSynthSamples(matchingFiles);
             
-            if(datasetDirectory.exists() && currentKey != "") {
+            if(datasetDirectory.exists() && currentKey != "")
+            {
                 Array<float> bpms;
                 Array<File> matchingFiles = getAudioFiles(datasetDirectory, currentKey, currentScale, bpms);
                 if(matchingFiles.size() > 0)
@@ -256,12 +257,20 @@ public:
             File theFileItFound (iter.getFile());
             audioFiles.add(theFileItFound);
             
-            std::cout << "Recognised File" << theFileItFound.getFileName() << "\n";
+            StringArray tokens;
+            tokens.addTokens (theFileItFound.getFileName(), "_", "\"");
+            
+            std::cout << "GOT BPM: " << tokens[1] << "\n";
+            
+            bpms.add(tokens[1].getFloatValue());
+            
+//            std::cout << "Recognised File" << theFileItFound.getFileName() << "\n";
         }
         
         return audioFiles;
     }
     
+
 
     // This is our Slider::Listener callback, when the user drags a slider.
     void sliderValueChanged (Slider* slider)

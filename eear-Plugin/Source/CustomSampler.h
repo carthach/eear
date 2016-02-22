@@ -99,6 +99,7 @@ public:
     void setAttack(const double attackTimeSecs);
     void setRelease(const double releaseTimeSecs);
 
+    double trackBPM;
 
 private:
     //==============================================================================
@@ -111,7 +112,7 @@ private:
     int length, attackSamples, releaseSamples;
     int midiRootNote;
     
-    float trackBPM, sampleBPM;
+    double sampleBPM;
 
     JUCE_LEAK_DETECTOR (SeekSamplerSound)
 };

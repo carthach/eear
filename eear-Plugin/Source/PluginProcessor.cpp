@@ -79,7 +79,7 @@ TheEarPluginAudioProcessor::TheEarPluginAudioProcessor()
     // Add some voices to our synth, to play the sounds..
     for (int i = 4; --i >= 0;)
     {
-        synth.addVoice (new SamplerVoice());    // and these ones play the sampled sounds
+        synth.addVoice (new SeekSamplerVoice());    // and these ones play the sampled sounds
     }
     
     // ..and add a sound for them to play...
@@ -101,9 +101,33 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles,
     
     int midiOffset = 36;
     
-    for(int i=0; i< 15; i++) {
+    ofstream bpmsOut;
+    bpmsOut.open("/Users/carthach/Desktop/bpms.txt");
+    
+    for(int i=0; i<bpms.size(); i++)
+    {
+        bpmsOut << bpms[i] << "\n";
+    }
+    
+    bpmsOut.close();
+    
+    ofstream filesOut;
+    filesOut.open("/Users/carthach/Desktop/files.txt");
+    
+    for(int i=0; i<listOfFiles.size(); i++)
+    {
+        filesOut << listOfFiles[i].getFileName() << "\n";
+    }
+    
+    filesOut.close();
+    
+    for(int i=0; i< 15; i++)
+    {
         int randomFileIndex = rand.nextInt(listOfFiles.size());
-                
+        
+        std::cout << "Random File: " << listOfFiles[randomFileIndex].getFileName() << "\n";
+        std::cout << "BPM: " << bpms[randomFileIndex] << "\n";
+        
         ScopedPointer<AudioFormatReader> audioReader = formatManager.createReaderFor(listOfFiles[randomFileIndex]);
 //        ScopedPointer<AudioFormatReader> audioReader = formatManager.createReaderFor(listOfFiles[0]);
         
@@ -112,25 +136,25 @@ void TheEarPluginAudioProcessor::setSynthSamples(const Array<File>& listOfFiles,
         
         float sampleLength = (float)audioReader->lengthInSamples / audioReader->sampleRate;
         
-//        synth.addSound (new SeekSamplerSound ("demo sound",
-//                                      *audioReader,
-//                                      midiRange,
-//                                      midiOffset+i,   // root midi note
-//                                      0.0,  // attack time
-//                                      0.1,  // release time
-//                                      sampleLength,  // maximum sample length
-//                                      bpms[i],
-//                                      120.0
-//                                      ));
+        synth.addSound (new SeekSamplerSound ("demo sound",
+                                      *audioReader,
+                                      midiRange,
+                                      midiOffset+i,   // root midi note
+                                      0.0,  // attack time
+                                      0.1,  // release time
+                                      sampleLength,  // maximum sample length
+                                      bpms[randomFileIndex],
+                                      lastPosInfo.bpm
+                                      ));
         
-        synth.addSound (new SamplerSound ("demo sound",
-                                              *audioReader,
-                                              midiRange,
-                                              midiOffset+i,   // root midi note
-                                              0.0,  // attack time
-                                              0.1,  // release time
-                                              sampleLength  // maximum sample length
-                                              ));
+//        synth.addSound (new SamplerSound ("demo sound",
+//                                              *audioReader,
+//                                              midiRange,
+//                                              midiOffset+i,   // root midi note
+//                                              0.0,  // attack time
+//                                              0.1,  // release time
+//                                              sampleLength  // maximum sample length
+//                                              ));
     }
 }
 
@@ -197,6 +221,15 @@ void TheEarPluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
     
     if (getPlayHead() != nullptr && getPlayHead()->getCurrentPosition (newTime))
     {
+        if(fabs(lastPosInfo.bpm - newTime.bpm) > 0.0001)
+        {
+            for (int i=0; i<synth.getNumSounds(); i++)
+            {
+                SeekSamplerSound* sound = (SeekSamplerSound*) synth.getSound(i);
+                sound->trackBPM = newTime.bpm;
+            }
+        }
+        
         // Successfully got the current time from the host..
         lastPosInfo = newTime;
     }
@@ -205,6 +238,8 @@ void TheEarPluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
         // If the host fails to fill-in the current time, we'll just clear it to a default..
         lastPosInfo.resetToDefault();
     }
+    
+
     
     const int ppqPerBar = (newTime.timeSigNumerator * 4 / newTime.timeSigDenominator);
     const double beats  = (fmod (newTime.ppqPosition, ppqPerBar) / ppqPerBar) * newTime.timeSigNumerator;

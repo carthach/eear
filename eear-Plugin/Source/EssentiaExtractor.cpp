@@ -332,7 +332,10 @@ String EssentiaExtractor::buildDataset(const File& audioFolder, bool writeOnsets
     
     File fileNames(outputRoot + "filesProcessed.txt");
     
-    for(int i=0; i<filesToProcess.size(); i++) {
+//    const int MAX = filesToProcess.size();
+    const int FILESMAX = 200;
+    
+    for(int i=0; i< FILESMAX; i++) {
         String currentAudioFileName = filesToProcess[i].getFileName();
         
         std::cout << "Processing file: " << currentAudioFileName << "\n";
@@ -360,7 +363,7 @@ String EssentiaExtractor::buildDataset(const File& audioFolder, bool writeOnsets
         int noOfLoops = 2;
     
         for(int j=0; j<noOfLoops; j++) {
-            loops.push_back(randomLoop(onsetTimes, signal, BPM, outputRoot + String((i*noOfLoops)+j) + "_" + currentAudioFileName +  "_loop_" + String(j) + ".wav"));
+            loops.push_back(randomLoop(onsetTimes, signal, BPM, outputRoot + String((i*noOfLoops)+j) + "_" + String((int)BPM) + "_" + currentAudioFileName +  "_loop_" + String(j) + ".wav"));
         }
 
         Pool onsetPool = extractFeatures(loops, BPM);
